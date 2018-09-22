@@ -12,7 +12,6 @@ public abstract class Action {
      * Performs the action.
      *
      * @param point the point
-     * @throws IllegalArgumentException if the action cannot be performed
      */
-    abstract void perform(Point point) throws IllegalArgumentException;
+    abstract void perform(Point point);
 }

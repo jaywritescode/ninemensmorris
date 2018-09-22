@@ -103,12 +103,28 @@ public class Board {
         return points.get(point);
     }
 
+    boolean isCompleteMill(Point point) {
+        return getMills(point).stream().anyMatch(mill -> mill.isComplete(point.getPiece()));
+    }
+
+    Set<Mill> getMills(String point) {
+        return mills.get(point).stream().map(Mill::new).collect(Collectors.toSet());
+    }
+
+    Set<Mill> getMills(Point point) {
+        return getMills(point.id);
+    }
+
     class Point {
         Piece piece;
         String id;
 
         Point(String id) {
             this.id = id;
+        }
+
+        Piece getPiece() {
+            return piece;
         }
 
         void setPiece(Piece piece) {
@@ -125,6 +141,18 @@ public class Board {
 
         String pretty() {
             return piece == null ? "+" : piece.pretty();
+        }
+    }
+
+    class Mill {
+        Set<Point> points;
+
+        Mill(Set<String> points) {
+            this.points = points.stream().map(Board.this.points::get).collect(Collectors.toSet());
+        }
+
+        boolean isComplete(Piece piece) {
+            return points.stream().allMatch(point -> point.getPiece() == piece);
         }
     }
 
