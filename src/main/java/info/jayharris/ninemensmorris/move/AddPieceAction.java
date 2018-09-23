@@ -5,11 +5,11 @@ import info.jayharris.ninemensmorris.Piece;
 
 import static com.google.common.base.Preconditions.*;
 
-public class AddPieceAction extends Action {
+class AddPieceAction extends Action {
 
-    Piece piece;
+    private Piece piece;
 
-    AddPieceAction(Piece piece) {
+    private AddPieceAction(Piece piece) {
         this.piece = piece;
     }
 
@@ -22,7 +22,7 @@ public class AddPieceAction extends Action {
      */
     @Override
     void perform(Point point) {
-        checkArgument(!point.isOccupied(), "Expected point %s to be empty.", point.getId());
+        checkArgument(point.isUnoccupied(), "Expected point %s to be empty.", point.getId());
         point.setPiece(piece);
     }
 
@@ -32,7 +32,7 @@ public class AddPieceAction extends Action {
      * @param piece the piece
      * @return the Action
      */
-    public static AddPieceAction create(Piece piece) {
+    static AddPieceAction create(Piece piece) {
         return new AddPieceAction(piece);
     }
 }

@@ -7,7 +7,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 public class MovePiece extends FlyPiece {
 
-    public MovePiece(BasePlayer player, Point initial, Point destination) {
+    private MovePiece(BasePlayer player, Point initial, Point destination) {
         super(player, initial, destination);
     }
 

@@ -2,7 +2,7 @@ package info.jayharris.ninemensmorris.move;
 
 import info.jayharris.ninemensmorris.Board.Point;
 
-public class RemovePieceAction extends Action {
+class RemovePieceAction extends Action {
 
     /**
      * Removes the piece at the given point.
@@ -21,7 +21,7 @@ public class RemovePieceAction extends Action {
      *
      * @return the Action
      */
-    public static RemovePieceAction create() {
+    static RemovePieceAction create() {
         return new RemovePieceAction();
     }
 }

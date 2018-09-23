@@ -7,9 +7,9 @@ import static com.google.common.base.Preconditions.checkState;
 
 public class CapturePiece extends BaseMove {
 
-    final Point point;
+    private final Point point;
 
-    public CapturePiece(BasePlayer player, Point point) {
+    private CapturePiece(BasePlayer player, Point point) {
         super(player);
         this.point = point;
     }

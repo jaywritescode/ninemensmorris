@@ -9,7 +9,7 @@ public abstract class BasePlayer {
     private final Piece piece;
     private int startingPieces = 9;
 
-    protected BasePlayer(Piece piece) {
+    BasePlayer(Piece piece) {
         this.piece = piece;
     }
 

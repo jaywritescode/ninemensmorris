@@ -99,10 +99,6 @@ public class Board {
         this.points = ALGEBRAIC_NOTATIONS_FOR_POINTS.stream().collect(Collectors.toMap(Function.identity(), Point::new));
     }
 
-    Point getPoint(String point) {
-        return points.get(point);
-    }
-
     public Set<Point> getOccupiedPoints(Piece piece) {
         return points.values().stream()
                 .filter(point -> point.getPiece() == piece)
@@ -111,20 +107,12 @@ public class Board {
 
     public Set<Point> getUnoccupiedPoints() {
         return points.values().stream()
-                .filter(point -> !point.isOccupied())
+                .filter(point -> point.isUnoccupied())
                 .collect(Collectors.toSet());
     }
 
     boolean isCompleteMill(Point point) {
-        return getMills(point).stream().anyMatch(mill -> mill.isComplete(point.getPiece()));
-    }
-
-    Set<Mill> getMills(String point) {
-        return mills.get(point).stream().map(Mill::new).collect(Collectors.toSet());
-    }
-
-    Set<Mill> getMills(Point point) {
-        return getMills(point.getId());
+        return point.getMills().stream().anyMatch(mill -> mill.isComplete(point.getPiece()));
     }
 
     public class Point {
@@ -143,14 +131,18 @@ public class Board {
             this.piece = piece;
         }
 
-        public boolean isOccupied() {
-            return piece != null;
+        public boolean isUnoccupied() {
+            return piece == null;
         }
 
         public Set<Point> getNeighbors() {
             return neighbors.get(id).stream()
                     .map(points::get)
                     .collect(Collectors.toSet());
+        }
+
+        public Set<Mill> getMills() {
+            return mills.get(id).stream().map(Mill::new).collect(Collectors.toSet());
         }
 
         public String getId() {
