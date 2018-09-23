@@ -1,6 +1,7 @@
-package info.jayharris.ninemensmorris;
+package info.jayharris.ninemensmorris.move;
 
 import info.jayharris.ninemensmorris.Board.Point;
+import info.jayharris.ninemensmorris.Piece;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -21,7 +22,7 @@ public class AddPieceAction extends Action {
      */
     @Override
     void perform(Point point) {
-        checkArgument(!point.isOccupied(), "Expected point %s to be empty.", point.id);
+        checkArgument(!point.isOccupied(), "Expected point %s to be empty.", point.getId());
         point.setPiece(piece);
     }
 

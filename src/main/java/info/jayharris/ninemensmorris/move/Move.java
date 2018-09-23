@@ -1,4 +1,4 @@
-package info.jayharris.ninemensmorris;
+package info.jayharris.ninemensmorris.move;
 
 public interface Move {
 

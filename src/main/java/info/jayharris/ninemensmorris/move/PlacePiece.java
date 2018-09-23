@@ -1,5 +1,6 @@
-package info.jayharris.ninemensmorris;
+package info.jayharris.ninemensmorris.move;
 
+import info.jayharris.ninemensmorris.BasePlayer;
 import info.jayharris.ninemensmorris.Board.Point;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -15,7 +16,7 @@ public final class PlacePiece extends BaseMove implements InitialMove {
 
     @Override
     public void perform() throws IllegalStateException {
-        checkState(!point.isOccupied(), "Expected %s to be empty.", point.id);
+        checkState(!point.isOccupied(), "Expected %s to be empty.", point.getId());
         AddPieceAction.create(player.getPiece()).perform(point);
     }
 

@@ -112,31 +112,36 @@ public class Board {
     }
 
     Set<Mill> getMills(Point point) {
-        return getMills(point.id);
+        return getMills(point.getId());
     }
 
-    class Point {
+    public class Point {
         Piece piece;
-        String id;
+        private String id;
 
         Point(String id) {
             this.id = id;
         }
 
-        Piece getPiece() {
+        public Piece getPiece() {
             return piece;
         }
 
-        void setPiece(Piece piece) {
+        public void setPiece(Piece piece) {
             this.piece = piece;
         }
 
-        boolean isOccupied() {
+        public boolean isOccupied() {
             return piece != null;
         }
 
-        Set<Point> getNeighbors() {
+        // TODO: implement
+        public Set<Point> getNeighbors() {
             return null;
+        }
+
+        public String getId() {
+            return id;
         }
 
         String pretty() {

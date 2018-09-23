@@ -1,5 +1,8 @@
 package info.jayharris.ninemensmorris;
 
+import info.jayharris.ninemensmorris.move.CapturePiece;
+import info.jayharris.ninemensmorris.move.InitialMove;
+
 import static com.google.common.base.Preconditions.checkState;
 
 /**
