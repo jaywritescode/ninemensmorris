@@ -1,5 +1,6 @@
 package info.jayharris.ninemensmorris;
 
+import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.InitialMove;
 
@@ -45,6 +46,10 @@ public class Turn {
 
         this.capture = capture;
         return board;
+    }
+
+    public Point getUpdatedPoint() {
+        return initial.getUpdatedPoint();
     }
 
     public static Turn create(BasePlayer player, Board board) {

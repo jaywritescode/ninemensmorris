@@ -103,6 +103,18 @@ public class Board {
         return points.get(point);
     }
 
+    public Set<Point> getOccupiedPoints(Piece piece) {
+        return points.values().stream()
+                .filter(point -> point.getPiece() == piece)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Point> getUnoccupiedPoints() {
+        return points.values().stream()
+                .filter(point -> !point.isOccupied())
+                .collect(Collectors.toSet());
+    }
+
     boolean isCompleteMill(Point point) {
         return getMills(point).stream().anyMatch(mill -> mill.isComplete(point.getPiece()));
     }
@@ -135,9 +147,10 @@ public class Board {
             return piece != null;
         }
 
-        // TODO: implement
         public Set<Point> getNeighbors() {
-            return null;
+            return neighbors.get(id).stream()
+                    .map(points::get)
+                    .collect(Collectors.toSet());
         }
 
         public String getId() {
