@@ -25,7 +25,7 @@ public class RandomMovePlayer extends BasePlayer {
 
     @Override
     public FlyPiece movePiece(Board board) {
-        if (board.getOccupiedPoints(getPiece()).size() < 3) {
+        if (board.getOccupiedPoints(getPiece()).size() == 3) {
             return flyPiece(board);
         }
         return moveToNeighbor(board);
