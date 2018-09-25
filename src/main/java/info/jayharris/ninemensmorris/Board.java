@@ -152,6 +152,14 @@ public class Board {
         String pretty() {
             return piece == null ? "+" : piece.pretty();
         }
+
+        @Override
+        public String toString() {
+            return new StringJoiner(", ", Point.class.getSimpleName() + "[", "]")
+                    .add("piece=" + piece)
+                    .add("id='" + id + "'")
+                    .toString();
+        }
     }
 
     class Mill {

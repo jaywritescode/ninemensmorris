@@ -29,6 +29,10 @@ public class FlyPiece extends BaseMove implements InitialMove {
         return destination;
     }
 
+    public String pretty() {
+        return initial.getId() + "-" + destination.getId();
+    }
+
     public static FlyPiece create(BasePlayer player, Point initial, Point destination) {
         return new FlyPiece(player, initial, destination);
     }

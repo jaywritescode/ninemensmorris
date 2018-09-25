@@ -22,6 +22,10 @@ public class CapturePiece extends BaseMove {
         RemovePieceAction.create().perform(point);
     }
 
+    public String pretty() {
+        return "x" + point.getId();
+    }
+
     public static CapturePiece create(BasePlayer player, Point point) {
         return new CapturePiece(player, point);
     }

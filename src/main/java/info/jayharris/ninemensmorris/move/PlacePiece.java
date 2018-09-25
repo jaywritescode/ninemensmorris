@@ -25,6 +25,10 @@ public final class PlacePiece extends BaseMove implements InitialMove {
         return point;
     }
 
+    public String pretty() {
+        return point.getId();
+    }
+
     public static PlacePiece create(BasePlayer player, Point point) {
         return new PlacePiece(player, point);
     }
