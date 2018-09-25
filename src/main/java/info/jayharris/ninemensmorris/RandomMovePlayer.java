@@ -36,18 +36,22 @@ public class RandomMovePlayer extends BasePlayer {
         return CapturePiece.create(this, randomElement(board.getOccupiedPoints(getPiece().opposite())));
     }
 
-    public FlyPiece flyPiece(Board board) {
+    private FlyPiece flyPiece(Board board) {
         Point init = randomElement(board.getOccupiedPoints(getPiece()));
         Point dest = randomElement(board.getUnoccupiedPoints());
         return FlyPiece.create(this, init, dest);
     }
 
-    public MovePiece moveToNeighbor(Board board) {
+    private MovePiece moveToNeighbor(Board board) {
         Point init = randomElement(
                 board.getOccupiedPoints(getPiece()).stream()
-                        .filter(point -> !point.getNeighbors().isEmpty())
-                        .collect(Collectors.toSet()));
-        Point dest = randomElement(init.getNeighbors());
+                        .filter(point -> point.getNeighbors().stream().anyMatch(Point::isUnoccupied))
+                        .collect(Collectors.toList())
+        );
+        Point dest = randomElement(
+                init.getNeighbors().stream()
+                        .filter(Point::isUnoccupied)
+                        .collect(Collectors.toList()));
         return MovePiece.create(this, init, dest);
     }
 
