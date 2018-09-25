@@ -6,10 +6,7 @@ import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -99,6 +96,10 @@ public class Board {
         this.points = ALGEBRAIC_NOTATIONS_FOR_POINTS.stream().collect(Collectors.toMap(Function.identity(), Point::new));
     }
 
+    Point getPoint(String point) {
+        return points.get(point);
+    }
+
     public Set<Point> getOccupiedPoints(Piece piece) {
         return points.values().stream()
                 .filter(point -> point.getPiece() == piece)
@@ -109,6 +110,10 @@ public class Board {
         return points.values().stream()
                 .filter(point -> point.isUnoccupied())
                 .collect(Collectors.toSet());
+    }
+
+    boolean hasPoint(Point point) {
+        return points.values().contains(point);
     }
 
     boolean isCompleteMill(Point point) {

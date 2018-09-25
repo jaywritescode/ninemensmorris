@@ -1,0 +1,144 @@
+package info.jayharris.ninemensmorris;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import info.jayharris.ninemensmorris.Board.Point;
+import info.jayharris.ninemensmorris.move.*;
+import org.apache.commons.lang3.RandomUtils;
+import org.junit.jupiter.api.*;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class RandomMovePlayerTest {
+
+    private RandomMovePlayer player;
+
+    @BeforeEach
+    void setUp() {
+        player = new RandomMovePlayer(Piece.BLACK);
+    }
+
+    @RepeatedTest(10)
+    @DisplayName("it always places a piece on an empty point")
+    void placePiece() {
+        BoardBuilder builder = BoardBuilder.create();
+
+        Set<Point> points = randomPoints(RandomUtils.nextInt(8, 16)).stream()
+                .map(builder::getPoint)
+                .peek(point -> builder.withPiece(point, RandomUtils.nextBoolean() ? Piece.WHITE : Piece.BLACK))
+                .collect(Collectors.toSet());
+
+        PlacePiece move = player.placePiece(builder.build());
+
+        assertThat(move).extracting("point").first().isNotIn(points);
+    }
+
+    @Nested
+    class MovePiecePhase {
+
+        BoardBuilder builder;
+
+        @BeforeEach
+        void setUp() {
+            builder = BoardBuilder.create();
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("player only has three pieces on the board")
+        void testFly() {
+            Iterator<Point> iter = randomPoints(RandomUtils.nextInt(6, 12)).stream()
+                    .map(builder::getPoint)
+                    .iterator();
+
+            int i = 0;
+            while (iter.hasNext()) {
+                builder.withPiece(iter.next(), i < 3 ? player.getPiece() : player.getPiece().opposite());
+                ++i;
+            }
+
+            FlyPiece move = player.movePiece(builder.build());
+
+            assertThat(move).isExactlyInstanceOf(FlyPiece.class);
+            assertThat(move)
+                    .extracting("initial")
+                    .first()
+                    .hasFieldOrPropertyWithValue("piece", player.getPiece());
+            assertThat(move)
+                    .extracting("destination")
+                    .first()
+                    .hasFieldOrPropertyWithValue("piece", null);
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("player has more than three pieces on the board")
+        void testMoveToNeighbor() {
+            Iterator<Point> iter = randomPoints(RandomUtils.nextInt(9, 15)).stream()
+                    .map(builder::getPoint)
+                    .iterator();
+
+            int i = 0;
+            while (iter.hasNext()) {
+                builder.withPiece(iter.next(), i < 9
+                        ? (i % 2 == 0 ? Piece.BLACK : Piece.WHITE)
+                        : (RandomUtils.nextBoolean() ? Piece.BLACK : Piece.WHITE));
+                ++i;
+            }
+
+            // ensure that at least one legal move exists
+            Point point = builder.findArbitraryPoint(player.getPiece());
+            Point neighbor = point.getNeighbors().iterator().next();
+            builder.withPiece(neighbor, null);
+
+            FlyPiece move = player.movePiece(builder.build());
+
+            assertThat(move).isExactlyInstanceOf(MovePiece.class);
+            assertThat(move).extracting("initial")
+                    .first()
+                    .hasFieldOrPropertyWithValue("piece", player.getPiece());
+            assertThat(move).extracting("destination")
+                    .first()
+                    .hasFieldOrPropertyWithValue("piece", null);
+            assertThat(move).extracting("initial")
+                    .first()
+                    .isIn(move.getUpdatedPoint().getNeighbors());
+        }
+    }
+
+    @RepeatedTest(10)
+    @DisplayName("it always captures an opponent's piece")
+    void capturePiece() {
+        BoardBuilder builder = BoardBuilder.create();
+
+        Iterator<Point> iter = randomPoints(RandomUtils.nextInt(8, 12)).stream()
+                .map(builder::getPoint)
+                .iterator();
+
+        int i = 0;
+        while (iter.hasNext()) {
+            builder.withPiece(iter.next(), i < 6
+                    ? (i % 2 == 0 ? Piece.BLACK : Piece.WHITE)
+                    : (RandomUtils.nextBoolean() ? Piece.BLACK : Piece.WHITE));
+            ++i;
+        }
+
+        CapturePiece move = player.capturePiece(builder.build());
+
+        assertThat(move)
+                .extracting("point")
+                .first()
+                .hasFieldOrPropertyWithValue("piece", Piece.WHITE);
+    }
+
+    private Set<String> randomPoints(int count) {
+        List<String> points = Lists.newArrayList(Board.ALGEBRAIC_NOTATIONS_FOR_POINTS);
+        Collections.shuffle(points);
+
+        return Sets.newHashSet(points.subList(0, count - 1));
+    }
+}
