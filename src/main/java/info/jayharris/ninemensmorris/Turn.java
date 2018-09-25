@@ -3,6 +3,9 @@ package info.jayharris.ninemensmorris;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.InitialMove;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -50,6 +53,10 @@ public class Turn {
 
     public Point getUpdatedPoint() {
         return initial.getUpdatedPoint();
+    }
+
+    public String pretty() {
+        return initial.pretty() + Objects.toString(capture, StringUtils.EMPTY);
     }
 
     public static Turn create(BasePlayer player, Board board) {

@@ -9,6 +9,4 @@ abstract class BaseMove implements Move {
     BaseMove(BasePlayer player) {
         this.player = player;
     }
-
-    public abstract String pretty();
 }

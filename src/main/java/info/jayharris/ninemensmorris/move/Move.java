@@ -8,4 +8,6 @@ public interface Move {
      * @throws IllegalStateException if the move is illegal
      */
     void perform() throws IllegalStateException;
+
+    String pretty();
 }
