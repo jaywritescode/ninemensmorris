@@ -3,58 +3,54 @@ package info.jayharris.ninemensmorris;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import info.jayharris.ninemensmorris.Board.Point;
-import info.jayharris.ninemensmorris.move.*;
+import info.jayharris.ninemensmorris.move.CapturePiece;
+import info.jayharris.ninemensmorris.move.FlyPiece;
+import info.jayharris.ninemensmorris.move.MovePiece;
+import info.jayharris.ninemensmorris.move.PlacePiece;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RandomMovePlayerTest {
 
     private RandomMovePlayer player;
+    private BoardBuilder builder;
 
     @BeforeEach
     void setUp() {
         player = new RandomMovePlayer(Piece.BLACK);
+        builder = BoardBuilder.create();
     }
 
     @RepeatedTest(10)
     @DisplayName("it always places a piece on an empty point")
     void placePiece() {
-        BoardBuilder builder = BoardBuilder.create();
-
-        Set<Point> points = randomPoints(RandomUtils.nextInt(8, 16)).stream()
-                .map(builder::getPoint)
-                .peek(point -> builder.withPiece(point, RandomUtils.nextBoolean() ? Piece.WHITE : Piece.BLACK))
-                .collect(Collectors.toSet());
+        randomPoints(RandomUtils.nextInt(8, 16)).stream()
+                .forEach(point -> builder.withPiece(point, RandomUtils.nextBoolean() ? Piece.WHITE : Piece.BLACK));
 
         PlacePiece move = player.placePiece(builder.build());
 
-        assertThat(move).extracting("point").first().isNotIn(points);
+        assertThat(move).extracting("point")
+                .first()
+                .hasFieldOrPropertyWithValue("piece", null);
     }
 
     @Nested
     class MovePiecePhase {
 
-        BoardBuilder builder;
-
-        @BeforeEach
-        void setUp() {
-            builder = BoardBuilder.create();
-        }
-
         @RepeatedTest(10)
         @DisplayName("player only has three pieces on the board")
         void testFly() {
-            Iterator<Point> iter = randomPoints(RandomUtils.nextInt(6, 12)).stream()
-                    .map(builder::getPoint)
-                    .iterator();
+            Iterator<String> iter = randomPoints(RandomUtils.nextInt(6, 12)).iterator();
 
             int i = 0;
             while (iter.hasNext()) {
@@ -78,9 +74,7 @@ class RandomMovePlayerTest {
         @RepeatedTest(10)
         @DisplayName("player has more than three pieces on the board")
         void testMoveToNeighbor() {
-            Iterator<Point> iter = randomPoints(RandomUtils.nextInt(9, 15)).stream()
-                    .map(builder::getPoint)
-                    .iterator();
+            Iterator<String> iter = randomPoints(RandomUtils.nextInt(9, 15)).iterator();
 
             int i = 0;
             while (iter.hasNext()) {
@@ -113,11 +107,7 @@ class RandomMovePlayerTest {
     @RepeatedTest(10)
     @DisplayName("it always captures an opponent's piece")
     void capturePiece() {
-        BoardBuilder builder = BoardBuilder.create();
-
-        Iterator<Point> iter = randomPoints(RandomUtils.nextInt(8, 12)).stream()
-                .map(builder::getPoint)
-                .iterator();
+        Iterator<String> iter = randomPoints(RandomUtils.nextInt(8, 12)).iterator();
 
         int i = 0;
         while (iter.hasNext()) {

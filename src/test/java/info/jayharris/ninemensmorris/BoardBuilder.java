@@ -23,10 +23,6 @@ public class BoardBuilder {
         return this;
     }
 
-    Point getPoint(String point) {
-        return board.getPoint(point);
-    }
-
     Point findArbitraryPoint(Piece piece) {
         return board.getOccupiedPoints(piece).iterator().next();
     }
