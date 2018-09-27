@@ -17,9 +17,7 @@ public class FlyPiece extends BaseMove implements InitialMove {
 
     @Override
     public void perform() throws IllegalStateException {
-        checkState(initial.getPiece() == player.getPiece(), "Expected a %s piece on point %s, instead found %s", player.getPiece().toString(), initial.getId(), initial.getPiece().toString());
-        checkState(destination.isUnoccupied(), "Expected point %s to be empty", destination.getId());
-
+        validateLegal();
         RemovePieceAction.create().perform(initial);
         AddPieceAction.create(player.getPiece()).perform(destination);
     }
@@ -29,11 +27,28 @@ public class FlyPiece extends BaseMove implements InitialMove {
         return destination;
     }
 
+    @Override
+    public void validateLegal() throws IllegalMoveException {
+        if (initial.getPiece() != player.getPiece()) {
+            throw IllegalMoveException.create(initial.isUnoccupied() ? "No piece on %s to move." : "Cannot move opponent's piece on %s.", initial.getId());
+        }
+        if (!destination.isUnoccupied()) {
+            throw IllegalMoveException.create("Cannot move to occupied point at %s.", destination.getId());
+        }
+    }
+
     public String pretty() {
         return initial.getId() + "-" + destination.getId();
     }
 
     public static FlyPiece create(BasePlayer player, Point initial, Point destination) {
         return new FlyPiece(player, initial, destination);
+    }
+
+    public static FlyPiece createLegal(BasePlayer player, Point initial, Point destination) {
+        FlyPiece move = create(player, initial, destination);
+
+        move.validateLegal();
+        return move;
     }
 }

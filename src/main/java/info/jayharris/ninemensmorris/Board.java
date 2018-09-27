@@ -96,7 +96,7 @@ public class Board {
         this.points = ALGEBRAIC_NOTATIONS_FOR_POINTS.stream().collect(Collectors.toMap(Function.identity(), Point::new));
     }
 
-    Point getPoint(String point) {
+    public Point getPoint(String point) {
         return points.get(point);
     }
 

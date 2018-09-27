@@ -1,9 +1,7 @@
 package info.jayharris.ninemensmorris.move;
 
-import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.Board.Point;
-
-import static com.google.common.base.Preconditions.checkState;
+import info.jayharris.ninemensmorris.player.BasePlayer;
 
 public final class PlacePiece extends BaseMove implements InitialMove {
 
@@ -15,8 +13,8 @@ public final class PlacePiece extends BaseMove implements InitialMove {
     }
 
     @Override
-    public void perform() throws IllegalStateException {
-        checkState(point.isUnoccupied(), "Expected %s to be empty.", point.getId());
+    public void perform() {
+        validateLegal();
         AddPieceAction.create(player.getPiece()).perform(point);
     }
 
@@ -25,11 +23,25 @@ public final class PlacePiece extends BaseMove implements InitialMove {
         return point;
     }
 
+    @Override
+    public void validateLegal() throws IllegalMoveException {
+        if (!point.isUnoccupied()) {
+            throw IllegalMoveException.create("Can't place a piece on occupied point %s.", point.getId());
+        }
+    }
+
     public String pretty() {
         return point.getId();
     }
 
     public static PlacePiece create(BasePlayer player, Point point) {
         return new PlacePiece(player, point);
+    }
+
+    public static PlacePiece createLegal(BasePlayer player, Point point) throws IllegalMoveException {
+        PlacePiece move = create(player, point);
+
+        move.validateLegal();
+        return move;
     }
 }
