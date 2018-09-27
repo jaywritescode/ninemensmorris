@@ -19,11 +19,19 @@ public class MovePiece extends FlyPiece {
     public void validateLegal() {
         super.validateLegal();
         if (initial.getNeighbors().contains(destination)) {
-            throw IllegalMoveException.create("Points %s and %s are not adjacent.", initial.getId(), destination.getId());
+            throw IllegalMoveException.create("Points %s and %s are not adjacent.", initial.getId(),
+                                              destination.getId());
         }
     }
 
     public static MovePiece create(BasePlayer player, Point initial, Point destination) {
         return new MovePiece(player, initial, destination);
+    }
+
+    public static MovePiece createLegal(BasePlayer player, Point initial, Point destination) {
+        MovePiece move = create(player, initial, destination);
+
+        move.validateLegal();
+        return move;
     }
 }

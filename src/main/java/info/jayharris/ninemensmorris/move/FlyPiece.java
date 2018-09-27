@@ -30,7 +30,9 @@ public class FlyPiece extends BaseMove implements InitialMove {
     @Override
     public void validateLegal() throws IllegalMoveException {
         if (initial.getPiece() != player.getPiece()) {
-            throw IllegalMoveException.create(initial.isUnoccupied() ? "No piece on %s to move." : "Cannot move opponent's piece on %s.", initial.getId());
+            throw IllegalMoveException.create(
+                    initial.isUnoccupied() ? "No piece on %s to move." : "Cannot move opponent's piece on %s.",
+                    initial.getId());
         }
         if (!destination.isUnoccupied()) {
             throw IllegalMoveException.create("Cannot move to occupied point at %s.", destination.getId());

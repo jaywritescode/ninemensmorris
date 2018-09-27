@@ -24,7 +24,8 @@ public class CapturePiece extends BaseMove {
 
     public void validateLegal() throws IllegalMoveException {
         if (point.getPiece() != player.getPiece().opposite()) {
-            throw IllegalMoveException.create("Expected a %s piece on point %s, instead found %s", player.getPiece().opposite().toString(),
+            throw IllegalMoveException.create("Expected a %s piece on point %s, instead found %s",
+                                              player.getPiece().opposite().toString(),
                                               point.getId(), Objects.toString(point.getPiece(), "no piece"));
         }
     }
