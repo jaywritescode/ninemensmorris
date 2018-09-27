@@ -56,6 +56,4 @@ public abstract class BasePlayer {
     public void done(Game game) {
         System.out.println(lastTurn.pretty());
     }
-
-    public void fail(Game game, Exception e) { }
 }
