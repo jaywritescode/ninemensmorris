@@ -35,6 +35,10 @@ public abstract class BasePlayer {
         return turn;
     }
 
+    public int getStartingPieces() {
+        return startingPieces;
+    }
+
     public abstract PlacePiece placePiece(Board board);
 
     public abstract FlyPiece movePiece(Board board);
