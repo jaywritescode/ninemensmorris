@@ -13,6 +13,8 @@ public abstract class BasePlayer {
     private final Piece piece;
     private int startingPieces = 9;
 
+    private Turn lastTurn;
+
     BasePlayer(Piece piece) {
         this.piece = piece;
     }
@@ -36,7 +38,7 @@ public abstract class BasePlayer {
             turn.doCaptureMove(capturePiece(board));
         }
 
-        return turn;
+        return lastTurn = turn;
     }
 
     public int getStartingPieces() {
@@ -51,7 +53,9 @@ public abstract class BasePlayer {
 
     public void begin(Game game) { }
 
-    public void done(Game game) { }
+    public void done(Game game) {
+        System.out.println(lastTurn.pretty());
+    }
 
     public void fail(Game game, Exception e) { }
 }

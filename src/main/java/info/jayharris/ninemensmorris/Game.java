@@ -24,7 +24,14 @@ public class Game {
 
     public void play() {
         while (!isGameOver()) {
-            nextPly();
+            try {
+                current.begin(this);
+                nextPly();
+                current.done(this);
+            }
+            catch (Exception e) {
+                current.fail(this, e);
+            }
         }
     }
 
