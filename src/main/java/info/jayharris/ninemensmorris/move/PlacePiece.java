@@ -1,6 +1,6 @@
 package info.jayharris.ninemensmorris.move;
 
-import info.jayharris.ninemensmorris.BasePlayer;
+import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.Board.Point;
 
 import static com.google.common.base.Preconditions.checkState;

@@ -12,22 +12,22 @@ public class BoardBuilder {
         this.board = board;
     }
 
-    BoardBuilder withPiece(String point, Piece piece) {
+    public BoardBuilder withPiece(String point, Piece piece) {
         return withPiece(board.getPoint(point), piece);
     }
 
-    BoardBuilder withPiece(Point point, Piece piece) {
+    public BoardBuilder withPiece(Point point, Piece piece) {
         Preconditions.checkArgument(board.hasPoint(point));
 
         point.setPiece(piece);
         return this;
     }
 
-    Point findArbitraryPoint(Piece piece) {
+    public Point findArbitraryPoint(Piece piece) {
         return board.getOccupiedPoints(piece).iterator().next();
     }
 
-    Board build() {
+    public Board build() {
         return board;
     }
 

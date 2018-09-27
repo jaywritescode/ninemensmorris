@@ -1,7 +1,9 @@
-package info.jayharris.ninemensmorris;
+package info.jayharris.ninemensmorris.player;
 
 import com.google.common.collect.Lists;
+import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
+import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.FlyPiece;
 import info.jayharris.ninemensmorris.move.MovePiece;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class RandomMovePlayer extends BasePlayer {
 
-    protected RandomMovePlayer(Piece piece) {
+    public RandomMovePlayer(Piece piece) {
         super(piece);
     }
 

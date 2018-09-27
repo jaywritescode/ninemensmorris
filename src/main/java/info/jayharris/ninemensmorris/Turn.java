@@ -3,6 +3,7 @@ package info.jayharris.ninemensmorris;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.InitialMove;
+import info.jayharris.ninemensmorris.player.BasePlayer;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;

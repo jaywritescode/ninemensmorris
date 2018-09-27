@@ -1,5 +1,9 @@
-package info.jayharris.ninemensmorris;
+package info.jayharris.ninemensmorris.player;
 
+import info.jayharris.ninemensmorris.Board;
+import info.jayharris.ninemensmorris.Game;
+import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.Turn;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.FlyPiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
@@ -44,4 +48,10 @@ public abstract class BasePlayer {
     public abstract FlyPiece movePiece(Board board);
 
     public abstract CapturePiece capturePiece(Board board);
+
+    public void begin(Game game) { }
+
+    public void done(Game game) { }
+
+    public void fail(Game game, Exception e) { }
 }

@@ -1,12 +1,16 @@
-package info.jayharris.ninemensmorris;
+package info.jayharris.ninemensmorris.player;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
+import info.jayharris.ninemensmorris.BoardBuilder;
+import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.FlyPiece;
 import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
+import info.jayharris.ninemensmorris.player.RandomMovePlayer;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

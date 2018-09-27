@@ -116,7 +116,7 @@ public class Board {
         return points.values().contains(point);
     }
 
-    boolean isCompleteMill(Point point) {
+    public boolean isCompleteMill(Point point) {
         return point.getMills().stream().anyMatch(mill -> mill.isComplete(point.getPiece()));
     }
 

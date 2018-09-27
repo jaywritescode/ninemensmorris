@@ -1,6 +1,8 @@
 package info.jayharris.ninemensmorris;
 
 import info.jayharris.ninemensmorris.Board.Point;
+import info.jayharris.ninemensmorris.player.BasePlayer;
+import info.jayharris.ninemensmorris.player.RandomMovePlayer;
 
 import java.util.Set;
 
