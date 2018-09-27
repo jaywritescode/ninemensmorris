@@ -57,7 +57,7 @@ public class Turn {
     }
 
     public String pretty() {
-        return initial.pretty() + Objects.toString(capture, StringUtils.EMPTY);
+        return initial.pretty() + StringUtils.defaultString(capture.pretty());
     }
 
     public static Turn create(BasePlayer player, Board board) {
