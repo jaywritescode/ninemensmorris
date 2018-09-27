@@ -55,6 +55,10 @@ public class Game {
                 point -> point.getNeighbors().stream().anyMatch(Point::isUnoccupied)));
     }
 
+    public String pretty() {
+        return board.pretty();
+    }
+
     public static void main(String... args) {
         BasePlayer black = new RandomMovePlayer(Piece.BLACK);
         BasePlayer white = new RandomMovePlayer(Piece.WHITE);
