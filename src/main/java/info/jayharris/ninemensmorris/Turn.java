@@ -32,7 +32,7 @@ public class Turn {
      * Performs the initial move, assuming one hasn't already been performed.
      */
     public Board doInitialMove(InitialMove initial) {
-        checkState(initial == null, "You can only move once per turn.");
+        checkState(this.initial == null, "You can only move once per turn.");
 
         initial.perform();
 
@@ -41,8 +41,8 @@ public class Turn {
     }
 
     public Board doCaptureMove(CapturePiece capture) {
-        checkState(initial != null, "You must move before you can capture.");
-        checkState(capture == null, "You can only capture one piece per turn.");
+        checkState(this.initial != null, "You must move before you can capture.");
+        checkState(this.capture == null, "You can only capture one piece per turn.");
         checkState(board.isCompleteMill(initial.getUpdatedPoint()), "Point %s does not complete a mill", initial.getUpdatedPoint().toString());
 
         capture.perform();
