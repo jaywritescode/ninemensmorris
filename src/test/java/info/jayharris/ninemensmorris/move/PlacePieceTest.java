@@ -20,7 +20,7 @@ class PlacePieceTest {
 
     @BeforeEach
     void setUp() {
-        board = BoardBuilder.create().build();
+        board = BoardBuilder.empty();
         player = new PlayerAdapter(Piece.BLACK);
     }
 
@@ -39,7 +39,7 @@ class PlacePieceTest {
 
         @Test
         @DisplayName("legal move")
-        void unoccupied() {
+        void legal() {
             PlacePiece move = PlacePiece.create(player, board.getPoint("e3"));
 
             assertThatCode(move::validateLegal).doesNotThrowAnyException();

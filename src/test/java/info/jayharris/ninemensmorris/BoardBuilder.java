@@ -31,6 +31,10 @@ public class BoardBuilder {
         return board;
     }
 
+    public static Board empty() {
+        return BoardBuilder.create().build();
+    }
+
     public static BoardBuilder create() {
         return BoardBuilder.create(new Board());
     }
