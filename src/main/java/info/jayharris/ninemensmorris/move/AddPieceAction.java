@@ -22,7 +22,6 @@ class AddPieceAction extends Action {
      */
     @Override
     void perform(Point point) {
-        checkArgument(point.isUnoccupied(), "Expected point %s to be empty.", point.getId());
         point.setPiece(piece);
     }
 
