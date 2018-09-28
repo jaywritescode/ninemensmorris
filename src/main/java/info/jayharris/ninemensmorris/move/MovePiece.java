@@ -1,35 +1,61 @@
 package info.jayharris.ninemensmorris.move;
 
+import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 
-public class MovePiece extends FlyPiece {
+public final class MovePiece extends BaseMove implements InitialMove {
 
-    private MovePiece(BasePlayer player, Point initial, Point destination) {
-        super(player, initial, destination);
+    private final Board board;
+    private final Point initial, destination;
+
+    private MovePiece(BasePlayer player, Board board, Point initial, Point destination) {
+        super(player);
+        this.board = board;
+        this.initial = initial;
+        this.destination = destination;
     }
 
     @Override
     public void perform() throws IllegalStateException {
         validateLegal();
-        super.perform();
+        RemovePieceAction.create().perform(initial);
+        AddPieceAction.create(player.getPiece()).perform(destination);
+    }
+
+    @Override
+    public Point getUpdatedPoint() {
+        return destination;
     }
 
     @Override
     public void validateLegal() {
-        super.validateLegal();
-        if (initial.getNeighbors().contains(destination)) {
+        if (initial.getPiece() != player.getPiece()) {
+            throw IllegalMoveException.create(
+                    initial.isUnoccupied() ? "No piece on %s to move." : "Cannot move opponent's piece on %s.",
+                    initial.getId());
+        }
+        if (!destination.isUnoccupied()) {
+            throw IllegalMoveException.create("Cannot move to occupied point at %s.", destination.getId());
+        }
+
+
+        if (board.getOccupiedPoints(getPiece()).size() > 3 && !initial.getNeighbors().contains(destination)) {
             throw IllegalMoveException.create("Points %s and %s are not adjacent.", initial.getId(),
                                               destination.getId());
         }
     }
 
-    public static MovePiece create(BasePlayer player, Point initial, Point destination) {
-        return new MovePiece(player, initial, destination);
+    public String pretty() {
+        return initial.getId() + "-" + destination.getId();
     }
 
-    public static MovePiece createLegal(BasePlayer player, Point initial, Point destination) {
-        MovePiece move = create(player, initial, destination);
+    public static MovePiece create(BasePlayer player, Board board, Point initial, Point destination) {
+        return new MovePiece(player, board, initial, destination);
+    }
+
+    public static MovePiece createLegal(BasePlayer player, Board board, Point initial, Point destination) {
+        MovePiece move = create(player, board, initial, destination);
 
         move.validateLegal();
         return move;

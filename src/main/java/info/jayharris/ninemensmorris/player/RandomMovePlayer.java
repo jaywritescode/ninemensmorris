@@ -5,7 +5,6 @@ import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
-import info.jayharris.ninemensmorris.move.FlyPiece;
 import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
 import org.apache.commons.lang3.RandomUtils;
@@ -26,9 +25,9 @@ public class RandomMovePlayer extends BasePlayer {
     }
 
     @Override
-    public FlyPiece movePiece(Board board) {
+    public MovePiece movePiece(Board board) {
         if (board.getOccupiedPoints(getPiece()).size() == 3) {
-            return flyPiece(board);
+            return movePieceAnywhere(board);
         }
         return moveToNeighbor(board);
     }
@@ -38,10 +37,10 @@ public class RandomMovePlayer extends BasePlayer {
         return CapturePiece.create(this, randomElement(board.getOccupiedPoints(getPiece().opposite())));
     }
 
-    private FlyPiece flyPiece(Board board) {
+    private MovePiece movePieceAnywhere(Board board) {
         Point init = randomElement(board.getOccupiedPoints(getPiece()));
         Point dest = randomElement(board.getUnoccupiedPoints());
-        return FlyPiece.create(this, init, dest);
+        return MovePiece.create(this, board, init, dest);
     }
 
     private MovePiece moveToNeighbor(Board board) {
@@ -54,7 +53,7 @@ public class RandomMovePlayer extends BasePlayer {
                 init.getNeighbors().stream()
                         .filter(Point::isUnoccupied)
                         .collect(Collectors.toList()));
-        return MovePiece.create(this, init, dest);
+        return MovePiece.create(this, board, init, dest);
     }
 
     private <T> T randomElement(Collection<T> collection) {

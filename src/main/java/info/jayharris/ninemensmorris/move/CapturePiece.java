@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkState;
 
-public class CapturePiece extends BaseMove {
+public final class CapturePiece extends BaseMove {
 
     private final Point point;
 

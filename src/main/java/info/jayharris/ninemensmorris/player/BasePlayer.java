@@ -5,7 +5,7 @@ import info.jayharris.ninemensmorris.Game;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.Turn;
 import info.jayharris.ninemensmorris.move.CapturePiece;
-import info.jayharris.ninemensmorris.move.FlyPiece;
+import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
 
 public abstract class BasePlayer {
@@ -47,7 +47,7 @@ public abstract class BasePlayer {
 
     public abstract PlacePiece placePiece(Board board);
 
-    public abstract FlyPiece movePiece(Board board);
+    public abstract MovePiece movePiece(Board board);
 
     public abstract CapturePiece capturePiece(Board board);
 

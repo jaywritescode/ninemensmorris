@@ -1,20 +1,17 @@
 package info.jayharris.ninemensmorris.player;
 
-import com.google.common.collect.ImmutableList;
 import info.jayharris.ninemensmorris.Board;
-import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Game;
 import info.jayharris.ninemensmorris.Piece;
-import info.jayharris.ninemensmorris.move.*;
-import org.apache.commons.lang3.StringUtils;
+import info.jayharris.ninemensmorris.move.CapturePiece;
+import info.jayharris.ninemensmorris.move.IllegalMoveException;
+import info.jayharris.ninemensmorris.move.MovePiece;
+import info.jayharris.ninemensmorris.move.PlacePiece;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +59,7 @@ public class TerminalPlayer extends BasePlayer {
     }
 
     @Override
-    public FlyPiece movePiece(Board board) {
+    public MovePiece movePiece(Board board) {
         String input;
 
         while (true) {
@@ -83,10 +80,10 @@ public class TerminalPlayer extends BasePlayer {
             try {
                 // TODO: maybe FlyPiece and MovePiece shouldn't be different classes
                 if (board.getOccupiedPoints(getPiece()).size() == 3) {
-                    return FlyPiece.createLegal(this, board.getPoint(init), board.getPoint(dest));
+                    return MovePiece.createLegal(this, board, board.getPoint(init), board.getPoint(dest));
                 }
                 else {
-                    return MovePiece.createLegal(this, board.getPoint(init), board.getPoint(dest));
+                    return MovePiece.createLegal(this, board, board.getPoint(init), board.getPoint(dest));
                 }
             }
             catch (IllegalMoveException e) {

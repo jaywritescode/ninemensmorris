@@ -7,10 +7,8 @@ import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.BoardBuilder;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
-import info.jayharris.ninemensmorris.move.FlyPiece;
 import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
-import info.jayharris.ninemensmorris.player.RandomMovePlayer;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,9 +60,8 @@ class RandomMovePlayerTest {
                 ++i;
             }
 
-            FlyPiece move = player.movePiece(builder.build());
+            MovePiece move = player.movePiece(builder.build());
 
-            assertThat(move).isExactlyInstanceOf(FlyPiece.class);
             assertThat(move)
                     .extracting("initial")
                     .first()
@@ -93,9 +90,8 @@ class RandomMovePlayerTest {
             Point neighbor = point.getNeighbors().iterator().next();
             builder.withPiece(neighbor, null);
 
-            FlyPiece move = player.movePiece(builder.build());
+            MovePiece move = player.movePiece(builder.build());
 
-            assertThat(move).isExactlyInstanceOf(MovePiece.class);
             assertThat(move).extracting("initial")
                     .first()
                     .hasFieldOrPropertyWithValue("piece", player.getPiece());
