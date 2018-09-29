@@ -11,6 +11,9 @@ public final class CapturePiece extends BaseMove {
 
     private final Point point;
 
+    public final static String ILLEGAL_MOVE_TEMPLATE = "Expected a %s piece on point %s, instead found %s.",
+            EMPTY_POINT = "no piece";
+
     private CapturePiece(BasePlayer player, Point point) {
         super(player);
         this.point = point;
@@ -24,9 +27,9 @@ public final class CapturePiece extends BaseMove {
 
     public void validateLegal() throws IllegalMoveException {
         if (point.getPiece() != player.getPiece().opposite()) {
-            throw IllegalMoveException.create("Expected a %s piece on point %s, instead found %s",
+            throw IllegalMoveException.create(ILLEGAL_MOVE_TEMPLATE,
                                               player.getPiece().opposite().toString(),
-                                              point.getId(), Objects.toString(point.getPiece(), "no piece"));
+                                              point.getId(), Objects.toString(point.getPiece(), EMPTY_POINT));
         }
     }
 

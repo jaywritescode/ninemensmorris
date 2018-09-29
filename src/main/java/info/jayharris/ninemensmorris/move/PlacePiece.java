@@ -7,6 +7,8 @@ public final class PlacePiece extends BaseMove implements InitialMove {
 
     private final Point point;
 
+    public final static String ILLEGAL_MOVE_TEMPLATE = "Can't place a piece on occupied point %s.";
+
     private PlacePiece(BasePlayer player, Point point) {
         super(player);
         this.point = point;
@@ -26,7 +28,7 @@ public final class PlacePiece extends BaseMove implements InitialMove {
     @Override
     public void validateLegal() throws IllegalMoveException {
         if (!point.isUnoccupied()) {
-            throw IllegalMoveException.create("Can't place a piece on occupied point %s.", point.getId());
+            throw IllegalMoveException.create(ILLEGAL_MOVE_TEMPLATE, point.getId());
         }
     }
 

@@ -22,6 +22,9 @@ public class TerminalPlayer extends BasePlayer {
 
     private final static Pattern movePattern = Pattern.compile("^(\\w{2})\\s*-\\s*(\\w{2})$", Pattern.CASE_INSENSITIVE);
 
+    public final static String INVALID_ALGEBRAIC_NOTATION_TEMPLATE = "%s is invalid algebraic notation. Try again >> ",
+            TRY_AGAIN_TEMPLATE = "%s Try again >> ";
+
     TerminalPlayer(Piece piece) {
         this(piece, new BufferedReader(new InputStreamReader(System.in)), System.out);
     }
@@ -53,7 +56,7 @@ public class TerminalPlayer extends BasePlayer {
                 }
             }
             else {
-                out.printf("%s is invalid algebraic notation. Try again >> ", input);
+                out.printf(INVALID_ALGEBRAIC_NOTATION_TEMPLATE, input);
             }
         }
     }
@@ -71,23 +74,22 @@ public class TerminalPlayer extends BasePlayer {
             }
 
             Matcher matcher = movePattern.matcher(input);
-            String init = matcher.group(1), dest = matcher.group(2);
+            if (!matcher.matches()) {
+                out.printf(INVALID_ALGEBRAIC_NOTATION_TEMPLATE, input);
+                continue;
+            }
 
+            String init = matcher.group(1), dest = matcher.group(2);
             if (!(matcher.matches() && valid(init) && valid(dest))) {
-                out.printf("%s is invalid algebraic notation.", input);
+                out.printf(INVALID_ALGEBRAIC_NOTATION_TEMPLATE, input);
+                continue;
             }
 
             try {
-                // TODO: maybe FlyPiece and MovePiece shouldn't be different classes
-                if (board.getOccupiedPoints(getPiece()).size() == 3) {
-                    return MovePiece.createLegal(this, board, board.getPoint(init), board.getPoint(dest));
-                }
-                else {
-                    return MovePiece.createLegal(this, board, board.getPoint(init), board.getPoint(dest));
-                }
+                return MovePiece.createLegal(this, board, board.getPoint(init), board.getPoint(dest));
             }
             catch (IllegalMoveException e) {
-                out.printf("%s Try again >> ", e.getMessage());
+                out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
             }
         }
     }
@@ -109,11 +111,11 @@ public class TerminalPlayer extends BasePlayer {
                     return CapturePiece.createLegalMove(this, board.getPoint(input));
                 }
                 catch (IllegalMoveException e) {
-                    out.printf("%s Try again >> ", e.getMessage());
+                    out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
                 }
             }
             else {
-                out.printf("%s is invalid algebraic notation. Try again >> ", input);
+                out.printf(INVALID_ALGEBRAIC_NOTATION_TEMPLATE, input);
             }
         }
     }

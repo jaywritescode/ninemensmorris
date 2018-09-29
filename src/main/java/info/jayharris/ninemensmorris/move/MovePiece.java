@@ -6,6 +6,10 @@ import info.jayharris.ninemensmorris.player.BasePlayer;
 
 public final class MovePiece extends BaseMove implements InitialMove {
 
+    public static final String EMPTY_POINT_TEMPLATE = "No piece on %s to move.",
+            OPPONENT_PIECE_TEMPLATE = "Cannot move opponent's piece on %s.",
+            DESTINATION_OCCUPIED_TEMPLATE = "Cannot move to occupied point at %s.",
+            POINTS_NOT_ADJACENT_TEMPLATE = "Points %s and %s are not adjacent.";
     private final Board board;
     private final Point initial, destination;
 
@@ -17,7 +21,7 @@ public final class MovePiece extends BaseMove implements InitialMove {
     }
 
     @Override
-    public void perform() throws IllegalStateException {
+    public void perform() throws IllegalMoveException {
         validateLegal();
         RemovePieceAction.create().perform(initial);
         AddPieceAction.create(player.getPiece()).perform(destination);
@@ -32,17 +36,15 @@ public final class MovePiece extends BaseMove implements InitialMove {
     public void validateLegal() {
         if (initial.getPiece() != player.getPiece()) {
             throw IllegalMoveException.create(
-                    initial.isUnoccupied() ? "No piece on %s to move." : "Cannot move opponent's piece on %s.",
+                    initial.isUnoccupied() ? EMPTY_POINT_TEMPLATE : OPPONENT_PIECE_TEMPLATE,
                     initial.getId());
         }
         if (!destination.isUnoccupied()) {
-            throw IllegalMoveException.create("Cannot move to occupied point at %s.", destination.getId());
+            throw IllegalMoveException.create(DESTINATION_OCCUPIED_TEMPLATE, destination.getId());
         }
 
-
         if (board.getOccupiedPoints(getPiece()).size() > 3 && !initial.getNeighbors().contains(destination)) {
-            throw IllegalMoveException.create("Points %s and %s are not adjacent.", initial.getId(),
-                                              destination.getId());
+            throw IllegalMoveException.create(POINTS_NOT_ADJACENT_TEMPLATE, initial.getId(), destination.getId());
         }
     }
 
