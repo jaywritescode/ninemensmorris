@@ -30,7 +30,7 @@ public class Game {
                 current.done(this);
             }
             catch (Exception e) {
-                current.fail(this, e);
+                e.printStackTrace();
             }
         }
     }
