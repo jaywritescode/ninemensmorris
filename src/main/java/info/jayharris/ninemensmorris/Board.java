@@ -159,6 +159,19 @@ public class Board {
         }
 
         @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Point point = (Point) o;
+            return Objects.equals(id, point.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+        }
+
+        @Override
         public String toString() {
             return new StringJoiner(", ", Point.class.getSimpleName() + "[", "]")
                     .add("piece=" + piece)
