@@ -37,6 +37,19 @@ public final class CapturePiece extends BaseMove {
         return "x" + point.getId();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CapturePiece that = (CapturePiece) o;
+        return Objects.equals(point, that.point);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(point);
+    }
+
     public static CapturePiece create(BasePlayer player, Point point) {
         return new CapturePiece(player, point);
     }

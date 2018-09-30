@@ -4,6 +4,8 @@ import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 
+import java.util.Objects;
+
 public final class MovePiece extends BaseMove implements InitialMove {
 
     public static final String EMPTY_POINT_TEMPLATE = "No piece on %s to move.",
@@ -46,6 +48,20 @@ public final class MovePiece extends BaseMove implements InitialMove {
         if (board.getOccupiedPoints(getPiece()).size() > 3 && !initial.getNeighbors().contains(destination)) {
             throw IllegalMoveException.create(POINTS_NOT_ADJACENT_TEMPLATE, initial.getId(), destination.getId());
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovePiece movePiece = (MovePiece) o;
+        return Objects.equals(initial, movePiece.initial) &&
+               Objects.equals(destination, movePiece.destination);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(initial, destination);
     }
 
     public String pretty() {

@@ -3,6 +3,8 @@ package info.jayharris.ninemensmorris.move;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 
+import java.util.Objects;
+
 public final class PlacePiece extends BaseMove implements InitialMove {
 
     private final Point point;
@@ -34,6 +36,19 @@ public final class PlacePiece extends BaseMove implements InitialMove {
 
     public String pretty() {
         return point.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlacePiece that = (PlacePiece) o;
+        return Objects.equals(point, that.point);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(point);
     }
 
     public static PlacePiece create(BasePlayer player, Point point) {
