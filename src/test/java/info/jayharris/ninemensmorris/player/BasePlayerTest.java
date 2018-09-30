@@ -16,6 +16,13 @@ import org.junit.jupiter.api.Test;
 
 class BasePlayerTest {
 
+    SoftAssertions softly;
+
+    @BeforeEach
+    void setUp() {
+        softly = new SoftAssertions();
+    }
+
     @Nested
     class TakeTurn {
 
@@ -49,13 +56,10 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                SoftAssertions softly = new SoftAssertions();
-
                 softly.assertThat(turn).extracting("initial", "capture")
                         .containsExactly(PlacePiece.create(player, initial), null);
                 softly.assertThat(player).hasFieldOrPropertyWithValue("startingPieces", 6);
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", player.getPiece());
-
                 softly.assertAll();
             }
 
@@ -80,8 +84,6 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                SoftAssertions softly = new SoftAssertions();
-
                 softly.assertThat(turn).extracting("initial", "capture")
                         .containsExactly(
                                 PlacePiece.create(player, initial),
@@ -89,9 +91,6 @@ class BasePlayerTest {
                 softly.assertThat(player).hasFieldOrPropertyWithValue("startingPieces", 6);
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", player.getPiece());
                 softly.assertThat(capture).hasFieldOrPropertyWithValue("piece", null);
-
-                softly.assertAll();
-
                 softly.assertAll();
             }
         }
@@ -138,13 +137,10 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                SoftAssertions softly = new SoftAssertions();
-
                 softly.assertThat(turn).extracting("initial", "capture")
                         .containsExactly(MovePiece.create(player, board, initial, destination), null);
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", null);
                 softly.assertThat(destination).hasFieldOrPropertyWithValue("piece", player.getPiece());
-
                 softly.assertAll();
             }
 
@@ -168,8 +164,6 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                SoftAssertions softly = new SoftAssertions();
-
                 softly.assertThat(turn).extracting("initial", "capture")
                         .containsExactly(
                                 MovePiece.create(player, board, initial, destination),
@@ -177,7 +171,6 @@ class BasePlayerTest {
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", null);
                 softly.assertThat(destination).hasFieldOrPropertyWithValue("piece", player.getPiece());
                 softly.assertThat(capture).hasFieldOrPropertyWithValue("piece", null);
-
                 softly.assertAll();
             }
         }
