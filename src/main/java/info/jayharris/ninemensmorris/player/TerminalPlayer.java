@@ -52,7 +52,7 @@ public class TerminalPlayer extends BasePlayer {
                     return PlacePiece.createLegal(this, board.getPoint(input));
                 }
                 catch (IllegalMoveException e) {
-                    out.printf("%s Try again >> ", e.getMessage());
+                    out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
                 }
             }
             else {

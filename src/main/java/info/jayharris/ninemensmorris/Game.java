@@ -35,6 +35,10 @@ public class Game {
         }
     }
 
+    public int getPly() {
+        return ply;
+    }
+
     private void nextPly() {
         ++ply;
 
