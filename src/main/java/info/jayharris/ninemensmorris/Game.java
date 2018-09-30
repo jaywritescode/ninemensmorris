@@ -70,5 +70,6 @@ public class Game {
         Game game = new Game(black, white);
 
         game.play();
+        System.out.println(game.pretty());
     }
 }
