@@ -22,7 +22,7 @@ class CapturePieceTest {
     Point point;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         player = new PlayerAdapter(Piece.WHITE);
 
         String pointStr = "e3";

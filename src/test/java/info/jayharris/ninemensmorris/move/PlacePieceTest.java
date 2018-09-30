@@ -19,7 +19,7 @@ class PlacePieceTest {
     BasePlayer player;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         board = BoardBuilder.empty();
         player = new PlayerAdapter(Piece.BLACK);
     }

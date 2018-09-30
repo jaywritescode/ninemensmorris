@@ -21,7 +21,7 @@ class MovePieceTest {
     Board board;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         player = new PlayerAdapter(Piece.WHITE);
     }
 
@@ -50,7 +50,7 @@ class MovePieceTest {
     class ValidateLegal {
 
         @BeforeEach
-        void setUp() {
+        void setUp() throws Exception {
 
         }
 
