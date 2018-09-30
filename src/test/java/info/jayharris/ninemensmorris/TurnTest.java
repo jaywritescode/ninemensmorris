@@ -17,7 +17,7 @@ class TurnTest {
     BasePlayer player;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         player = new PlayerAdapter(Piece.WHITE);
     }
 
