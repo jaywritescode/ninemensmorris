@@ -25,7 +25,7 @@ public class TerminalPlayer extends BasePlayer {
     public final static String INVALID_ALGEBRAIC_NOTATION_TEMPLATE = "%s is invalid algebraic notation. Try again >> ",
             TRY_AGAIN_TEMPLATE = "%s Try again >> ";
 
-    TerminalPlayer(Piece piece) {
+    public TerminalPlayer(Piece piece) {
         this(piece, new BufferedReader(new InputStreamReader(System.in)), System.out);
     }
 
@@ -96,6 +96,7 @@ public class TerminalPlayer extends BasePlayer {
 
     @Override
     public CapturePiece capturePiece(Board board) {
+        out.printf("Capture %s piece >> ", getPiece().opposite());
         String input;
 
         while (true) {

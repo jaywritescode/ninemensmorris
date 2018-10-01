@@ -64,7 +64,7 @@ public class Game {
     }
 
     public static void main(String... args) {
-        BasePlayer black = new RandomMovePlayer(Piece.BLACK);
+        BasePlayer black = new TerminalPlayer(Piece.BLACK);
         BasePlayer white = new RandomMovePlayer(Piece.WHITE);
 
         Game game = new Game(black, white);
