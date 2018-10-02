@@ -5,9 +5,9 @@ public interface Move {
     /**
      * Validates and performs the move.
      *
-     * @throws IllegalStateException if the move is illegal
+     * @throws IllegalMoveException if the move is illegal
      */
-    void perform() throws IllegalStateException;
+    void perform() throws IllegalMoveException;
 
     String pretty();
 }
