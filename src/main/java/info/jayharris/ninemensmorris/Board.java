@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,7 +94,8 @@ public class Board {
     }
 
     public Board() {
-        this.points = ALGEBRAIC_NOTATIONS_FOR_POINTS.stream().collect(Collectors.toMap(Function.identity(), Point::new));
+        this.points = ALGEBRAIC_NOTATIONS_FOR_POINTS.stream()
+                .collect(Collectors.toMap(Function.identity(), Point::new));
     }
 
     public Point getPoint(String point) {
@@ -111,6 +113,8 @@ public class Board {
                 .filter(point -> point.isUnoccupied())
                 .collect(Collectors.toSet());
     }
+
+    public static Predicate<Point> isUnoccupied = Point::isUnoccupied;
 
     boolean hasPoint(Point point) {
         return points.values().contains(point);
@@ -154,6 +158,12 @@ public class Board {
             return id;
         }
 
+        public Point copy() {
+            Point copy = new Point(id);
+            copy.setPiece(piece);
+            return copy;
+        }
+
         String pretty() {
             return piece == null ? "+" : piece.pretty();
         }
@@ -178,6 +188,29 @@ public class Board {
                     .add("id='" + id + "'")
                     .toString();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return Objects.equals(points, board.points);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(points);
+    }
+
+    public static Board copy(Board original) {
+        Board copy = new Board();
+
+        original.points.values().stream()
+                .filter(isUnoccupied.negate())
+                .forEach(Point::copy);
+
+        return copy;
     }
 
     class Mill {
