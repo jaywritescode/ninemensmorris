@@ -49,7 +49,7 @@ public class TerminalPlayer extends BasePlayer {
 
             if (valid(input)) {
                 try {
-                    return PlacePiece.createLegal(this, board.getPoint(input));
+                    return PlacePiece.createLegal(getPiece(), board.getPoint(input));
                 }
                 catch (IllegalMoveException e) {
                     out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
@@ -86,7 +86,7 @@ public class TerminalPlayer extends BasePlayer {
             }
 
             try {
-                return MovePiece.createLegal(this, board, board.getPoint(init), board.getPoint(dest));
+                return MovePiece.createLegal(getPiece(), board, board.getPoint(init), board.getPoint(dest));
             }
             catch (IllegalMoveException e) {
                 out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
@@ -109,7 +109,7 @@ public class TerminalPlayer extends BasePlayer {
 
             if (valid(input)) {
                 try {
-                    return CapturePiece.createLegalMove(this, board.getPoint(input));
+                    return CapturePiece.createLegalMove(getPiece(), board.getPoint(input));
                 }
                 catch (IllegalMoveException e) {
                     out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());

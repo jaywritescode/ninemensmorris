@@ -1,19 +1,18 @@
 package info.jayharris.ninemensmorris.move;
 
 import info.jayharris.ninemensmorris.Piece;
-import info.jayharris.ninemensmorris.player.BasePlayer;
 
 abstract class BaseMove implements Move {
 
-    BasePlayer player;
+    Piece piece;
 
-    BaseMove(BasePlayer player) {
-        this.player = player;
+    BaseMove(Piece piece) {
+        this.piece = piece;
     }
 
     public abstract void validateLegal() throws IllegalMoveException;
 
     public Piece getPiece() {
-        return player.getPiece();
+        return piece;
     }
 }

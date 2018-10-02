@@ -15,10 +15,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 class TurnTest {
 
     BasePlayer player;
+    Piece piece;
 
     @BeforeEach
     void setUp() throws Exception {
         player = new PlayerAdapter(Piece.WHITE);
+        piece = player.getPiece();
     }
 
     @Test
@@ -28,10 +30,10 @@ class TurnTest {
 
         Turn turn = Turn.create(player, board);
 
-        InitialMove initial = PlacePiece.create(player, point);
+        InitialMove initial = PlacePiece.create(piece, point);
 
         assertThatCode(() -> turn.doInitialMove(initial)).doesNotThrowAnyException();
-        assertThat(point).hasFieldOrPropertyWithValue("piece", player.getPiece());
+        assertThat(point).hasFieldOrPropertyWithValue("piece", piece);
     }
 
     @Test
@@ -45,9 +47,9 @@ class TurnTest {
         Point point = board.getPoint(captureStr);
 
         Turn turn = Turn.create(player, board);
-        turn.doInitialMove(PlacePiece.create(player, board.getPoint("c3")));
+        turn.doInitialMove(PlacePiece.create(piece, board.getPoint("c3")));
 
-        CapturePiece capture = CapturePiece.create(player, point);
+        CapturePiece capture = CapturePiece.create(piece, point);
 
         assertThatCode(() -> turn.doCaptureMove(capture)).doesNotThrowAnyException();
         assertThat(point).hasFieldOrPropertyWithValue("piece", null);

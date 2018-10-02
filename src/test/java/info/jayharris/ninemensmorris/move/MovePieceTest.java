@@ -18,11 +18,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOf
 class MovePieceTest {
 
     BasePlayer player;
+    Piece piece;
+
     Board board;
 
     @BeforeEach
     void setUp() throws Exception {
         player = new PlayerAdapter(Piece.WHITE);
+        piece = player.getPiece();
     }
 
     @Test
@@ -30,19 +33,19 @@ class MovePieceTest {
     void perform() {
         String initStr = "a7", destStr = "d7";
         board = BoardBuilder.create()
-                .withPiece("a7", player.getPiece())
-                .withPiece("b6", player.getPiece())
-                .withPiece("c5", player.getPiece())
-                .withPiece("a4", player.getPiece())
+                .withPiece("a7", piece)
+                .withPiece("b6", piece)
+                .withPiece("c5", piece)
+                .withPiece("a4", piece)
                 .build();
 
         Point init = board.getPoint(initStr), dest = board.getPoint(destStr);
 
-        MovePiece.create(player, board, init, dest).perform();
+        MovePiece.create(piece, board, init, dest).perform();
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(init).hasFieldOrPropertyWithValue("piece", null);
-        softly.assertThat(dest).hasFieldOrPropertyWithValue("piece", player.getPiece());
+        softly.assertThat(dest).hasFieldOrPropertyWithValue("piece", piece);
         softly.assertAll();
     }
 
@@ -60,13 +63,13 @@ class MovePieceTest {
             String initStr = "a7", destStr = "d7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("a7", player.getPiece())
-                    .withPiece("b6", player.getPiece())
-                    .withPiece("c5", player.getPiece())
-                    .withPiece("a4", player.getPiece())
+                    .withPiece("a7", piece)
+                    .withPiece("b6", piece)
+                    .withPiece("c5", piece)
+                    .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(player, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
 
             assertThatCode(move::validateLegal).doesNotThrowAnyException();
         }
@@ -77,13 +80,13 @@ class MovePieceTest {
             String initStr = "a7", destStr = "d7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("a7", player.getPiece().opposite())
-                    .withPiece("b6", player.getPiece())
-                    .withPiece("c5", player.getPiece())
-                    .withPiece("a4", player.getPiece())
+                    .withPiece("a7", piece.opposite())
+                    .withPiece("b6", piece)
+                    .withPiece("c5", piece)
+                    .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(player, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -94,12 +97,12 @@ class MovePieceTest {
             String initStr = "a7", destStr = "d7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("b6", player.getPiece())
-                    .withPiece("c5", player.getPiece())
-                    .withPiece("a4", player.getPiece())
+                    .withPiece("b6", piece)
+                    .withPiece("c5", piece)
+                    .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(player, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -110,14 +113,14 @@ class MovePieceTest {
             String initStr = "a7", destStr = "d7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("a7", player.getPiece())
-                    .withPiece("b6", player.getPiece())
-                    .withPiece("c5", player.getPiece())
-                    .withPiece("a4", player.getPiece())
-                    .withPiece("d7", player.getPiece())
+                    .withPiece("a7", piece)
+                    .withPiece("b6", piece)
+                    .withPiece("c5", piece)
+                    .withPiece("a4", piece)
+                    .withPiece("d7", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(player, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -128,13 +131,13 @@ class MovePieceTest {
             String initStr = "a7", destStr = "g7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("a7", player.getPiece().opposite())
-                    .withPiece("b6", player.getPiece())
-                    .withPiece("c5", player.getPiece())
-                    .withPiece("a4", player.getPiece())
+                    .withPiece("a7", piece.opposite())
+                    .withPiece("b6", piece)
+                    .withPiece("c5", piece)
+                    .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(player, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -145,12 +148,12 @@ class MovePieceTest {
             String initStr = "a7", destStr = "g7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("a7", player.getPiece())
-                    .withPiece("b6", player.getPiece())
-                    .withPiece("c5", player.getPiece())
+                    .withPiece("a7", piece)
+                    .withPiece("b6", piece)
+                    .withPiece("c5", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(player, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
 
             assertThatCode(move::validateLegal).doesNotThrowAnyException();
         }

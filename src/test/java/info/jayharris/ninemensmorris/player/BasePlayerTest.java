@@ -49,7 +49,7 @@ class BasePlayerTest {
                 PlayerAdapter player = new PlayerAdapter(Piece.BLACK) {
                     @Override
                     public PlacePiece placePiece(Board board) {
-                        return PlacePiece.create(this, initial);
+                        return PlacePiece.create(getPiece(), initial);
                     }
                 };
                 player.setStartingPieces(7);
@@ -57,7 +57,7 @@ class BasePlayerTest {
                 Turn turn = player.takeTurn(board);
 
                 softly.assertThat(turn).extracting("initial", "capture")
-                        .containsExactly(PlacePiece.create(player, initial), null);
+                        .containsExactly(PlacePiece.create(player.getPiece(), initial), null);
                 softly.assertThat(player).hasFieldOrPropertyWithValue("startingPieces", 6);
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", player.getPiece());
                 softly.assertAll();
@@ -72,12 +72,12 @@ class BasePlayerTest {
                 PlayerAdapter player = new PlayerAdapter(Piece.BLACK) {
                     @Override
                     public PlacePiece placePiece(Board board) {
-                        return PlacePiece.create(this, initial);
+                        return PlacePiece.create(getPiece(), initial);
                     }
 
                     @Override
                     public CapturePiece capturePiece(Board board) {
-                        return CapturePiece.create(this, capture);
+                        return CapturePiece.create(getPiece(), capture);
                     }
                 };
                 player.setStartingPieces(7);
@@ -86,8 +86,8 @@ class BasePlayerTest {
 
                 softly.assertThat(turn).extracting("initial", "capture")
                         .containsExactly(
-                                PlacePiece.create(player, initial),
-                                CapturePiece.create(player, capture));
+                                PlacePiece.create(player.getPiece(), initial),
+                                CapturePiece.create(player.getPiece(), capture));
                 softly.assertThat(player).hasFieldOrPropertyWithValue("startingPieces", 6);
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", player.getPiece());
                 softly.assertThat(capture).hasFieldOrPropertyWithValue("piece", null);
@@ -130,7 +130,7 @@ class BasePlayerTest {
                 PlayerAdapter player = new PlayerAdapter(Piece.BLACK) {
                     @Override
                     public MovePiece movePiece(Board board) {
-                        return MovePiece.create(this, board, initial, destination);
+                        return MovePiece.create(getPiece(), board, initial, destination);
                     }
                 };
                 player.setStartingPieces(0);
@@ -138,7 +138,7 @@ class BasePlayerTest {
                 Turn turn = player.takeTurn(board);
 
                 softly.assertThat(turn).extracting("initial", "capture")
-                        .containsExactly(MovePiece.create(player, board, initial, destination), null);
+                        .containsExactly(MovePiece.create(player.getPiece(), board, initial, destination), null);
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", null);
                 softly.assertThat(destination).hasFieldOrPropertyWithValue("piece", player.getPiece());
                 softly.assertAll();
@@ -152,12 +152,12 @@ class BasePlayerTest {
                 PlayerAdapter player = new PlayerAdapter(Piece.WHITE) {
                     @Override
                     public MovePiece movePiece(Board board) {
-                        return MovePiece.create(this, board, initial, destination);
+                        return MovePiece.create(getPiece(), board, initial, destination);
                     }
 
                     @Override
                     public CapturePiece capturePiece(Board board) {
-                        return CapturePiece.create(this, capture);
+                        return CapturePiece.create(getPiece(), capture);
                     }
                 };
                 player.setStartingPieces(0);
@@ -166,8 +166,8 @@ class BasePlayerTest {
 
                 softly.assertThat(turn).extracting("initial", "capture")
                         .containsExactly(
-                                MovePiece.create(player, board, initial, destination),
-                                CapturePiece.create(player, capture));
+                                MovePiece.create(player.getPiece(), board, initial, destination),
+                                CapturePiece.create(player.getPiece(), capture));
                 softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", null);
                 softly.assertThat(destination).hasFieldOrPropertyWithValue("piece", player.getPiece());
                 softly.assertThat(capture).hasFieldOrPropertyWithValue("piece", null);

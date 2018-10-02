@@ -21,7 +21,7 @@ public class RandomMovePlayer extends BasePlayer {
 
     @Override
     public PlacePiece placePiece(Board board) {
-        return PlacePiece.create(this, randomElement(board.getUnoccupiedPoints()));
+        return PlacePiece.create(getPiece(), randomElement(board.getUnoccupiedPoints()));
     }
 
     @Override
@@ -34,13 +34,13 @@ public class RandomMovePlayer extends BasePlayer {
 
     @Override
     public CapturePiece capturePiece(Board board) {
-        return CapturePiece.create(this, randomElement(board.getOccupiedPoints(getPiece().opposite())));
+        return CapturePiece.create(getPiece(), randomElement(board.getOccupiedPoints(getPiece().opposite())));
     }
 
     private MovePiece movePieceAnywhere(Board board) {
         Point init = randomElement(board.getOccupiedPoints(getPiece()));
         Point dest = randomElement(board.getUnoccupiedPoints());
-        return MovePiece.create(this, board, init, dest);
+        return MovePiece.create(getPiece(), board, init, dest);
     }
 
     private MovePiece moveToNeighbor(Board board) {
@@ -53,7 +53,7 @@ public class RandomMovePlayer extends BasePlayer {
                 init.getNeighbors().stream()
                         .filter(Point::isUnoccupied)
                         .collect(Collectors.toList()));
-        return MovePiece.create(this, board, init, dest);
+        return MovePiece.create(getPiece(), board, init, dest);
     }
 
     private <T> T randomElement(Collection<T> collection) {

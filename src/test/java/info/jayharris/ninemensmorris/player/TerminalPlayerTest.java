@@ -177,7 +177,7 @@ class TerminalPlayerTest {
             player.capturePiece(builder.build());
 
             verify(reader, times(2)).readLine();
-            assertThat(output.toString()).isEqualTo(
+            assertThat(output.toString()).contains(
                     String.format(TerminalPlayer.INVALID_ALGEBRAIC_NOTATION_TEMPLATE, input));
         }
 

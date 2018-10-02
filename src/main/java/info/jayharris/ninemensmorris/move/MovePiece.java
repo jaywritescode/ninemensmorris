@@ -2,7 +2,7 @@ package info.jayharris.ninemensmorris.move;
 
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
-import info.jayharris.ninemensmorris.player.BasePlayer;
+import info.jayharris.ninemensmorris.Piece;
 
 import java.util.Objects;
 
@@ -15,8 +15,8 @@ public final class MovePiece extends BaseMove implements InitialMove {
     private final Board board;
     private final Point initial, destination;
 
-    private MovePiece(BasePlayer player, Board board, Point initial, Point destination) {
-        super(player);
+    private MovePiece(Piece piece, Board board, Point initial, Point destination) {
+        super(piece);
         this.board = board;
         this.initial = initial;
         this.destination = destination;
@@ -26,7 +26,7 @@ public final class MovePiece extends BaseMove implements InitialMove {
     public void perform() throws IllegalMoveException {
         validateLegal();
         RemovePieceAction.create().perform(initial);
-        AddPieceAction.create(player.getPiece()).perform(destination);
+        AddPieceAction.create(piece).perform(destination);
     }
 
     @Override
@@ -36,7 +36,7 @@ public final class MovePiece extends BaseMove implements InitialMove {
 
     @Override
     public void validateLegal() {
-        if (initial.getPiece() != player.getPiece()) {
+        if (initial.getPiece() != piece) {
             throw IllegalMoveException.create(
                     initial.isUnoccupied() ? EMPTY_POINT_TEMPLATE : OPPONENT_PIECE_TEMPLATE,
                     initial.getId());
@@ -68,12 +68,12 @@ public final class MovePiece extends BaseMove implements InitialMove {
         return initial.getId() + "-" + destination.getId();
     }
 
-    public static MovePiece create(BasePlayer player, Board board, Point initial, Point destination) {
-        return new MovePiece(player, board, initial, destination);
+    public static MovePiece create(Piece piece, Board board, Point initial, Point destination) {
+        return new MovePiece(piece, board, initial, destination);
     }
 
-    public static MovePiece createLegal(BasePlayer player, Board board, Point initial, Point destination) {
-        MovePiece move = create(player, board, initial, destination);
+    public static MovePiece createLegal(Piece piece, Board board, Point initial, Point destination) {
+        MovePiece move = create(piece, board, initial, destination);
 
         move.validateLegal();
         return move;

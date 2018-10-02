@@ -15,13 +15,17 @@ import static org.assertj.core.api.Assertions.*;
 
 class PlacePieceTest {
 
-    Board board;
     BasePlayer player;
+    Piece piece;
+
+    Board board;
 
     @BeforeEach
     void setUp() throws Exception {
-        board = BoardBuilder.empty();
         player = new PlayerAdapter(Piece.BLACK);
+        piece = player.getPiece();
+
+        board = BoardBuilder.empty();
     }
 
     @Test
@@ -29,8 +33,8 @@ class PlacePieceTest {
     void perform() {
         Point point = board.getPoint("e3");
 
-        PlacePiece.create(player, point).perform();
-        assertThat(point).hasFieldOrPropertyWithValue("piece", player.getPiece());
+        PlacePiece.create(piece, point).perform();
+        assertThat(point).hasFieldOrPropertyWithValue("piece", piece);
     }
 
 
@@ -40,7 +44,7 @@ class PlacePieceTest {
         @Test
         @DisplayName("legal move")
         void legal() {
-            PlacePiece move = PlacePiece.create(player, board.getPoint("e3"));
+            PlacePiece move = PlacePiece.create(piece, board.getPoint("e3"));
 
             assertThatCode(move::validateLegal).doesNotThrowAnyException();
         }
@@ -53,7 +57,7 @@ class PlacePieceTest {
                     .withPiece(point, Piece.BLACK)
                     .build();
 
-            PlacePiece move = PlacePiece.create(player, board.getPoint(point));
+            PlacePiece move = PlacePiece.create(piece, board.getPoint(point));
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }

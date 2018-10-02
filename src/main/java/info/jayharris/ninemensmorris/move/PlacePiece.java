@@ -1,7 +1,7 @@
 package info.jayharris.ninemensmorris.move;
 
 import info.jayharris.ninemensmorris.Board.Point;
-import info.jayharris.ninemensmorris.player.BasePlayer;
+import info.jayharris.ninemensmorris.Piece;
 
 import java.util.Objects;
 
@@ -11,15 +11,15 @@ public final class PlacePiece extends BaseMove implements InitialMove {
 
     public final static String ILLEGAL_MOVE_TEMPLATE = "Can't place a piece on occupied point %s.";
 
-    private PlacePiece(BasePlayer player, Point point) {
-        super(player);
+    private PlacePiece(Piece piece, Point point) {
+        super(piece);
         this.point = point;
     }
 
     @Override
     public void perform() {
         validateLegal();
-        AddPieceAction.create(player.getPiece()).perform(point);
+        AddPieceAction.create(piece).perform(point);
     }
 
     @Override
@@ -51,12 +51,12 @@ public final class PlacePiece extends BaseMove implements InitialMove {
         return Objects.hash(point);
     }
 
-    public static PlacePiece create(BasePlayer player, Point point) {
-        return new PlacePiece(player, point);
+    public static PlacePiece create(Piece piece, Point point) {
+        return new PlacePiece(piece, point);
     }
 
-    public static PlacePiece createLegal(BasePlayer player, Point point) throws IllegalMoveException {
-        PlacePiece move = create(player, point);
+    public static PlacePiece createLegal(Piece piece, Point point) throws IllegalMoveException {
+        PlacePiece move = create(piece, point);
 
         move.validateLegal();
         return move;

@@ -17,13 +17,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
 class CapturePieceTest {
 
-    BasePlayer player;
-    Board board;
-    Point point;
+    private BasePlayer player;
+    private Piece piece;
+
+    private Board board;
+    private Point point;
 
     @BeforeEach
     void setUp() throws Exception {
         player = new PlayerAdapter(Piece.WHITE);
+        piece = player.getPiece();
 
         String pointStr = "e3";
         board = BoardBuilder.create()
@@ -35,7 +38,7 @@ class CapturePieceTest {
     @Test
     @DisplayName("it removes an opponent's piece at the given point")
     void perform() {
-        CapturePiece.create(player, point).perform();
+        CapturePiece.create(player.getPiece(), point).perform();
         assertThat(point).hasFieldOrPropertyWithValue("piece", null);
     }
 
@@ -45,7 +48,7 @@ class CapturePieceTest {
         @Test
         @DisplayName("legal move")
         void legal() {
-            assertThatCode(CapturePiece.create(player, point)::perform).doesNotThrowAnyException();
+            assertThatCode(CapturePiece.create(piece, point)::perform).doesNotThrowAnyException();
         }
 
         @Test
@@ -54,7 +57,7 @@ class CapturePieceTest {
             String point = "e3";
             board = BoardBuilder.empty();
 
-            CapturePiece move = CapturePiece.create(player, board.getPoint(point));
+            CapturePiece move = CapturePiece.create(piece, board.getPoint(point));
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -64,10 +67,10 @@ class CapturePieceTest {
         void ownPiece() {
             String point = "e3";
             board = BoardBuilder.create()
-                    .withPiece(point, player.getPiece())
+                    .withPiece(point, piece)
                     .build();
 
-            CapturePiece move = CapturePiece.create(player, board.getPoint(point));
+            CapturePiece move = CapturePiece.create(piece, board.getPoint(point));
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
