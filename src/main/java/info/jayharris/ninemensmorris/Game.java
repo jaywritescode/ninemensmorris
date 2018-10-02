@@ -1,9 +1,12 @@
 package info.jayharris.ninemensmorris;
 
+import com.google.common.collect.Lists;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.RandomMovePlayer;
+import info.jayharris.ninemensmorris.player.TerminalPlayer;
 
+import java.util.List;
 import java.util.Set;
 
 public class Game {
@@ -13,7 +16,8 @@ public class Game {
 
     private Board board;
 
-    private int ply = 0;
+    private List<Turn> history = Lists.newLinkedList();
+    private int ply = 1;
 
     Game(BasePlayer black, BasePlayer white) {
         this.black = this.current = black;
@@ -22,16 +26,22 @@ public class Game {
         this.board = new Board();
     }
 
-    public void play() {
-        while (!isGameOver()) {
-            try {
-                current.begin(this);
-                nextPly();
-                current.done(this);
+    /**
+     * Play the game.
+     *
+     * @return the winner
+     */
+    public BasePlayer play() {
+        while (true) {
+            current.begin(this);
+            nextPly();
+            current.done(this);
+
+            if (isGameOver()) {
+                return current;
             }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+
+            current = (current == black ? white : black);
         }
     }
 
@@ -40,11 +50,9 @@ public class Game {
     }
 
     private void nextPly() {
+        Turn turn = current.takeTurn(board);
+        history.add(turn);
         ++ply;
-
-        current.takeTurn(board);
-
-        current = (current == black ? white : black);
     }
 
     private boolean isGameOver() {
