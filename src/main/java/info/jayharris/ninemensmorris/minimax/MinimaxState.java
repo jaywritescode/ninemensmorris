@@ -6,10 +6,13 @@ import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.InitialMove;
+import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
 
 import java.util.Collection;
 import java.util.OptionalLong;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +43,16 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
     }
 
     private Collection<MinimaxAction> getMovePieceActions() {
-        return null;
+        Board scratchPad = Board.copy(board);
+        Set<Point> initialPoints = board.getOccupiedPoints(toMove);
+
+        Function<Point, Stream<MinimaxAction>> moveFunction = initialPoints.size() == 3
+                ? point -> tryMovePieceAnywhere(point, scratchPad)
+                : point -> tryMovePieceToNeighbor(point, scratchPad);
+
+        return initialPoints.stream()
+                .flatMap(moveFunction)
+                .collect(Collectors.toSet());
     }
 
     private Stream<MinimaxAction> tryPlacePiece(Point point) {
@@ -50,7 +62,7 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         MinimaxAction action = MinimaxAction.createWithInitialMove(move);
 
         Stream<MinimaxAction> stream;
-        if (board.isCompleteMill(point)) {
+        if (board.isCompleteMill(move.getUpdatedPoint())) {
             stream = board.getOccupiedPoints(toMove.opposite()).stream()
                     .map(capturePoint -> action.withCapture(CapturePiece.create(toMove, capturePoint)));
         }
@@ -60,6 +72,39 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
 
         // clean up
         point.setPiece(null);
+
+        return stream;
+    }
+
+    private Stream<MinimaxAction> tryMovePieceAnywhere(Point initial, Board scratchPad) {
+        return scratchPad.getUnoccupiedPoints().stream()
+                .map(destination -> MovePiece.create(toMove, scratchPad, initial, destination))
+                .flatMap(move -> tryMoveAndCapture(initial, move, scratchPad));
+    }
+
+    private Stream<MinimaxAction> tryMovePieceToNeighbor(Point initial, Board scratchPad) {
+        return initial.getNeighbors().stream()
+                .map(destination -> MovePiece.create(toMove, scratchPad, initial, destination))
+                .flatMap(move -> tryMoveAndCapture(initial, move, scratchPad));
+    }
+
+    private Stream<MinimaxAction> tryMoveAndCapture(Point initial, InitialMove move, Board scratchPad) {
+        move.perform();
+
+        MinimaxAction action = MinimaxAction.createWithInitialMove(move);
+
+        Stream<MinimaxAction> stream;
+        if (board.isCompleteMill(move.getUpdatedPoint())) {
+            stream = scratchPad.getOccupiedPoints(toMove.opposite()).stream()
+                    .map(capturePoint -> action.withCapture(CapturePiece.create(toMove, capturePoint)));
+        }
+        else {
+            stream = Stream.of(action);
+        }
+
+        // clean up
+        move.getUpdatedPoint().setPiece(null);
+        initial.setPiece(toMove);
 
         return stream;
     }
