@@ -8,12 +8,13 @@ import info.jayharris.ninemensmorris.BoardBuilder;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,11 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MinimaxStateTest {
 
+    Comparator<MinimaxAction> minimaxActionComparator = new MinimaxActionComparator();
+
     @Nested
     class Actions {
 
         @Test
-        @Disabled
         @DisplayName("#getPlacePieceActions")
         void getPlacePieceActions() throws Exception {
             Board board = BoardBuilder.create()
@@ -89,8 +91,19 @@ class MinimaxStateTest {
                                             .map(point -> CapturePiece.create(Piece.BLACK, point))
                                             .map(action::withCapture))
                                     .collect(Collectors.toSet()));
+            
+            assertThat(actual)
+                    .usingElementComparator(minimaxActionComparator)
+                    .containsExactlyInAnyOrderElementsOf(expected);
+        }
+    }
 
-            assertThat(actual).isEqualTo(expected);
+    class MinimaxActionComparator implements Comparator<MinimaxAction> {
+
+        @Override
+        public int compare(MinimaxAction o1, MinimaxAction o2) {
+            return Objects.equals(o1.getInitialMove(), o2.getInitialMove()) &&
+                   Objects.equals(o1.getCaptureMove(), o2.getCaptureMove()) ? 0 : 1;
         }
     }
 }
