@@ -13,7 +13,7 @@ class BoardTest {
 
     @Test
     void copy() {
-        Board board = BoardBuilder.create()
+        Board original = BoardBuilder.create()
                 .withPiece("a7", Piece.WHITE)
                 .withPiece("d6", Piece.BLACK)
                 .withPiece("c5", Piece.BLACK)
@@ -27,8 +27,12 @@ class BoardTest {
                 .withPiece("b2", Piece.WHITE)
                 .withPiece("d2", Piece.BLACK)
                 .build();
+        Board copy = Board.copy(original);
 
-        assertThat(Board.copy(board)).usingComparator(boardComparator).isEqualTo(board);
+        assertThat(copy)
+                .as("Original board:\n%s\nis the same as copy:\n%s", original.pretty(), copy.pretty())
+                .usingComparator(boardComparator)
+                .isEqualTo(original);
     }
 
     class BoardComparator implements Comparator<Board> {
