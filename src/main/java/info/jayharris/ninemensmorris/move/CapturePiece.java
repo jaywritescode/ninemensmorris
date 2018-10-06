@@ -35,17 +35,26 @@ public final class CapturePiece extends BaseMove {
         return "x" + point.getId();
     }
 
+    /**
+     * Two PlacePiece moves are {@code equals} iff they are played by the same {@code Piece}
+     * and remove the same piece at the same coordinates.
+     *
+     * @param o the reference object with which to compare
+     * @return true if this object is the same as the o argument; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CapturePiece that = (CapturePiece) o;
-        return Objects.equals(point, that.point);
+        return Objects.equals(point.getId(), that.point.getId()) &&
+               Objects.equals(point.getPiece(), that.point.getPiece()) &&
+               Objects.equals(getPiece(), that.getPiece());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(point);
+        return Objects.hash(point.getId(), point.getPiece(), getPiece());
     }
 
     public static CapturePiece create(Piece piece, Point point) {

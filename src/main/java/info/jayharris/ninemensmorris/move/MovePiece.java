@@ -50,18 +50,26 @@ public final class MovePiece extends BaseMove implements InitialMove {
         }
     }
 
+    /**
+     * Two MovePiece moves are {@code equals} iff they move the same piece
+     * from the same initial coordinates to the same destination coordinates.
+     *
+     * @param o the reference object with which to compare
+     * @return true if this object is the same as the o argument; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MovePiece movePiece = (MovePiece) o;
-        return Objects.equals(initial, movePiece.initial) &&
-               Objects.equals(destination, movePiece.destination);
+        MovePiece that = (MovePiece) o;
+        return Objects.equals(initial, that.initial) &&
+               Objects.equals(destination, that.destination) &&
+               Objects.equals(getPiece(), that.getPiece());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(initial, destination);
+        return Objects.hash(initial, destination, getPiece());
     }
 
     public String pretty() {

@@ -38,17 +38,25 @@ public final class PlacePiece extends BaseMove implements InitialMove {
         return point.getId();
     }
 
+    /**
+     * Two PlacePiece moves are {@code equals} iff they place the same piece
+     * at the same coordinates.
+     *
+     * @param o the reference object with which to compare
+     * @return true if this object is the same as the o argument; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlacePiece that = (PlacePiece) o;
-        return Objects.equals(point, that.point);
+        return Objects.equals(point.getId(), that.point.getId()) &&
+               Objects.equals(getPiece(), that.getPiece());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(point);
+        return Objects.hash(point.getId(), getPiece());
     }
 
     public static PlacePiece create(Piece piece, Point point) {
