@@ -5,7 +5,7 @@ import info.jayharris.ninemensmorris.Board.Point;
 
 public class BoardBuilder {
 
-    Board board;
+    private Board board;
 
     private BoardBuilder(Board board) {
         this.board = board;

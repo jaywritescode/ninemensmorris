@@ -110,11 +110,9 @@ public class Board {
 
     public Set<Point> getUnoccupiedPoints() {
         return points.values().stream()
-                .filter(point -> point.isUnoccupied())
+                .filter(Point::isUnoccupied)
                 .collect(Collectors.toSet());
     }
-
-    public static Predicate<Point> isUnoccupied = Point::isUnoccupied;
 
     boolean hasPoint(Point point) {
         return points.values().contains(point);
@@ -150,7 +148,7 @@ public class Board {
                     .collect(Collectors.toSet());
         }
 
-        public Set<Mill> getMills() {
+        Set<Mill> getMills() {
             return mills.get(id).stream().map(Mill::new).collect(Collectors.toSet());
         }
 
