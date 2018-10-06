@@ -2,10 +2,14 @@ package info.jayharris.ninemensmorris;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
+
+    Comparator<Board> boardComparator = new BoardComparator();
 
     @Test
     void copy() {
@@ -24,8 +28,15 @@ class BoardTest {
                 .withPiece("d2", Piece.BLACK)
                 .build();
 
-        Board copy = Board.copy(board);
+        assertThat(Board.copy(board)).usingComparator(boardComparator).isEqualTo(board);
+    }
 
-        assertThat(copy).isEqualTo(board);
+    class BoardComparator implements Comparator<Board> {
+
+        @Override
+        public int compare(Board o1, Board o2) {
+            return Board.ALGEBRAIC_NOTATIONS_FOR_POINTS.stream()
+                    .allMatch(point -> o1.getPoint(point).getPiece() == o2.getPoint(point).getPiece()) ? 0 : 1;
+        }
     }
 }

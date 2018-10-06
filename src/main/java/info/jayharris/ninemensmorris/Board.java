@@ -158,27 +158,8 @@ public class Board {
             return id;
         }
 
-        public Point copy() {
-            Point copy = new Point(id);
-            copy.setPiece(piece);
-            return copy;
-        }
-
         String pretty() {
             return piece == null ? "+" : piece.pretty();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Point point = (Point) o;
-            return Objects.equals(id, point.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id);
         }
 
         @Override
@@ -206,14 +187,16 @@ public class Board {
     public static Board copy(Board original) {
         Board copy = new Board();
 
-        original.points.values().stream()
-                .filter(isUnoccupied.negate())
-                .forEach(Point::copy);
+        Point originalPoint;
+        for (String id : original.points.keySet()) {
+            originalPoint = original.getPoint(id);
+            copy.getPoint(id).setPiece(originalPoint.getPiece());
+        }
 
         return copy;
     }
 
-    class Mill {
+    public class Mill {
         Set<Point> points;
 
         Mill(Set<String> points) {
@@ -225,7 +208,7 @@ public class Board {
         }
     }
 
-    String pretty() {
+    public String pretty() {
         return prettyPrinterSupplier.get().print();
     }
 
