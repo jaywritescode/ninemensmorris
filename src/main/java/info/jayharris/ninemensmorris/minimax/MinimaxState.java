@@ -37,8 +37,10 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
     }
 
     private Collection<MinimaxAction> getPlacePieceActions() {
-        return Board.copy(board).getUnoccupiedPoints().stream()
-                .flatMap(this::tryPlacePiece)
+        Board scratchPad = Board.copy(board);
+
+        return scratchPad.getUnoccupiedPoints().stream()
+                .flatMap(tryPlacePiece(scratchPad))
                 .collect(Collectors.toSet());
     }
 
@@ -55,26 +57,49 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
                 .collect(Collectors.toSet());
     }
 
-    private Stream<MinimaxAction> tryPlacePiece(Point point) {
-        InitialMove move = PlacePiece.create(toMove, point);
-        move.perform();
+    private Function<Point, Stream<MinimaxAction>> tryPlacePiece(Board board) {
+        return point -> {
+            InitialMove move = PlacePiece.create(toMove, point);
+            move.perform();
 
-        MinimaxAction action = MinimaxAction.createWithInitialMove(move);
+            MinimaxAction.Builder builder = MinimaxAction.createWithInitialMove(move);
 
-        Stream<MinimaxAction> stream;
-        if (board.isCompleteMill(move.getUpdatedPoint())) {
-            stream = board.getOccupiedPoints(toMove.opposite()).stream()
-                    .map(capturePoint -> action.withCapture(CapturePiece.create(toMove, capturePoint)));
-        }
-        else {
-            stream = Stream.of(action);
-        }
+            Stream<MinimaxAction> stream;
+            if (board.isCompleteMill(move.getUpdatedPoint())) {
+                stream = board.getOccupiedPoints(toMove.opposite()).stream()
+                        .map(capturePoint -> builder.withCapture(CapturePiece.create(toMove, capturePoint)));
+            }
+            else {
+                stream = Stream.of(builder.withNoCapture());
+            }
 
-        // clean up
-        point.setPiece(null);
+            // clean up
+            point.setPiece(null);
 
-        return stream;
+            return stream;
+        };
     }
+
+//    private Stream<MinimaxAction> tryPlacePiece(Point point) {
+//        InitialMove move = PlacePiece.create(toMove, point);
+//        move.perform();
+//
+//        MinimaxAction.Builder builder = MinimaxAction.createWithInitialMove(move);
+//
+//        Stream<MinimaxAction> stream;
+//        if (move.getUpdatedPoint().getBoard().isCompleteMill()) {
+//            stream = board.getOccupiedPoints(toMove.opposite()).stream()
+//                    .map(capturePoint -> builder.withCapture(CapturePiece.create(toMove, capturePoint)));
+//        }
+//        else {
+//            stream = Stream.of(builder.withNoCapture());
+//        }
+//
+//        // clean up
+//        point.setPiece(null);
+//
+//        return stream;
+//    }
 
     private Stream<MinimaxAction> tryMovePieceAnywhere(Point initial, Board scratchPad) {
         return scratchPad.getUnoccupiedPoints().stream()
@@ -91,15 +116,15 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
     private Stream<MinimaxAction> tryMoveAndCapture(Point initial, InitialMove move, Board scratchPad) {
         move.perform();
 
-        MinimaxAction action = MinimaxAction.createWithInitialMove(move);
+        MinimaxAction.Builder builder = MinimaxAction.createWithInitialMove(move);
 
         Stream<MinimaxAction> stream;
         if (board.isCompleteMill(move.getUpdatedPoint())) {
             stream = scratchPad.getOccupiedPoints(toMove.opposite()).stream()
-                    .map(capturePoint -> action.withCapture(CapturePiece.create(toMove, capturePoint)));
+                    .map(capturePoint -> builder.withCapture(CapturePiece.create(toMove, capturePoint)));
         }
         else {
-            stream = Stream.of(action);
+            stream = Stream.of(builder.withNoCapture());
         }
 
         // clean up
@@ -120,5 +145,9 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
     @Override
     public OptionalLong utility() {
         return null;
+    }
+
+    public static MinimaxState initialState(Piece toMove) {
+        return new MinimaxState(new Board(), toMove, 9);
     }
 }
