@@ -2,7 +2,6 @@ package info.jayharris.ninemensmorris;
 
 import com.google.common.base.Preconditions;
 import info.jayharris.ninemensmorris.Board.Point;
-import org.apache.commons.lang3.RandomUtils;
 
 public class BoardBuilder {
 
