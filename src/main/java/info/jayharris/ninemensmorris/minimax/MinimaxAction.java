@@ -3,6 +3,7 @@ package info.jayharris.ninemensmorris.minimax;
 import info.jayharris.minimax.Action;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.InitialMove;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -28,6 +29,10 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
 
     public Optional<CapturePiece> getCaptureMove() {
         return captureMove;
+    }
+
+    public String pretty() {
+        return initialMove.pretty() + getCaptureMove().map(CapturePiece::pretty).orElse(StringUtils.EMPTY);
     }
 
     @Override

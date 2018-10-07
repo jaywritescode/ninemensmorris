@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 
 public class MinimaxStateBuilder {
 
-    Field boardField;
+    Field scratchPadField;
     Field playerPiecesField;
 
     Board board;
@@ -15,8 +15,8 @@ public class MinimaxStateBuilder {
     int playerPieces = 0;
 
     public MinimaxStateBuilder() throws NoSuchFieldException {
-        boardField = MinimaxState.class.getDeclaredField("board");
-        boardField.setAccessible(true);
+        scratchPadField = MinimaxState.class.getDeclaredField("scratchPad");
+        scratchPadField.setAccessible(true);
 
         playerPiecesField = MinimaxState.class.getDeclaredField("playerPieces");
         playerPiecesField.setAccessible(true);
@@ -40,7 +40,7 @@ public class MinimaxStateBuilder {
     public MinimaxState build() throws IllegalAccessException {
         MinimaxState minimaxState = MinimaxState.initialState(toMove);
 
-        boardField.set(minimaxState, this.board);
+        scratchPadField.set(minimaxState, this.board);
         playerPiecesField.setInt(minimaxState, this.playerPieces);
 
         return minimaxState;
