@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MinimaxStateTest {
 
-    Comparator<MinimaxAction> minimaxActionComparator = new MinimaxActionComparator();
+    private Comparator<MinimaxAction> minimaxActionComparator = new MinimaxActionComparator();
 
     @Nested
     class Actions {
@@ -105,7 +105,7 @@ class MinimaxStateTest {
 
         @Test
         @DisplayName("#getMovePieceActions — > 3 pieces")
-        void getMovePieceActions() throws Exception {
+        void getMovePieceActions_tryMovePieceToNeighbor() throws Exception {
             Piece toMove = Piece.BLACK;
             board = BoardBuilder.create()
                     .withPiece("a7", Piece.WHITE)
@@ -184,6 +184,114 @@ class MinimaxStateTest {
                     .containsExactlyInAnyOrderElementsOf(expected);
         }
 
+        @Test
+        @DisplayName("#getMovePieceActions — 3 pieces")
+        void getMovePieceActions_tryMovePieceAnywhere() throws Exception {
+            Piece toMove = Piece.WHITE;
+            board = BoardBuilder.create()
+                    .withPiece("g7", Piece.BLACK)
+                    .withPiece("b6", Piece.WHITE)
+                    .withPiece("d6", Piece.WHITE)
+                    .withPiece("d5", Piece.WHITE)
+                    .withPiece("a4", Piece.BLACK)
+                    .withPiece("b4", Piece.BLACK)
+                    .withPiece("c4", Piece.BLACK)
+                    .withPiece("f4", Piece.BLACK)
+                    .withPiece("d3", Piece.BLACK)
+                    .withPiece("b2", Piece.BLACK)
+                    .withPiece("f2", Piece.BLACK)
+                    .build();
+            /*
+            7  + --------------- + --------------- ●
+               |                 |                 |
+               |                 |                 |
+            6  |     ○ --------- ○ --------- +     |
+               |     |           |           |     |
+               |     |           |           |     |
+            5  |     |     + --- ○ --- +     |     |
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            4  ● --- ● --- ●           + --- ● --- +
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            3  |     |     + --- ● --- +     |     |
+               |     |           |           |     |
+               |     |           |           |     |
+            2  |     ● --------- + --------- ●     |
+               |                 |                 |
+               |                 |                 |
+            1  + --------------- + --------------- +
+
+               a     b     c     d     e     f     g
+             */
+            Collection<MinimaxAction> actual = new MinimaxStateBuilder()
+                    .withBoard(board)
+                    .withPlayerPieces(0)
+                    .withToMove(toMove)
+                    .build()
+                    .actions();
+
+            Collection<MinimaxAction> expected = ImmutableSet.<MinimaxAction>builder()
+                    .add(actionWithMovePiece(toMove, "b6", "a7"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "g7"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "a4"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "b4"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "c4"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "f4"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "d3"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "b2"))
+                    .add(actionWithMovePiece(toMove, "b6", "d7", "f2"))
+                    .add(actionWithMovePiece(toMove, "b6", "f6"))
+                    .add(actionWithMovePiece(toMove, "b6", "c5"))
+                    .add(actionWithMovePiece(toMove, "b6", "e5"))
+                    .add(actionWithMovePiece(toMove, "b6", "e4"))
+                    .add(actionWithMovePiece(toMove, "b6", "g4"))
+                    .add(actionWithMovePiece(toMove, "b6", "c3"))
+                    .add(actionWithMovePiece(toMove, "b6", "e3"))
+                    .add(actionWithMovePiece(toMove, "b6", "d2"))
+                    .add(actionWithMovePiece(toMove, "b6", "a1"))
+                    .add(actionWithMovePiece(toMove, "b6", "d1"))
+                    .add(actionWithMovePiece(toMove, "b6", "g1"))
+                    .add(actionWithMovePiece(toMove, "d6", "a7"))
+                    .add(actionWithMovePiece(toMove, "d6", "d7"))
+                    .add(actionWithMovePiece(toMove, "d6", "f6"))
+                    .add(actionWithMovePiece(toMove, "d6", "c5"))
+                    .add(actionWithMovePiece(toMove, "d6", "e5"))
+                    .add(actionWithMovePiece(toMove, "d6", "e4"))
+                    .add(actionWithMovePiece(toMove, "d6", "g4"))
+                    .add(actionWithMovePiece(toMove, "d6", "c3"))
+                    .add(actionWithMovePiece(toMove, "d6", "e3"))
+                    .add(actionWithMovePiece(toMove, "d6", "d2"))
+                    .add(actionWithMovePiece(toMove, "d6", "a1"))
+                    .add(actionWithMovePiece(toMove, "d6", "d1"))
+                    .add(actionWithMovePiece(toMove, "d6", "g1"))
+                    .add(actionWithMovePiece(toMove, "d5", "a7"))
+                    .add(actionWithMovePiece(toMove, "d5", "d7"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","g7"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","a4"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","b4"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","c4"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","f4"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","d3"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","b2"))
+                    .add(actionWithMovePiece(toMove, "d5", "f6","f2"))
+                    .add(actionWithMovePiece(toMove, "d5", "c5"))
+                    .add(actionWithMovePiece(toMove, "d5", "e5"))
+                    .add(actionWithMovePiece(toMove, "d5", "e4"))
+                    .add(actionWithMovePiece(toMove, "d5", "g4"))
+                    .add(actionWithMovePiece(toMove, "d5", "c3"))
+                    .add(actionWithMovePiece(toMove, "d5", "e3"))
+                    .add(actionWithMovePiece(toMove, "d5", "d2"))
+                    .add(actionWithMovePiece(toMove, "d5", "a1"))
+                    .add(actionWithMovePiece(toMove, "d5", "d1"))
+                    .add(actionWithMovePiece(toMove, "d5", "g1"))
+                    .build();
+
+            assertThat(actual)
+                    .usingElementComparator(minimaxActionComparator)
+                    .containsExactlyInAnyOrderElementsOf(expected);
+        }
+
         MinimaxAction actionWithPlacePiece(Piece toMove, String point) {
             return actionWithPlacePiece(toMove, point, null);
         }
@@ -214,7 +322,7 @@ class MinimaxStateTest {
             return MinimaxAction.createWithInitialMove(m).withCapture(c);
         }
     }
-    
+
     class MinimaxActionComparator implements Comparator<MinimaxAction> {
 
         @Override
