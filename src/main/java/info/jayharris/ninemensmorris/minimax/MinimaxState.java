@@ -10,7 +10,6 @@ import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
 
 import java.util.Collection;
-import java.util.OptionalLong;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +32,11 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
             return getPlacePieceActions();
         }
         return getMovePieceActions();
+    }
+
+    @Override
+    public double eval() {
+        return 0;
     }
 
     private Collection<MinimaxAction> getPlacePieceActions() {
@@ -102,11 +106,6 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         initial.setPiece(toMove);
 
         return stream;
-    }
-
-    @Override
-    public OptionalLong utility() {
-        return null;
     }
 
     public static MinimaxState initialState(Piece toMove) {

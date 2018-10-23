@@ -6,8 +6,6 @@ import info.jayharris.ninemensmorris.move.InitialMove;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Objects;
-
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -32,23 +30,23 @@ public class Turn {
     /**
      * Performs the initial move, assuming one hasn't already been performed.
      */
-    public Board doInitialMove(InitialMove initial) {
+    public Board doInitialMove(InitialMove move) {
         checkState(this.initial == null, "You can only move once per turn.");
 
-        initial.perform();
+        move.perform();
 
-        this.initial = initial;
+        this.initial = move;
         return board;
     }
 
-    public Board doCaptureMove(CapturePiece capture) {
+    public Board doCaptureMove(CapturePiece move) {
         checkState(this.initial != null, "You must move before you can capture.");
         checkState(this.capture == null, "You can only capture one piece per turn.");
         checkState(board.isCompleteMill(initial.getUpdatedPoint()), "Point %s does not complete a mill", initial.getUpdatedPoint().toString());
 
-        capture.perform();
+        move.perform();
 
-        this.capture = capture;
+        this.capture = move;
         return board;
     }
 
@@ -60,7 +58,7 @@ public class Turn {
         return initial.pretty() + (capture == null ? StringUtils.EMPTY : capture.pretty());
     }
 
-    public static Turn create(BasePlayer player, Board board) {
+    public static Turn initialize(BasePlayer player, Board board) {
         return new Turn(player, board);
     }
 }

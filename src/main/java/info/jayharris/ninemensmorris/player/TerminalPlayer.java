@@ -1,6 +1,7 @@
 package info.jayharris.ninemensmorris.player;
 
 import info.jayharris.ninemensmorris.Board;
+import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Game;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
@@ -122,7 +123,7 @@ public class TerminalPlayer extends BasePlayer {
     }
 
     private static boolean valid(String point) {
-        return Board.ALGEBRAIC_NOTATIONS_FOR_POINTS.contains(point);
+        return Coordinate.ALGEBRAIC_NOTATIONS_FOR_COORDINATES.contains(point);
     }
 
     @Override

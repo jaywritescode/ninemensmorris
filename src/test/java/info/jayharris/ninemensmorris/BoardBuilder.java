@@ -16,8 +16,6 @@ public class BoardBuilder {
     }
 
     public BoardBuilder withPiece(Point point, Piece piece) {
-        Preconditions.checkArgument(board.hasPoint(point));
-
         point.setPiece(piece);
         return this;
     }

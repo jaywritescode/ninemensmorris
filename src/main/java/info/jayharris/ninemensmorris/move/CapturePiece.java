@@ -4,6 +4,7 @@ import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Piece;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public final class CapturePiece extends BaseMove {
 
@@ -27,34 +28,33 @@ public final class CapturePiece extends BaseMove {
         if (point.getPiece() != piece.opposite()) {
             throw IllegalMoveException.create(ILLEGAL_MOVE_TEMPLATE,
                                               piece.opposite().toString(),
-                                              point.getId(), Objects.toString(point.getPiece(), EMPTY_POINT));
+                                              point.algebraicNotation(), Objects.toString(point.getPiece(), EMPTY_POINT));
         }
     }
 
     public String pretty() {
-        return "x" + point.getId();
+        return "x" + point.algebraicNotation();
     }
 
-    /**
-     * Two PlacePiece moves are {@code equals} iff they are played by the same {@code Piece}
-     * and remove the same piece at the same coordinates.
-     *
-     * @param o the reference object with which to compare
-     * @return true if this object is the same as the o argument; false otherwise.
-     */
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", CapturePiece.class.getSimpleName() + "[", "]")
+                .add("point=" + point)
+                .add("piece=" + piece)
+                .toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CapturePiece that = (CapturePiece) o;
-        return Objects.equals(point.getId(), that.point.getId()) &&
-               Objects.equals(point.getPiece(), that.point.getPiece()) &&
-               Objects.equals(getPiece(), that.getPiece());
+        return Objects.equals(point, that.point);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(point.getId(), point.getPiece(), getPiece());
+        return Objects.hash(point);
     }
 
     public static CapturePiece create(Piece piece, Point point) {

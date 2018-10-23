@@ -22,7 +22,7 @@ public abstract class BasePlayer {
     }
 
     public final Turn takeTurn(Board board) {
-        Turn turn = Turn.create(this, board);
+        Turn turn = Turn.initialize(this, board);
 
         if (startingPieces > 0) {
             turn.doInitialMove(placePiece(board));

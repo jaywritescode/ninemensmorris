@@ -28,7 +28,7 @@ class TurnTest {
         Board board = BoardBuilder.create().build();
         Point point = board.getPoint("c3");
 
-        Turn turn = Turn.create(player, board);
+        Turn turn = Turn.initialize(player, board);
 
         InitialMove initial = PlacePiece.create(piece, point);
 
@@ -46,7 +46,7 @@ class TurnTest {
                 .build();
         Point point = board.getPoint(captureStr);
 
-        Turn turn = Turn.create(player, board);
+        Turn turn = Turn.initialize(player, board);
         turn.doInitialMove(PlacePiece.create(piece, board.getPoint("c3")));
 
         CapturePiece capture = CapturePiece.create(piece, point);

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Comparator;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
@@ -39,7 +38,7 @@ class BoardTest {
 
         @Override
         public int compare(Board o1, Board o2) {
-            return Board.ALGEBRAIC_NOTATIONS_FOR_POINTS.stream()
+            return Coordinate.ALGEBRAIC_NOTATIONS_FOR_COORDINATES.stream()
                     .allMatch(point -> o1.getPoint(point).getPiece() == o2.getPoint(point).getPiece()) ? 0 : 1;
         }
     }

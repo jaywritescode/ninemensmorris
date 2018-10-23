@@ -4,6 +4,7 @@ import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Piece;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public final class PlacePiece extends BaseMove implements InitialMove {
 
@@ -30,33 +31,34 @@ public final class PlacePiece extends BaseMove implements InitialMove {
     @Override
     public void validateLegal() throws IllegalMoveException {
         if (!point.isUnoccupied()) {
-            throw IllegalMoveException.create(ILLEGAL_MOVE_TEMPLATE, point.getId());
+            throw IllegalMoveException.create(ILLEGAL_MOVE_TEMPLATE, point.algebraicNotation());
         }
     }
 
     public String pretty() {
-        return point.getId();
+        return point.algebraicNotation();
     }
 
-    /**
-     * Two PlacePiece moves are {@code equals} iff they place the same piece
-     * at the same coordinates.
-     *
-     * @param o the reference object with which to compare
-     * @return true if this object is the same as the o argument; false otherwise.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlacePiece that = (PlacePiece) o;
-        return Objects.equals(point.getId(), that.point.getId()) &&
-               Objects.equals(getPiece(), that.getPiece());
+        return Objects.equals(point, that.point) &&
+               Objects.equals(piece, that.piece);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(point.getId(), getPiece());
+        return Objects.hash(point, piece);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", PlacePiece.class.getSimpleName() + "[", "]")
+                .add("point=" + point)
+                .add("piece=" + piece)
+                .toString();
     }
 
     public static PlacePiece create(Piece piece, Point point) {

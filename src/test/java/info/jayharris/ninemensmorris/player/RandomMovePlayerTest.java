@@ -2,9 +2,9 @@ package info.jayharris.ninemensmorris.player;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.BoardBuilder;
+import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.MovePiece;
@@ -126,7 +126,7 @@ class RandomMovePlayerTest {
     }
 
     private Set<String> randomPoints(int count) {
-        List<String> points = Lists.newArrayList(Board.ALGEBRAIC_NOTATIONS_FOR_POINTS);
+        List<String> points = Lists.newArrayList(Coordinate.ALGEBRAIC_NOTATIONS_FOR_COORDINATES);
         Collections.shuffle(points);
 
         return Sets.newHashSet(points.subList(0, count - 1));

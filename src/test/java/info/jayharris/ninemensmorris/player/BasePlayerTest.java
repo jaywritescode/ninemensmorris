@@ -56,10 +56,17 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                softly.assertThat(turn).extracting("initial", "capture")
-                        .containsExactly(PlacePiece.create(player.getPiece(), initial), null);
-                softly.assertThat(player).hasFieldOrPropertyWithValue("startingPieces", 6);
-                softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", player.getPiece());
+                softly.assertThat(turn)
+                        .as("Turn places piece at [%s]", initial.algebraicNotation())
+                        .extracting("initial.point", "capture.point")
+                        .containsExactly(initial, null);
+                softly.assertThat(initial)
+                        .as("[%s] now has a [%s] piece on it", initial.algebraicNotation(), player.getPiece())
+                        .hasFieldOrPropertyWithValue("piece", player.getPiece());
+
+                softly.assertThat(player)
+                        .as("Piece removed from player's initial collection.")
+                        .hasFieldOrPropertyWithValue("startingPieces", 6);
                 softly.assertAll();
             }
 
@@ -84,13 +91,22 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                softly.assertThat(turn).extracting("initial", "capture")
-                        .containsExactly(
-                                PlacePiece.create(player.getPiece(), initial),
-                                CapturePiece.create(player.getPiece(), capture));
-                softly.assertThat(player).hasFieldOrPropertyWithValue("startingPieces", 6);
-                softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", player.getPiece());
-                softly.assertThat(capture).hasFieldOrPropertyWithValue("piece", null);
+                softly.assertThat(turn)
+                        .as("Turn places piece at [%s] and then captures at [%s]",
+                            initial.algebraicNotation(), capture.algebraicNotation())
+                        .extracting("initial.point", "capture.point")
+                        .containsExactly(initial, capture);
+
+                softly.assertThat(initial)
+                        .as("[%s] now has a [%s] piece on it", initial.algebraicNotation(), player.getPiece())
+                        .hasFieldOrPropertyWithValue("piece", player.getPiece());
+                softly.assertThat(capture)
+                        .as("[%s] is now empty", capture.algebraicNotation())
+                        .hasFieldOrPropertyWithValue("piece", null);
+
+                softly.assertThat(player)
+                        .as("Piece removed from player's initial collection.")
+                        .hasFieldOrPropertyWithValue("startingPieces", 6);
                 softly.assertAll();
             }
         }
@@ -137,10 +153,18 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                softly.assertThat(turn).extracting("initial", "capture")
-                        .containsExactly(MovePiece.create(player.getPiece(), board, initial, destination), null);
-                softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", null);
-                softly.assertThat(destination).hasFieldOrPropertyWithValue("piece", player.getPiece());
+                softly.assertThat(turn)
+                        .as("Turn moves piece from [%s] to [%s].",
+                            initial.algebraicNotation(), destination.algebraicNotation())
+                        .extracting("initial.initial", "initial.destination", "capture")
+                        .containsExactly(initial, destination, null);
+
+                softly.assertThat(initial)
+                        .as("[%s] is now empty", initial.algebraicNotation())
+                        .hasFieldOrPropertyWithValue("piece", null);
+                softly.assertThat(destination)
+                        .as("[%s] now has a [%s] piece on it.", destination.algebraicNotation(), player.getPiece())
+                        .hasFieldOrPropertyWithValue("piece", player.getPiece());
                 softly.assertAll();
             }
 
@@ -164,13 +188,21 @@ class BasePlayerTest {
 
                 Turn turn = player.takeTurn(board);
 
-                softly.assertThat(turn).extracting("initial", "capture")
-                        .containsExactly(
-                                MovePiece.create(player.getPiece(), board, initial, destination),
-                                CapturePiece.create(player.getPiece(), capture));
-                softly.assertThat(initial).hasFieldOrPropertyWithValue("piece", null);
-                softly.assertThat(destination).hasFieldOrPropertyWithValue("piece", player.getPiece());
-                softly.assertThat(capture).hasFieldOrPropertyWithValue("piece", null);
+                softly.assertThat(turn)
+                        .as("Turn moves piece from [%s] to [%s] and then captures at [%s]",
+                            initial.algebraicNotation(), destination.algebraicNotation(), capture.algebraicNotation())
+                        .extracting("initial.initial", "initial.destination", "capture.point")
+                        .containsExactly(initial, destination, capture);
+
+                softly.assertThat(initial)
+                        .as("[%s] is now empty", initial.algebraicNotation())
+                        .hasFieldOrPropertyWithValue("piece", null);
+                softly.assertThat(destination)
+                        .as("[%s] now has a [%s] piece on it", destination.algebraicNotation(), player.getPiece())
+                        .hasFieldOrPropertyWithValue("piece", player.getPiece());
+                softly.assertThat(capture)
+                        .as("[%s] is now empty", capture.algebraicNotation())
+                        .hasFieldOrPropertyWithValue("piece", null);
                 softly.assertAll();
             }
         }

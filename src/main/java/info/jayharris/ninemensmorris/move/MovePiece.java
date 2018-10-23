@@ -5,6 +5,7 @@ import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Piece;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public final class MovePiece extends BaseMove implements InitialMove {
 
@@ -39,41 +40,42 @@ public final class MovePiece extends BaseMove implements InitialMove {
         if (initial.getPiece() != piece) {
             throw IllegalMoveException.create(
                     initial.isUnoccupied() ? EMPTY_POINT_TEMPLATE : OPPONENT_PIECE_TEMPLATE,
-                    initial.getId());
+                    initial.algebraicNotation());
         }
         if (!destination.isUnoccupied()) {
-            throw IllegalMoveException.create(DESTINATION_OCCUPIED_TEMPLATE, destination.getId());
+            throw IllegalMoveException.create(DESTINATION_OCCUPIED_TEMPLATE, destination.algebraicNotation());
         }
 
         if (board.getOccupiedPoints(getPiece()).size() > 3 && !initial.getNeighbors().contains(destination)) {
-            throw IllegalMoveException.create(POINTS_NOT_ADJACENT_TEMPLATE, initial.getId(), destination.getId());
+            throw IllegalMoveException.create(POINTS_NOT_ADJACENT_TEMPLATE, initial.algebraicNotation(), destination.algebraicNotation());
         }
     }
 
-    /**
-     * Two MovePiece moves are {@code equals} iff they move the same piece
-     * from the same initial coordinates to the same destination coordinates.
-     *
-     * @param o the reference object with which to compare
-     * @return true if this object is the same as the o argument; false otherwise.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MovePiece that = (MovePiece) o;
-        return Objects.equals(initial, that.initial) &&
-               Objects.equals(destination, that.destination) &&
-               Objects.equals(getPiece(), that.getPiece());
+        MovePiece movePiece = (MovePiece) o;
+        return Objects.equals(initial, movePiece.initial) &&
+               Objects.equals(destination, movePiece.destination);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(initial, destination, getPiece());
+        return Objects.hash(initial, destination);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MovePiece.class.getSimpleName() + "[", "]")
+                .add("initial=" + initial)
+                .add("destination=" + destination)
+                .add("piece=" + piece)
+                .toString();
     }
 
     public String pretty() {
-        return initial.getId() + "-" + destination.getId();
+        return initial.algebraicNotation() + "-" + destination.algebraicNotation();
     }
 
     public static MovePiece create(Piece piece, Board board, Point initial, Point destination) {
