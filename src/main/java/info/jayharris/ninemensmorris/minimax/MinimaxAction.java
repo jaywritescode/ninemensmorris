@@ -1,71 +1,60 @@
 package info.jayharris.ninemensmorris.minimax;
 
 import info.jayharris.minimax.Action;
-import info.jayharris.ninemensmorris.move.CapturePiece;
-import info.jayharris.ninemensmorris.move.InitialMove;
-import org.apache.commons.lang3.StringUtils;
+import info.jayharris.ninemensmorris.Board;
+import info.jayharris.ninemensmorris.Coordinate;
 
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.Objects;
 
 public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
 
-    private InitialMove initialMove;
-    private Optional<CapturePiece> captureMove;
+    private Coordinate placePiece;
+    private Coordinate movePieceFrom;
+    private Coordinate movePieceTo;
+    private Coordinate capturePiece;
 
-    private MinimaxAction(Builder builder) {
-        this.initialMove = builder.initialMove;
-        this.captureMove = Optional.ofNullable(builder.capturePiece);
+    private MinimaxAction(Coordinate placePiece) {
+        this.placePiece = placePiece;
+    }
+
+    private MinimaxAction(Coordinate movePieceFrom, Coordinate movePieceTo) {
+        this.movePieceFrom = movePieceFrom;
+        this.movePieceTo = movePieceTo;
     }
 
     @Override
     public MinimaxState apply(MinimaxState initialState) {
+        Board copy = initialState.copyBoard();
+
         return null;
     }
 
-    public InitialMove getInitialMove() {
-        return initialMove;
+    MinimaxAction withCapture(Coordinate capturePiece) {
+        this.capturePiece = capturePiece;
+        return this;
     }
 
-    public Optional<CapturePiece> getCaptureMove() {
-        return captureMove;
+    static MinimaxAction fromPlacePiece(Coordinate placePiece) {
+        return new MinimaxAction(placePiece);
     }
 
-    public String pretty() {
-        return initialMove.pretty() + getCaptureMove().map(CapturePiece::pretty).orElse(StringUtils.EMPTY);
+    static MinimaxAction fromMovePiece(Coordinate movePieceFrom, Coordinate movePieceTo) {
+        return new MinimaxAction(movePieceFrom, movePieceTo);
     }
 
     @Override
-    public String toString() {
-        return new StringJoiner(", ", MinimaxAction.class.getSimpleName() + "[", "]")
-                .add("initialMove=" + initialMove)
-                .add("captureMove=" + captureMove)
-                .toString();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MinimaxAction that = (MinimaxAction) o;
+        return Objects.equals(placePiece, that.placePiece) &&
+               Objects.equals(movePieceFrom, that.movePieceFrom) &&
+               Objects.equals(movePieceTo, that.movePieceTo) &&
+               Objects.equals(capturePiece, that.capturePiece);
     }
 
-    public static MinimaxAction.Builder createWithInitialMove(InitialMove initialMove) {
-        return new Builder().withInitialMove(initialMove);
-    }
-
-    public static class Builder {
-
-        InitialMove initialMove;
-        CapturePiece capturePiece;
-
-        private Builder() { }
-
-        public Builder withInitialMove(InitialMove initialMove) {
-            this.initialMove = initialMove;
-            return this;
-        }
-
-        public MinimaxAction withNoCapture() {
-            return new MinimaxAction(this);
-        }
-
-        public MinimaxAction withCapture(CapturePiece capturePiece) {
-            this.capturePiece = capturePiece;
-            return new MinimaxAction(this);
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(placePiece, movePieceFrom, movePieceTo, capturePiece);
     }
 }

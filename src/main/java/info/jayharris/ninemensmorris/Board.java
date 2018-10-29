@@ -39,6 +39,14 @@ public class Board {
                 .collect(Collectors.toSet());
     }
 
+    public Set<Mill> getMillsAt(Coordinate coordinate) {
+        return getMillsAt(getPoint(coordinate));
+    }
+
+    public Set<Mill> getMillsAt(Point point) {
+        return point.getMills();
+    }
+
     public Stream<Point> points() {
         return points.values().stream();
     }
@@ -80,6 +88,10 @@ public class Board {
         }
 
         public String algebraicNotation() { return coordinate.pretty(); }
+
+        public Coordinate getCoordinate() {
+            return coordinate;
+        }
 
         String pretty() {
             return piece == null ? "+" : piece.pretty();
@@ -124,6 +136,10 @@ public class Board {
 
         boolean isComplete(Piece piece) {
             return points.stream().allMatch(point -> point.getPiece() == piece);
+        }
+
+        public Set<Point> getPoints() {
+            return points;
         }
     }
 
