@@ -92,6 +92,14 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         return Stream.of(MinimaxAction.fromMovePiece(movePieceFrom, movePieceTo));
     }
 
+    public Piece getToMove() {
+        return toMove;
+    }
+
+    public int getPlayerPieces() {
+        return playerPieces;
+    }
+
     private Function<Point, Stream<MinimaxAction>> generateActionsFromMovePiece(Point initialPoint) {
         return destination -> generateActionsFromMovePiece(initialPoint, destination);
     }

@@ -26,7 +26,15 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
     public MinimaxState apply(MinimaxState initialState) {
         Board copy = initialState.copyBoard();
 
-        return null;
+        if (placePiece != null) {
+            copy.getPoint(placePiece).setPiece(initialState.getToMove());
+        }
+
+        if (capturePiece != null) {
+            copy.getPoint(capturePiece).setPiece(null);
+        }
+
+        return new MinimaxState(copy, initialState.getToMove().opposite(), initialState.getPlayerPieces() - 1);
     }
 
     MinimaxAction withCapture(Coordinate capturePiece) {
@@ -34,12 +42,23 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
         return this;
     }
 
-    static MinimaxAction fromPlacePiece(Coordinate placePiece) {
-        return new MinimaxAction(placePiece);
-    }
+    public String pretty() {
+        StringBuilder sb = new StringBuilder();
 
-    static MinimaxAction fromMovePiece(Coordinate movePieceFrom, Coordinate movePieceTo) {
-        return new MinimaxAction(movePieceFrom, movePieceTo);
+        if (placePiece != null) {
+            sb.append(placePiece.pretty());
+        }
+        else if (movePieceFrom != null && movePieceTo != null) {
+            sb.append(movePieceFrom.pretty()).append("-").append(movePieceTo.pretty());
+        }
+        else {
+            return "invalid";
+        }
+
+        if (capturePiece != null) {
+            sb.append("x").append(capturePiece.pretty());
+        }
+        return sb.toString();
     }
 
     @Override
@@ -57,4 +76,13 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
     public int hashCode() {
         return Objects.hash(placePiece, movePieceFrom, movePieceTo, capturePiece);
     }
+
+    static MinimaxAction fromPlacePiece(Coordinate placePiece) {
+        return new MinimaxAction(placePiece);
+    }
+
+    static MinimaxAction fromMovePiece(Coordinate movePieceFrom, Coordinate movePieceTo) {
+        return new MinimaxAction(movePieceFrom, movePieceTo);
+    }
+
 }
