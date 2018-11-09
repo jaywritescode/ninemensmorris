@@ -42,6 +42,22 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
         return this;
     }
 
+    public Coordinate getPlacePiece() {
+        return placePiece;
+    }
+
+    public Coordinate getMovePieceFrom() {
+        return movePieceFrom;
+    }
+
+    public Coordinate getMovePieceTo() {
+        return movePieceTo;
+    }
+
+    public Coordinate getCapturePiece() {
+        return capturePiece;
+    }
+
     public String pretty() {
         StringBuilder sb = new StringBuilder();
 
@@ -59,6 +75,10 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
             sb.append("x").append(capturePiece.pretty());
         }
         return sb.toString();
+    }
+
+    @Override public String toString() {
+        return pretty();
     }
 
     @Override
