@@ -7,6 +7,7 @@ import info.jayharris.ninemensmorris.Board.Mill;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 
 import java.util.Collection;
 import java.util.Set;
@@ -113,5 +114,9 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
 
     Board copyBoard() {
         return Board.copy(board);
+    }
+
+    public static MinimaxState create(Board board, MinimaxPlayer player) {
+        return new MinimaxState(board, player.getPiece(), player.getStartingPieces());
     }
 }
