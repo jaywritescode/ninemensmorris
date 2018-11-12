@@ -36,11 +36,6 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         return tryMovePiece();
     }
 
-    @Override
-    public double eval() {
-        return 0;
-    }
-
     private Set<MinimaxAction> tryPlacePiece() {
         return board.getUnoccupiedPoints().stream()
                 .flatMap(this::generateActionsFromPlacePiece)
