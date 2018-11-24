@@ -7,7 +7,7 @@ import info.jayharris.ninemensmorris.Piece;
 
 public abstract class BaseHeuristicFunction implements HeuristicEvaluationFunction<MinimaxState> {
 
-    private final Piece piece;
+    protected final Piece piece;
 
     public BaseHeuristicFunction(Piece piece) {
         this.piece = piece;

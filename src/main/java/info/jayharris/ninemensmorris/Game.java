@@ -2,7 +2,9 @@ package info.jayharris.ninemensmorris;
 
 import com.google.common.collect.Lists;
 import info.jayharris.ninemensmorris.Board.Point;
+import info.jayharris.ninemensmorris.minimax.SampleHeuristicFunction;
 import info.jayharris.ninemensmorris.player.BasePlayer;
+import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import info.jayharris.ninemensmorris.player.RandomMovePlayer;
 import info.jayharris.ninemensmorris.player.TerminalPlayer;
 
@@ -71,7 +73,7 @@ public class Game {
 
     public static void main(String... args) {
         BasePlayer black = new TerminalPlayer(Piece.BLACK);
-        BasePlayer white = new RandomMovePlayer(Piece.WHITE);
+        BasePlayer white = new MinimaxPlayer(Piece.WHITE);
 
         Game game = new Game(black, white);
 

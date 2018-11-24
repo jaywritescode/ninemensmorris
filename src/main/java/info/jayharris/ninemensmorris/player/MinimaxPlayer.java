@@ -18,9 +18,9 @@ public class MinimaxPlayer extends BasePlayer {
 
     Transpositions<MinimaxState> transpositions = new InMemoryMapTranspositions<>();
 
-    public MinimaxPlayer(Piece piece, HeuristicEvaluationFunction<MinimaxState> heuristic) {
+    public MinimaxPlayer(Piece piece) {
         super(piece);
-        this.heuristic = heuristic;
+        this.heuristic = new SampleHeuristicFunction(piece);
     }
 
     @Override
