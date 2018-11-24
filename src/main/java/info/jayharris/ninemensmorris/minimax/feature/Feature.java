@@ -1,10 +1,11 @@
-package info.jayharris.ninemensmorris.minimax;
+package info.jayharris.ninemensmorris.minimax.feature;
 
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.minimax.MinimaxState;
 
 public abstract class Feature {
 
-    private final Piece piece;
+    protected final Piece piece;
 
     public Feature(Piece piece) {
         this.piece = piece;

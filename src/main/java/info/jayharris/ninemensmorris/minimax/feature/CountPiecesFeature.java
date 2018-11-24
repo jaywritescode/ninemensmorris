@@ -1,7 +1,8 @@
-package info.jayharris.ninemensmorris.minimax;
+package info.jayharris.ninemensmorris.minimax.feature;
 
 import info.jayharris.ninemensmorris.BoardUtils;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.minimax.MinimaxState;
 
 /**
  * This feature counts the number of one player's pieces on the board.
@@ -14,6 +15,6 @@ public class CountPiecesFeature extends Feature {
 
     @Override
     public double apply(MinimaxState state) {
-        return BoardUtils.countPieces(state.copyBoard(), getPiece());
+        return BoardUtils.countPieces(state.copyBoard(), piece);
     }
 }

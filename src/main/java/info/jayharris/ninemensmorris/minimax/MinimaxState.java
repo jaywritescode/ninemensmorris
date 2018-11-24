@@ -107,7 +107,7 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
                 .allMatch(Predicates.equalTo(toMove));
     }
 
-    Board copyBoard() {
+    public Board copyBoard() {
         return Board.copy(board);
     }
 
