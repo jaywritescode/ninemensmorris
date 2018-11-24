@@ -3,11 +3,11 @@ package info.jayharris.ninemensmorris.minimax;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.minimax.feature.CountPiecesFeature;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CountPiecesFeatureTest {
 
