@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 
 public class BoardUtils {
 
+    public static final int NUM_POINTS = Coordinate.ALGEBRAIC_NOTATIONS_FOR_COORDINATES.size();
+
     /**
      * Determine if {@code piece} has won the game.
      *
@@ -43,5 +45,16 @@ public class BoardUtils {
 
     public static Optional<Piece> getWinner(Board board) {
         return Stream.of(Piece.BLACK, Piece.WHITE).filter(pieceIsWinner(board)).findAny();
+    }
+
+    /**
+     * Count the number of {@code piece} pieces on {@code board}.
+     *
+     * @param board the board
+     * @param piece the piece
+     * @return the number of pieces on the board
+     */
+    public static int countPieces(Board board, Piece piece) {
+        return board.getOccupiedPoints(piece).size();
     }
 }
