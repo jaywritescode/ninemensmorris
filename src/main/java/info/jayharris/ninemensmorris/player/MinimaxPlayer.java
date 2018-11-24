@@ -26,7 +26,7 @@ public class MinimaxPlayer extends BasePlayer {
     @Override
     public PlacePiece placePiece(Board board) {
         DecisionTree<MinimaxState, MinimaxAction> tree = new DecisionTree<>(
-                Node.root(MinimaxState.create(board, this)),
+                MinimaxState.create(board, this),
                 transpositions,
                 heuristic,
                 node -> node.getDepth() >= 3);
