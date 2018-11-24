@@ -60,11 +60,9 @@ public class Game {
             return false;
         }
 
-        Set<Point> occupied = board.getOccupiedPoints(current.getPiece());
-        int count = occupied.size();
-
-        return count < 3 || (count > 3 && occupied.stream().noneMatch(
-                point -> point.getNeighbors().stream().anyMatch(Point::isUnoccupied)));
+        // After current takes their turn. there is no possibility that their opponent has won the game. And ties are
+        // impossible, so we only need to check if current has won the game to see if the game is over.
+        return BoardUtils.isWinner(board, current.getPiece());
     }
 
     public String pretty() {
