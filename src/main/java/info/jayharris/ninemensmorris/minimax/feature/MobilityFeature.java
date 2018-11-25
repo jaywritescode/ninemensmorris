@@ -20,10 +20,6 @@ public class MobilityFeature extends Feature {
         Board board = state.copyBoard();
         int myPieces = BoardUtils.countPieces(board, piece);
 
-        if (myPieces == 3) {
-            return BoardUtils.NUM_POINTS - myPieces - BoardUtils.countPieces(board, piece.opposite());
-        }
-
         return board.getOccupiedPoints(piece)
                 .stream()
                 .mapToLong(point -> point.getNeighbors().stream().filter(Point::isUnoccupied).count())
