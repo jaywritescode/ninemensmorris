@@ -14,13 +14,17 @@ import info.jayharris.ninemensmorris.move.PlacePiece;
 
 public class MinimaxPlayer extends BasePlayer {
 
-    private final HeuristicEvaluationFunction<MinimaxState> heuristic;
+    private HeuristicEvaluationFunction<MinimaxState> heuristic;
 
     Transpositions<MinimaxState> transpositions = new InMemoryMapTranspositions<>();
 
-    public MinimaxPlayer(Piece piece) {
+    public MinimaxPlayer(Piece piece, HeuristicEvaluationFunction<MinimaxState> heuristic) {
         super(piece);
-        this.heuristic = new SampleHeuristicFunction(piece);
+        this.heuristic = heuristic;
+    }
+
+    public void setHeuristic(HeuristicEvaluationFunction<MinimaxState> heuristic) {
+        this.heuristic = heuristic;
     }
 
     @Override
@@ -31,9 +35,9 @@ public class MinimaxPlayer extends BasePlayer {
                 heuristic,
                 node -> node.getDepth() >= 3);
 
-        MinimaxAction a = tree.perform();
+        MinimaxAction action = tree.perform();
 
-        return PlacePiece.create(getPiece(), board.getPoint(a.getPlacePiece()));
+        return PlacePiece.create(getPiece(), board.getPoint(action.getPlacePiece()));
     }
 
     @Override

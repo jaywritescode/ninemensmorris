@@ -73,7 +73,7 @@ public class Game {
 
     public static void main(String... args) {
         BasePlayer black = new TerminalPlayer(Piece.BLACK);
-        BasePlayer white = new MinimaxPlayer(Piece.WHITE);
+        BasePlayer white = new MinimaxPlayer(Piece.WHITE, new SampleHeuristicFunction(Piece.WHITE));
 
         Game game = new Game(black, white);
 
