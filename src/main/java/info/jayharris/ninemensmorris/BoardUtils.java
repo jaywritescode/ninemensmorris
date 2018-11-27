@@ -12,7 +12,7 @@ public class BoardUtils {
     public static final int NUM_POINTS = Coordinate.ALGEBRAIC_NOTATIONS_FOR_COORDINATES.size();
 
     /**
-     * Determine if {@code piece} has won the game.
+     * Determine if {@code piece} has won the game, assuming we're in the "move piece" phase.
      *
      * @param board the board
      * @param piece the piece

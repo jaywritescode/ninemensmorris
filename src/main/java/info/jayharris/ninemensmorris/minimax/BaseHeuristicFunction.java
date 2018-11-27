@@ -17,11 +17,13 @@ public abstract class BaseHeuristicFunction implements HeuristicEvaluationFuncti
     public double apply(MinimaxState state) {
         Board board = state.copyBoard();
 
-        if (BoardUtils.isWinner(board, piece)) {
-            return Double.POSITIVE_INFINITY;
-        }
-        if (BoardUtils.isWinner(board, piece.opposite())) {
-            return Double.NEGATIVE_INFINITY;
+        if (state.getPlayerPieces() == 0) {
+            if (BoardUtils.isWinner(board, piece)) {
+                return Double.POSITIVE_INFINITY;
+            }
+            if (BoardUtils.isWinner(board, piece.opposite())) {
+                return Double.NEGATIVE_INFINITY;
+            }
         }
 
         return 0;
