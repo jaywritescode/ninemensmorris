@@ -27,4 +27,8 @@ public class MinimaxStateBuilder {
     public MinimaxState build() {
         return new MinimaxState(board, toMove, playerPieces);
     }
+
+    public static MinimaxStateBuilder create() {
+        return new MinimaxStateBuilder();
+    }
 }

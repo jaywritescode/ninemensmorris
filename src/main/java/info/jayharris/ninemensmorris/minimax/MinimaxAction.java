@@ -3,6 +3,8 @@ package info.jayharris.ninemensmorris.minimax;
 import info.jayharris.minimax.Action;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Coordinate;
+import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.player.BasePlayer;
 
 import java.util.Objects;
 
@@ -34,7 +36,9 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
             copy.getPoint(capturePiece).setPiece(null);
         }
 
-        return new MinimaxState(copy, initialState.getToMove().opposite(), initialState.getPlayerPieces() - 1);
+        Piece nextPlayer = initialState.getToMove().opposite();
+        int nextPieces = initialState.getPlayerPieces() - (nextPlayer == BasePlayer.FIRST_PLAYER ? 0 : 1);
+        return new MinimaxState(copy, nextPlayer, nextPieces);
     }
 
     MinimaxAction withCapture(Coordinate capturePiece) {

@@ -10,6 +10,8 @@ import info.jayharris.ninemensmorris.move.PlacePiece;
 
 public abstract class BasePlayer {
 
+    public final static Piece FIRST_PLAYER = Piece.BLACK;
+
     private final Piece piece;
     private int startingPieces = 9;
 
