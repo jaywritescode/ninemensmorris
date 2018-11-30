@@ -37,7 +37,7 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
         }
 
         Piece nextPlayer = initialState.getToMove().opposite();
-        int nextPieces = initialState.getPlayerPieces() - (nextPlayer == BasePlayer.FIRST_PLAYER ? 0 : 1);
+        int nextPieces = initialState.getPlayerPieces() - (nextPlayer == BasePlayer.FIRST_PLAYER ? 1 : 0);
         return new MinimaxState(copy, nextPlayer, nextPieces);
     }
 
