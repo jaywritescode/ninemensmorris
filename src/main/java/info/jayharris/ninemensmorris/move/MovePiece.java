@@ -13,14 +13,14 @@ public final class MovePiece extends BaseMove implements InitialMove {
             OPPONENT_PIECE_TEMPLATE = "Cannot move opponent's piece on %s.",
             DESTINATION_OCCUPIED_TEMPLATE = "Cannot move to occupied point at %s.",
             POINTS_NOT_ADJACENT_TEMPLATE = "Points %s and %s are not adjacent.";
-    private final Board board;
+    private final boolean canFly;
     private final Point initial, destination;
 
-    private MovePiece(Piece piece, Board board, Point initial, Point destination) {
+    private MovePiece(Piece piece, Point initial, Point destination, boolean canFly) {
         super(piece);
-        this.board = board;
         this.initial = initial;
         this.destination = destination;
+        this.canFly = canFly;
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class MovePiece extends BaseMove implements InitialMove {
             throw IllegalMoveException.create(DESTINATION_OCCUPIED_TEMPLATE, destination.algebraicNotation());
         }
 
-        if (board.getOccupiedPoints(getPiece()).size() > 3 && !initial.getNeighbors().contains(destination)) {
+        if (!canFly && !initial.getNeighbors().contains(destination)) {
             throw IllegalMoveException.create(POINTS_NOT_ADJACENT_TEMPLATE, initial.algebraicNotation(), destination.algebraicNotation());
         }
     }
@@ -78,12 +78,31 @@ public final class MovePiece extends BaseMove implements InitialMove {
         return initial.algebraicNotation() + "-" + destination.algebraicNotation();
     }
 
-    public static MovePiece create(Piece piece, Board board, Point initial, Point destination) {
-        return new MovePiece(piece, board, initial, destination);
+    /**
+     * Creates a (possibly illegal) MovePiece.
+     *
+     * @param piece the piece
+     * @param initial the point the piece is being moved from
+     * @param destination the point the piece is being moved to
+     * @param canFly true iff there are exactly three {@code piece}s on the board
+     * @return the move
+     */
+    public static MovePiece create(Piece piece, Point initial, Point destination, boolean canFly) {
+        return new MovePiece(piece, initial, destination, canFly);
     }
 
-    public static MovePiece createLegal(Piece piece, Board board, Point initial, Point destination) {
-        MovePiece move = create(piece, board, initial, destination);
+    /**
+     * Creates a legal MovePiece.
+     *
+     * @param piece the piece
+     * @param initial the point the piece is being moved from
+     * @param destination the point the piece is being moved to
+     * @param canFly true iff there are exactly three {@code piece}s on the board
+     * @return the move
+     * @throws IllegalMoveException if the move is illegal
+     */
+    public static MovePiece createLegal(Piece piece, Point initial, Point destination, boolean canFly) {
+        MovePiece move = create(piece, initial, destination, canFly);
 
         move.validateLegal();
         return move;
