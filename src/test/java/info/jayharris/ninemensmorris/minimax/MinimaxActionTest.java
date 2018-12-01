@@ -16,28 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class MinimaxActionTest {
 
     @Test
-    @DisplayName("root")
-    void root() throws Exception {
-        Board board = BoardBuilder.empty();
-        MinimaxState currentState = MinimaxStateBuilder.create()
-                .withBoard(board)
-                .withToMove(Piece.BLACK)
-                .withPlayerPieces(9)
-                .build();
-
-        Coordinate coordinate = Coordinate.get("b2");
-        MinimaxAction action = MinimaxAction.fromPlacePiece(coordinate);
-
-        MinimaxState nextState = action.apply(currentState);
-        assertThat(nextState)
-                .hasFieldOrPropertyWithValue("toMove", Piece.WHITE)
-                .hasFieldOrPropertyWithValue("playerPieces", 9)
-                .hasFieldOrPropertyWithValue("board", BoardBuilder.create()
-                        .withPiece(board.getPoint(coordinate), Piece.BLACK)
-                        .build());
-    }
-
-    @Test
     @DisplayName("place piece — black, no capture")
     void placePieceBlackNoCapture() throws Exception {
         Board board = BoardBuilder.create()
