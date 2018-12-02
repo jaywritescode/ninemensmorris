@@ -37,7 +37,7 @@ public class MinimaxPlayer extends BasePlayer {
 
         MinimaxAction action = tree.perform();
 
-        return PlacePiece.create(getPiece(), board.getPoint(action.getPlacePiece()));
+        return PlacePiece.create(piece, board.getPoint(action.getPlacePiece()));
     }
 
     @Override

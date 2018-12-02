@@ -21,12 +21,12 @@ public class RandomMovePlayer extends BasePlayer {
 
     @Override
     public PlacePiece placePiece(Board board) {
-        return PlacePiece.create(getPiece(), randomElement(board.getUnoccupiedPoints()));
+        return PlacePiece.create(piece, randomElement(board.getUnoccupiedPoints()));
     }
 
     @Override
     public MovePiece movePiece(Board board) {
-        if (board.getOccupiedPoints(getPiece()).size() == 3) {
+        if (board.getOccupiedPoints(piece).size() == 3) {
             return movePieceAnywhere(board);
         }
         return moveToNeighbor(board);
@@ -34,18 +34,18 @@ public class RandomMovePlayer extends BasePlayer {
 
     @Override
     public CapturePiece capturePiece(Board board) {
-        return CapturePiece.create(getPiece(), randomElement(board.getOccupiedPoints(getPiece().opposite())));
+        return CapturePiece.create(piece, randomElement(board.getOccupiedPoints(piece.opposite())));
     }
 
     private MovePiece movePieceAnywhere(Board board) {
-        Point init = randomElement(board.getOccupiedPoints(getPiece()));
+        Point init = randomElement(board.getOccupiedPoints(piece));
         Point dest = randomElement(board.getUnoccupiedPoints());
-        return MovePiece.create(getPiece(), init, dest, true);
+        return MovePiece.create(piece, init, dest, true);
     }
 
     private MovePiece moveToNeighbor(Board board) {
         Point init = randomElement(
-                board.getOccupiedPoints(getPiece()).stream()
+                board.getOccupiedPoints(piece).stream()
                         .filter(point -> point.getNeighbors().stream().anyMatch(Point::isUnoccupied))
                         .collect(Collectors.toList())
         );
@@ -53,7 +53,7 @@ public class RandomMovePlayer extends BasePlayer {
                 init.getNeighbors().stream()
                         .filter(Point::isUnoccupied)
                         .collect(Collectors.toList()));
-        return MovePiece.create(getPiece(), init, dest, false);
+        return MovePiece.create(piece, init, dest, false);
     }
 
     private <T> T randomElement(Collection<T> collection) {

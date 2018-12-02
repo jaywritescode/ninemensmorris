@@ -50,7 +50,7 @@ public class TerminalPlayer extends BasePlayer {
 
             if (valid(input)) {
                 try {
-                    return PlacePiece.createLegal(getPiece(), board.getPoint(input));
+                    return PlacePiece.createLegal(piece, board.getPoint(input));
                 }
                 catch (IllegalMoveException e) {
                     out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
@@ -87,8 +87,8 @@ public class TerminalPlayer extends BasePlayer {
             }
 
             try {
-                return MovePiece.createLegal(getPiece(), board.getPoint(init), board.getPoint(dest),
-                                             board.getOccupiedPoints(getPiece()).size() == 3);
+                return MovePiece.createLegal(piece, board.getPoint(init), board.getPoint(dest),
+                                             board.getOccupiedPoints(piece).size() == 3);
             }
             catch (IllegalMoveException e) {
                 out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
@@ -98,7 +98,7 @@ public class TerminalPlayer extends BasePlayer {
 
     @Override
     public CapturePiece capturePiece(Board board) {
-        out.printf("Capture %s piece >> ", getPiece().opposite());
+        out.printf("Capture %s piece >> ", piece.opposite());
         String input;
 
         while (true) {
@@ -111,7 +111,7 @@ public class TerminalPlayer extends BasePlayer {
 
             if (valid(input)) {
                 try {
-                    return CapturePiece.createLegalMove(getPiece(), board.getPoint(input));
+                    return CapturePiece.createLegalMove(piece, board.getPoint(input));
                 }
                 catch (IllegalMoveException e) {
                     out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
@@ -130,6 +130,6 @@ public class TerminalPlayer extends BasePlayer {
     @Override
     public void begin(Game game) {
         out.println(game.pretty());
-        out.printf("Ply %d: %s to %s >> ", game.getPly(), getPiece().toString(), getStartingPieces() > 0 ? "place piece" : "move piece");
+        out.printf("Ply %d: %s to %s >> ", game.getPly(), piece.toString(), startingPieces > 0 ? "place piece" : "move piece");
     }
 }
