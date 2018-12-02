@@ -58,16 +58,12 @@ class MovePieceTest {
         }
 
         @Test
-        // TODO: this sounds wrong, looks like we have exactly three pieces on the board
-        @DisplayName("legal move with > 3 pieces on the board")
+        @DisplayName("legal move, cannot fly")
         void legal() {
             String initStr = "a7", destStr = "d7";
 
             Board board = BoardBuilder.create()
                     .withPiece("a7", piece)
-                    .withPiece("b6", piece)
-                    .withPiece("c5", piece)
-                    .withPiece("a4", piece)
                     .build();
 
             MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
@@ -82,9 +78,6 @@ class MovePieceTest {
 
             Board board = BoardBuilder.create()
                     .withPiece("a7", piece.opposite())
-                    .withPiece("b6", piece)
-                    .withPiece("c5", piece)
-                    .withPiece("a4", piece)
                     .build();
 
             MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
@@ -98,9 +91,6 @@ class MovePieceTest {
             String initStr = "a7", destStr = "d7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("b6", piece)
-                    .withPiece("c5", piece)
-                    .withPiece("a4", piece)
                     .build();
 
             MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
@@ -115,9 +105,6 @@ class MovePieceTest {
 
             Board board = BoardBuilder.create()
                     .withPiece("a7", piece)
-                    .withPiece("b6", piece)
-                    .withPiece("c5", piece)
-                    .withPiece("a4", piece)
                     .withPiece("d7", piece)
                     .build();
 
@@ -127,15 +114,12 @@ class MovePieceTest {
         }
 
         @Test
-        @DisplayName("illegal move — initial and destination points not adjacent, > 3 pieces on board")
+        @DisplayName("illegal move — initial and destination points not adjacent, cannot fly")
         void notAdjacent() {
             String initStr = "a7", destStr = "g7";
 
             Board board = BoardBuilder.create()
-                    .withPiece("a7", piece.opposite())
-                    .withPiece("b6", piece)
-                    .withPiece("c5", piece)
-                    .withPiece("a4", piece)
+                    .withPiece("a7", piece)
                     .build();
 
             MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
@@ -144,15 +128,12 @@ class MovePieceTest {
         }
 
         @Test
-        // TODO: it's now the caller's responsibility to determine if we can fly
-        @DisplayName("legal move with 3 pieces on the board")
+        @DisplayName("legal move — initial and destination points not adjacent, can fly")
         void flying() {
             String initStr = "a7", destStr = "g7";
 
             Board board = BoardBuilder.create()
                     .withPiece("a7", piece)
-                    .withPiece("b6", piece)
-                    .withPiece("c5", piece)
                     .build();
 
             MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), true);
