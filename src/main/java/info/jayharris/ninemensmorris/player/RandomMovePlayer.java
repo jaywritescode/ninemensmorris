@@ -40,7 +40,7 @@ public class RandomMovePlayer extends BasePlayer {
     private MovePiece movePieceAnywhere(Board board) {
         Point init = randomElement(board.getOccupiedPoints(getPiece()));
         Point dest = randomElement(board.getUnoccupiedPoints());
-        return MovePiece.create(getPiece(), board, init, dest);
+        return MovePiece.create(getPiece(), init, dest, true);
     }
 
     private MovePiece moveToNeighbor(Board board) {
@@ -53,7 +53,7 @@ public class RandomMovePlayer extends BasePlayer {
                 init.getNeighbors().stream()
                         .filter(Point::isUnoccupied)
                         .collect(Collectors.toList()));
-        return MovePiece.create(getPiece(), board, init, dest);
+        return MovePiece.create(getPiece(), init, dest, false);
     }
 
     private <T> T randomElement(Collection<T> collection) {

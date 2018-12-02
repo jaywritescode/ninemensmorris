@@ -146,7 +146,7 @@ class BasePlayerTest {
                 PlayerAdapter player = new PlayerAdapter(Piece.BLACK) {
                     @Override
                     public MovePiece movePiece(Board board) {
-                        return MovePiece.create(getPiece(), board, initial, destination);
+                        return MovePiece.create(getPiece(), initial, destination, false);
                     }
                 };
                 player.setStartingPieces(0);
@@ -176,7 +176,7 @@ class BasePlayerTest {
                 PlayerAdapter player = new PlayerAdapter(Piece.WHITE) {
                     @Override
                     public MovePiece movePiece(Board board) {
-                        return MovePiece.create(getPiece(), board, initial, destination);
+                        return MovePiece.create(getPiece(), initial, destination, false);
                     }
 
                     @Override

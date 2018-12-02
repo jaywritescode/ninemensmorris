@@ -41,7 +41,7 @@ class MovePieceTest {
 
         Point init = board.getPoint(initStr), dest = board.getPoint(destStr);
 
-        MovePiece.create(piece, board, init, dest).perform();
+        MovePiece.create(piece, init, dest, false).perform();
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(init).hasFieldOrPropertyWithValue("piece", null);
@@ -58,6 +58,7 @@ class MovePieceTest {
         }
 
         @Test
+        // TODO: this sounds wrong, looks like we have exactly three pieces on the board
         @DisplayName("legal move with > 3 pieces on the board")
         void legal() {
             String initStr = "a7", destStr = "d7";
@@ -69,7 +70,7 @@ class MovePieceTest {
                     .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
 
             assertThatCode(move::validateLegal).doesNotThrowAnyException();
         }
@@ -86,7 +87,7 @@ class MovePieceTest {
                     .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -102,7 +103,7 @@ class MovePieceTest {
                     .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -120,7 +121,7 @@ class MovePieceTest {
                     .withPiece("d7", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
@@ -137,12 +138,13 @@ class MovePieceTest {
                     .withPiece("a4", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), false);
 
             assertThatExceptionOfType(IllegalMoveException.class).isThrownBy(move::validateLegal);
         }
 
         @Test
+        // TODO: it's now the caller's responsibility to determine if we can fly
         @DisplayName("legal move with 3 pieces on the board")
         void flying() {
             String initStr = "a7", destStr = "g7";
@@ -153,7 +155,7 @@ class MovePieceTest {
                     .withPiece("c5", piece)
                     .build();
 
-            MovePiece move = MovePiece.create(piece, board, board.getPoint(initStr), board.getPoint(destStr));
+            MovePiece move = MovePiece.create(piece, board.getPoint(initStr), board.getPoint(destStr), true);
 
             assertThatCode(move::validateLegal).doesNotThrowAnyException();
         }

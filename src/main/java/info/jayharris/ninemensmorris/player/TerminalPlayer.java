@@ -87,7 +87,8 @@ public class TerminalPlayer extends BasePlayer {
             }
 
             try {
-                return MovePiece.createLegal(getPiece(), board, board.getPoint(init), board.getPoint(dest));
+                return MovePiece.createLegal(getPiece(), board.getPoint(init), board.getPoint(dest),
+                                             board.getOccupiedPoints(getPiece()).size() == 3);
             }
             catch (IllegalMoveException e) {
                 out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());
