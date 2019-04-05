@@ -111,7 +111,7 @@ public class TerminalPlayer extends BasePlayer {
 
             if (valid(input)) {
                 try {
-                    return CapturePiece.createLegalMove(piece, board.getPoint(input));
+                    return CapturePiece.createLegal(piece, board.getPoint(input));
                 }
                 catch (IllegalMoveException e) {
                     out.printf(TRY_AGAIN_TEMPLATE, e.getMessage());

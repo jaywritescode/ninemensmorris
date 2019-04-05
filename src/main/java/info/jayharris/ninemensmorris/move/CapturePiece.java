@@ -57,11 +57,26 @@ public final class CapturePiece extends BaseMove {
         return Objects.hash(point);
     }
 
+    /**
+     * Creates a (possibly illegal) CapturePiece.
+     *
+     * @param piece the piece (of the player) doing the capturing
+     * @param point the point from which a piece is being captured
+     * @return the move
+     */
     public static CapturePiece create(Piece piece, Point point) {
         return new CapturePiece(piece, point);
     }
 
-    public static CapturePiece createLegalMove(Piece piece, Point point) {
+    /**
+     * Creates a legal CapturePiece.
+     *
+     * @param piece the piece (of the player) doing the capturing
+     * @param point the point from which a piece is being captured
+     * @return the move
+     * @throws IllegalMoveException if the move is illegal
+     */
+    public static CapturePiece createLegal(Piece piece, Point point) {
         CapturePiece move = create(piece, point);
 
         move.validateLegal();
