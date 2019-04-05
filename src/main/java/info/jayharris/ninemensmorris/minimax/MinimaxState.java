@@ -7,8 +7,10 @@ import info.jayharris.ninemensmorris.Board.Mill;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.move.CapturePiece;
+import info.jayharris.ninemensmorris.move.MovePiece;
+import info.jayharris.ninemensmorris.move.PlacePiece;
 import info.jayharris.ninemensmorris.player.BasePlayer;
-import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 
 import java.util.Collection;
 import java.util.Set;
@@ -17,10 +19,16 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// TODO: Can this class be consolidated into MinimaxPlayer?
 public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
 
     private final Board board;
     private final Piece toMove;
+
+    /**
+     * the number of pieces the player has left to put on the board in the
+     * initial phase of the game
+     */
     private final int playerPieces;
 
     MinimaxState(Board board, Piece toMove, int playerPieces) {
@@ -35,6 +43,31 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
             return tryPlacePiece();
         }
         return tryMovePiece();
+    }
+
+    public void doPlacePiece(Coordinate move) {
+        if (move == null) {
+            return;
+        }
+
+        PlacePiece.createLegal(toMove, board.getPoint(move)).perform();
+    }
+
+    public void doMovePiece(Coordinate from, Coordinate to) {
+        if (from == null && to == null) {
+            return;
+        }
+
+        MovePiece.createLegal(toMove, board.getPoint(from), board.getPoint(to),
+                board.getOccupiedPoints(toMove).size() == 3).perform();
+    }
+
+    public void doCapturePiece(Coordinate capture) {
+        if (capture == null) {
+            return;
+        }
+
+        CapturePiece.createLegal(toMove, board.getPoint(capture)).perform();
     }
 
     private Set<MinimaxAction> tryPlacePiece() {
@@ -108,11 +141,24 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
                 .allMatch(Predicates.equalTo(toMove));
     }
 
-    public Board copyBoard() {
-        return Board.copy(board);
+    /**
+     * Creates a new MinimaxState.
+     * <p>
+     * The state's board is mutable and can be modified without affecting the
+     * board that's passed into the method.
+     *
+     * @param board  the state's board
+     * @param player the state's player to move
+     * @return a new state
+     */
+    public static MinimaxState create(Board board, BasePlayer player) {
+        return new MinimaxState(Board.copy(board), player.getPiece(), player.getStartingPieces());
     }
 
-    public static MinimaxState create(Board board, BasePlayer player) {
-        return new MinimaxState(board, player.getPiece(), player.getStartingPieces());
+    public static MinimaxState create(MinimaxState predecessor) {
+        Piece nextPiece = predecessor.toMove.opposite();
+
+        return new MinimaxState(predecessor.board, nextPiece,
+                Math.max(0, predecessor.playerPieces - (nextPiece == BasePlayer.FIRST_PLAYER ? 1 : 0)));
     }
 }

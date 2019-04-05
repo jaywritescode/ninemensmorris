@@ -8,6 +8,7 @@ import info.jayharris.ninemensmorris.player.BasePlayer;
 
 import java.util.Objects;
 
+// TODO: Can this class be consolidated into MinimaxPlayer?
 public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
 
     private Coordinate placePiece;
@@ -25,20 +26,12 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
     }
 
     @Override
-    public MinimaxState apply(MinimaxState initialState) {
-        Board copy = initialState.copyBoard();
+    public MinimaxState apply(MinimaxState state) {
+        state.doPlacePiece(placePiece);
+        state.doMovePiece(movePieceFrom, movePieceTo);
+        state.doCapturePiece(capturePiece);
 
-        if (placePiece != null) {
-            copy.getPoint(placePiece).setPiece(initialState.getToMove());
-        }
-
-        if (capturePiece != null) {
-            copy.getPoint(capturePiece).setPiece(null);
-        }
-
-        Piece nextPlayer = initialState.getToMove().opposite();
-        int nextPieces = initialState.getPlayerPieces() - (nextPlayer == BasePlayer.FIRST_PLAYER ? 1 : 0);
-        return new MinimaxState(copy, nextPlayer, nextPieces);
+        return MinimaxState.create(state);
     }
 
     MinimaxAction withCapture(Coordinate capturePiece) {
