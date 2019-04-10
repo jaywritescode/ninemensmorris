@@ -26,12 +26,14 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
     }
 
     @Override
-    public MinimaxState apply(MinimaxState state) {
-        state.doPlacePiece(placePiece);
-        state.doMovePiece(movePieceFrom, movePieceTo);
-        state.doCapturePiece(capturePiece);
+    public MinimaxState apply(MinimaxState predecessor) {
+        MinimaxState successor = MinimaxState.create(predecessor);
 
-        return MinimaxState.create(state);
+        successor.doPlacePiece(placePiece);
+        successor.doMovePiece(movePieceFrom, movePieceTo);
+        successor.doCapturePiece(capturePiece);
+
+        return successor;
     }
 
     MinimaxAction withCapture(Coordinate capturePiece) {

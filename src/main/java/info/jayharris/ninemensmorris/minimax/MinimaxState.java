@@ -31,7 +31,7 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
      */
     private final int playerPieces;
 
-    MinimaxState(Board board, Piece toMove, int playerPieces) {
+    private MinimaxState(Board board, Piece toMove, int playerPieces) {
         this.board = board;
         this.toMove = toMove;
         this.playerPieces = playerPieces;
@@ -45,7 +45,7 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         return tryMovePiece();
     }
 
-    public void doPlacePiece(Coordinate move) {
+    void doPlacePiece(Coordinate move) {
         if (move == null) {
             return;
         }
@@ -53,7 +53,7 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         PlacePiece.createLegal(toMove, board.getPoint(move)).perform();
     }
 
-    public void doMovePiece(Coordinate from, Coordinate to) {
+    void doMovePiece(Coordinate from, Coordinate to) {
         if (from == null && to == null) {
             return;
         }
@@ -62,7 +62,7 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
                 board.getOccupiedPoints(toMove).size() == 3).perform();
     }
 
-    public void doCapturePiece(Coordinate capture) {
+    void doCapturePiece(Coordinate capture) {
         if (capture == null) {
             return;
         }
@@ -126,6 +126,10 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         return toMove;
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
     public int getPlayerPieces() {
         return playerPieces;
     }
@@ -142,23 +146,32 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
     }
 
     /**
-     * Creates a new MinimaxState.
-     * <p>
-     * The state's board is mutable and can be modified without affecting the
-     * board that's passed into the method.
+     * Creates a new MinimaxState from a predecessor state. Changes to the board
+     * in the returned state won't affect the predecessor state.
      *
      * @param board  the state's board
      * @param player the state's player to move
      * @return a new state
      */
     public static MinimaxState create(Board board, BasePlayer player) {
-        return new MinimaxState(Board.copy(board), player.getPiece(), player.getStartingPieces());
+        return create(board, player.getPiece(), player.getStartingPieces());
     }
 
+    /**
+     * Creates a new MinimaxState from a predecessor state. Changes to the board
+     * in the returned state won't affect the predecessor state.
+     *
+     * @param predecessor the predecessor state
+     * @return a new state
+     */
     public static MinimaxState create(MinimaxState predecessor) {
-        Piece nextPiece = predecessor.toMove.opposite();
+        Piece nextPiece = predecessor.getToMove().opposite();
 
-        return new MinimaxState(predecessor.board, nextPiece,
-                Math.max(0, predecessor.playerPieces - (nextPiece == BasePlayer.FIRST_PLAYER ? 1 : 0)));
+        return MinimaxState.create(predecessor.getBoard(), nextPiece,
+                predecessor.getPlayerPieces() - (nextPiece == BasePlayer.FIRST_PLAYER ? 1 : 0));
+    }
+
+    static MinimaxState create(Board board, Piece toMove, int startingPieces) {
+        return new MinimaxState(Board.copy(board), toMove, Math.max(0, startingPieces));
     }
 }

@@ -15,6 +15,6 @@ public class CountPiecesFeature extends Feature {
 
     @Override
     public double apply(MinimaxState state) {
-        return BoardUtils.countPieces(state.copyBoard(), piece);
+        return BoardUtils.countPieces(state.getBoard(), piece);
     }
 }

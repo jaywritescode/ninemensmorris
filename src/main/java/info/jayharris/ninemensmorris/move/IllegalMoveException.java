@@ -11,6 +11,6 @@ public class IllegalMoveException extends RuntimeException {
     }
 
     public static IllegalMoveException create(String template, String... args) {
-        return IllegalMoveException.create(String.format(template, args));
+        return IllegalMoveException.create(String.format(template, (Object) args));
     }
 }

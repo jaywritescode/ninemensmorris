@@ -15,7 +15,7 @@ public abstract class BaseHeuristicFunction implements HeuristicEvaluationFuncti
 
     @Override
     public double apply(MinimaxState state) {
-        Board board = state.copyBoard();
+        Board board = state.getBoard();
 
         if (state.getPlayerPieces() == 0) {
             if (BoardUtils.isWinner(board, piece)) {

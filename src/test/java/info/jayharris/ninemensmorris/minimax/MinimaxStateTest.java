@@ -16,12 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MinimaxStateTest {
 
     @Nested
+    @DisplayName("it returns the correct set of next moves")
     class Actions {
 
         Board board;
 
         @Test
-        @DisplayName("#getPlacePieceActions")
+        @DisplayName("in the \"place piece\" phase of the game")
         void getPlacePieceActions() throws Exception {
             Piece toMove = Piece.BLACK;
             board = BoardBuilder.create()
@@ -96,7 +97,7 @@ class MinimaxStateTest {
         }
 
         @Test
-        @DisplayName("#getMovePieceActions — > 3 pieces")
+        @DisplayName("in the \"move piece\" phase of the game, player to move has more than three pieces")
         void getMovePieceActions_tryMovePieceToNeighbor() throws Exception {
             Piece toMove = Piece.BLACK;
             board = BoardBuilder.create()
@@ -175,7 +176,7 @@ class MinimaxStateTest {
         }
 
         @Test
-        @DisplayName("#getMovePieceActions — 3 pieces")
+        @DisplayName("in the \"move piece\" phase of the game, player to move has exactly three pieces")
         void getMovePieceActions_tryMovePieceAnywhere() throws Exception {
             Piece toMove = Piece.WHITE;
             board = BoardBuilder.create()

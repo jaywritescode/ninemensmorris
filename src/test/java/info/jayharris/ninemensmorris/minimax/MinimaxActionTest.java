@@ -24,6 +24,29 @@ class MinimaxActionTest {
                 .withPiece("c3", Piece.BLACK)
                 .withPiece("a7", Piece.WHITE)
                 .build();
+        /*
+            7  ○ --------------- + --------------- +
+               |                 |                 |
+               |                 |                 |
+            6  |     + --------- + --------- +     |
+               |     |           |           |     |
+               |     |           |           |     |
+            5  |     |     + --- ○ --- +     |     |
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            4  + --- ● --- +           + --- + --- +
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            3  |     |     ● --- + --- +     |     |
+               |     |           |           |     |
+               |     |           |           |     |
+            2  |     + --------- + --------- +     |
+               |                 |                 |
+               |                 |                 |
+            1  + --------------- + --------------- +
+
+               a     b     c     d     e     f     g
+             */
         MinimaxState currentState = MinimaxStateBuilder.create()
                 .withBoard(board)
                 .withToMove(Piece.BLACK)
@@ -34,6 +57,8 @@ class MinimaxActionTest {
         MinimaxAction action = MinimaxAction.fromPlacePiece(coordinate);
 
         MinimaxState nextState = action.apply(currentState);
+
+        assertThat(nextState.getBoard()).isNotSameAs(currentState.getBoard());
 
         assertThat(nextState)
                 .hasFieldOrPropertyWithValue("toMove", Piece.WHITE)
@@ -53,6 +78,29 @@ class MinimaxActionTest {
                 .withPiece("a7", Piece.WHITE)
                 .withPiece("g1", Piece.BLACK)
                 .build();
+        /*
+            7  ○ --------------- + --------------- +
+               |                 |                 |
+               |                 |                 |
+            6  |     + --------- + --------- +     |
+               |     |           |           |     |
+               |     |           |           |     |
+            5  |     |     + --- ○ --- +     |     |
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            4  + --- ● --- +           + --- + --- +
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            3  |     |     ● --- + --- +     |     |
+               |     |           |           |     |
+               |     |           |           |     |
+            2  |     + --------- + --------- +     |
+               |                 |                 |
+               |                 |                 |
+            1  + --------------- + --------------- ●
+
+               a     b     c     d     e     f     g
+             */
         MinimaxState currentState = MinimaxStateBuilder.create()
                 .withBoard(board)
                 .withToMove(Piece.WHITE)
@@ -64,11 +112,13 @@ class MinimaxActionTest {
 
         MinimaxState nextState = action.apply(currentState);
 
+        assertThat(nextState.getBoard()).isNotSameAs(currentState.getBoard());
+
         assertThat(nextState)
                 .hasFieldOrPropertyWithValue("toMove", Piece.BLACK)
                 .hasFieldOrPropertyWithValue("playerPieces", 6)
                 .hasFieldOrPropertyWithValue("board", BoardBuilder.create(board)
-                        .withPiece(board.getPoint(coordinate), Piece.BLACK)
+                        .withPiece(board.getPoint(coordinate), Piece.WHITE)
                         .build());
     }
 
@@ -82,9 +132,32 @@ class MinimaxActionTest {
                 .withPiece("b4", Piece.WHITE)
                 .withPiece("c4", Piece.BLACK)
                 .withPiece("f4", Piece.WHITE)
+                .withPiece("d3", Piece.BLACK)
                 .withPiece("e3", Piece.BLACK)
-                .withPiece("d2", Piece.BLACK)
                 .build();
+        /*
+            7  ○ --------------- + --------------- +
+               |                 |                 |
+               |                 |                 |
+            6  |     + --------- ● --------- +     |
+               |     |           |           |     |
+               |     |           |           |     |
+            5  |     |     + --- ○ --- +     |     |
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            4  + --- ○ --- ●           + --- ○ --- +
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            3  |     |     + --- ● --- ●     |     |
+               |     |           |           |     |
+               |     |           |           |     |
+            2  |     + --------- + --------- +     |
+               |                 |                 |
+               |                 |                 |
+            1  + --------------- + --------------- +
+
+               a     b     c     d     e     f     g
+             */
         MinimaxState currentState = MinimaxStateBuilder.create()
                 .withBoard(board)
                 .withToMove(Piece.BLACK)

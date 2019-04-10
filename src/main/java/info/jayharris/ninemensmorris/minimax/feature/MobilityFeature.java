@@ -17,12 +17,14 @@ public class MobilityFeature extends Feature {
 
     @Override
     public double apply(MinimaxState state) {
-        Board board = state.copyBoard();
-        int myPieces = BoardUtils.countPieces(board, piece);
+//        Board board = state.copyBoard();
+//        int myPieces = BoardUtils.countPieces(board, piece);
+//
+//        return board.getOccupiedPoints(piece)
+//                .stream()
+//                .mapToLong(point -> point.getNeighbors().stream().filter(Point::isUnoccupied).count())
+//                .sum();
 
-        return board.getOccupiedPoints(piece)
-                .stream()
-                .mapToLong(point -> point.getNeighbors().stream().filter(Point::isUnoccupied).count())
-                .sum();
+        return 0;
     }
 }
