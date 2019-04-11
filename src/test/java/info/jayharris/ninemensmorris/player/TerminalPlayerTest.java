@@ -190,9 +190,8 @@ class TerminalPlayerTest {
             player.capturePiece(builder.build());
 
             verify(reader, times(2)).readLine();
-            assertThat(output.toString()).contains(
-                    String.format(CapturePiece.ILLEGAL_MOVE_TEMPLATE, player.getPiece().opposite().toString(), input,
-                                  CapturePiece.EMPTY_POINT));
+            assertThat(output.toString())
+                    .contains(player.getPiece().opposite().toString(), input, CapturePiece.EMPTY_POINT);
             assertThat(output.toString()).contains(String.format(TerminalPlayer.TRY_AGAIN_TEMPLATE, ""));
         }
 
@@ -206,8 +205,7 @@ class TerminalPlayerTest {
 
             verify(reader, times(2)).readLine();
             assertThat(output.toString()).contains(
-                    String.format(CapturePiece.ILLEGAL_MOVE_TEMPLATE, player.getPiece().opposite().toString(), input,
-                                  player.getPiece()));
+                    player.getPiece().opposite().toString(), input, player.getPiece().toString());
             assertThat(output.toString()).contains(String.format(TerminalPlayer.TRY_AGAIN_TEMPLATE, ""));
         }
     }

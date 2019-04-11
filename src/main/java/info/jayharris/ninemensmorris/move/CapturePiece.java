@@ -26,9 +26,7 @@ public final class CapturePiece extends BaseMove {
 
     public void validateLegal() throws IllegalMoveException {
         if (point.getPiece() != piece.opposite()) {
-            throw IllegalMoveException.create(ILLEGAL_MOVE_TEMPLATE,
-                                              piece.opposite().toString(),
-                                              point.algebraicNotation(), Objects.toString(point.getPiece(), EMPTY_POINT));
+            throw illegalMove(piece.opposite(), point);
         }
     }
 
@@ -81,5 +79,14 @@ public final class CapturePiece extends BaseMove {
 
         move.validateLegal();
         return move;
+    }
+
+    private static IllegalMoveException illegalMove(Piece expectedPiece, Point target) {
+        String msg = String.format("Expected to find a %s piece on [%s], but instead found %s.",
+                Objects.toString(expectedPiece, EMPTY_POINT),
+                target.algebraicNotation(),
+                Objects.toString(target.getPiece(), EMPTY_POINT));
+
+        return IllegalMoveException.create(msg);
     }
 }
