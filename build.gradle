@@ -24,7 +24,7 @@ dependencies {
     implementation 'info.jayharris:minimax:1.5.0-SNAPSHOT'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testImplementation 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'org.assertj:assertj-core:3.12.0'
     testImplementation 'org.mockito:mockito-core:2.22.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
