@@ -1,10 +1,12 @@
-package info.jayharris.ninemensmorris.minimax;
+package info.jayharris.ninemensmorris.minimax.feature;
 
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.minimax.MinimaxState;
 import info.jayharris.ninemensmorris.minimax.feature.CountPiecesFeature;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +33,12 @@ class CountPiecesFeatureTest {
                 .withPiece("a1", Piece.WHITE)
                 .withPiece("g1", Piece.BLACK)
                 .build();
-        MinimaxState state = MinimaxState.create(board, new MinimaxPlayer(Piece.BLACK, b -> 0.0));
+        MinimaxState state = MinimaxState.create(board, new MinimaxPlayer(Piece.BLACK, o -> 0.0));
 
-        assertThat(new CountPiecesFeature(Piece.WHITE).apply(state)).isEqualTo(7);
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(new CountPiecesFeature(Piece.WHITE).apply(state)).isEqualTo(7);
+        softly.assertThat(new CountPiecesFeature(Piece.BLACK).apply(state)).isEqualTo(9);
+        softly.assertAll();
     }
 }

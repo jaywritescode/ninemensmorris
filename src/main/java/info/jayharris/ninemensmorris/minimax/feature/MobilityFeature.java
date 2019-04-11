@@ -1,13 +1,12 @@
 package info.jayharris.ninemensmorris.minimax.feature;
 
-import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Point;
-import info.jayharris.ninemensmorris.BoardUtils;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
 
 /**
- * This feature counts the number of empty squares that a player can move to.
+ * This feature counts the number (`from`, `to`) pairs where `from` is occupied
+ * by `piece`, `to` is unoccupied, and `from` and `to` are adjacent to each other.
  */
 public class MobilityFeature extends Feature {
 
@@ -17,14 +16,14 @@ public class MobilityFeature extends Feature {
 
     @Override
     public double apply(MinimaxState state) {
-//        Board board = state.copyBoard();
-//        int myPieces = BoardUtils.countPieces(board, piece);
-//
-//        return board.getOccupiedPoints(piece)
-//                .stream()
-//                .mapToLong(point -> point.getNeighbors().stream().filter(Point::isUnoccupied).count())
-//                .sum();
+        return state.getBoard().getOccupiedPoints(piece).stream()
+                .mapToLong(MobilityFeature::countUnoccupiedNeighbors)
+                .sum();
+    }
 
-        return 0;
+    private static long countUnoccupiedNeighbors(Point point) {
+        return point.getNeighbors().stream()
+                .filter(Point::isUnoccupied)
+                .count();
     }
 }
