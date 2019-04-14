@@ -82,11 +82,11 @@ public final class CapturePiece extends BaseMove {
     }
 
     private static IllegalMoveException illegalMove(Piece expectedPiece, Point target) {
-        String msg = String.format("Expected to find a %s piece on [%s], but instead found %s.",
-                Objects.toString(expectedPiece, EMPTY_POINT),
+        String msg = String.format(ILLEGAL_MOVE_TEMPLATE,
+                Objects.toString(expectedPiece),
                 target.algebraicNotation(),
                 Objects.toString(target.getPiece(), EMPTY_POINT));
 
-        return IllegalMoveException.create(msg);
+        return new IllegalMoveException(msg);
     }
 }

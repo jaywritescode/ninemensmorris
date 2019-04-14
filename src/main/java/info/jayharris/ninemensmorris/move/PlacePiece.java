@@ -31,7 +31,7 @@ public final class PlacePiece extends BaseMove implements InitialMove {
     @Override
     public void validateLegal() throws IllegalMoveException {
         if (!point.isUnoccupied()) {
-            throw IllegalMoveException.create(ILLEGAL_MOVE_TEMPLATE, point.algebraicNotation());
+            throw illegalMove(point);
         }
     }
 
@@ -70,5 +70,10 @@ public final class PlacePiece extends BaseMove implements InitialMove {
 
         move.validateLegal();
         return move;
+    }
+
+    private IllegalMoveException illegalMove(Point target) {
+        String msg = String.format(ILLEGAL_MOVE_TEMPLATE, target.algebraicNotation());
+        return new IllegalMoveException(msg);
     }
 }
