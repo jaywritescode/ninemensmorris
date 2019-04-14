@@ -38,16 +38,15 @@ public final class MovePiece extends BaseMove implements InitialMove {
     @Override
     public void validateLegal() {
         if (initial.getPiece() != piece) {
-            throw IllegalMoveException.create(
-                    initial.isUnoccupied() ? EMPTY_POINT_TEMPLATE : OPPONENT_PIECE_TEMPLATE,
-                    initial.algebraicNotation());
+            throw initial.isUnoccupied() ? emptyPoint(initial) : wrongColor(initial);
         }
+
         if (!destination.isUnoccupied()) {
-            throw IllegalMoveException.create(DESTINATION_OCCUPIED_TEMPLATE, destination.algebraicNotation());
+            throw destinationOccupied(destination);
         }
 
         if (!canFly && !initial.getNeighbors().contains(destination)) {
-            throw IllegalMoveException.create(POINTS_NOT_ADJACENT_TEMPLATE, initial.algebraicNotation(), destination.algebraicNotation());
+            throw pointsNotAdjacent(initial, destination);
         }
     }
 
@@ -106,5 +105,26 @@ public final class MovePiece extends BaseMove implements InitialMove {
 
         move.validateLegal();
         return move;
+    }
+
+    private static IllegalMoveException emptyPoint(Point point) {
+        String msg = String.format(EMPTY_POINT_TEMPLATE, point.algebraicNotation());
+        return new IllegalMoveException(msg);
+    }
+
+    private static IllegalMoveException wrongColor(Point point) {
+        String msg = String.format(OPPONENT_PIECE_TEMPLATE, point.algebraicNotation());
+        return new IllegalMoveException(msg);
+    }
+
+    private static IllegalMoveException destinationOccupied(Point point) {
+        String msg = String.format(DESTINATION_OCCUPIED_TEMPLATE, point.algebraicNotation());
+        return new IllegalMoveException(msg);
+    }
+
+    private static IllegalMoveException pointsNotAdjacent(Point initial, Point destination) {
+        String msg = String.format(POINTS_NOT_ADJACENT_TEMPLATE,
+                initial.algebraicNotation(), destination.algebraicNotation());
+        return new IllegalMoveException(msg);
     }
 }

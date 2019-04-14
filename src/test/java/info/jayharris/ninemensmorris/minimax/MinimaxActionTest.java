@@ -4,11 +4,14 @@ import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
 import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Piece;
+import org.assertj.core.api.Condition;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,14 +61,14 @@ class MinimaxActionTest {
 
         MinimaxState nextState = action.apply(currentState);
 
-        assertThat(nextState.getBoard()).isNotSameAs(currentState.getBoard());
+        SoftAssertions softly = new SoftAssertions();
 
-        assertThat(nextState)
-                .hasFieldOrPropertyWithValue("toMove", Piece.WHITE)
-                .hasFieldOrPropertyWithValue("playerPieces", 7)
-                .hasFieldOrPropertyWithValue("board", BoardBuilder.create(board)
-                        .withPiece(board.getPoint(coordinate), Piece.BLACK)
-                        .build());
+        softly.assertThat(nextState.getBoard()).isNotSameAs(currentState.getBoard());
+        softly.assertThat(nextState.getToMove()).isEqualTo(Piece.WHITE);
+        softly.assertThat(nextState.getPlayerPieces()).isEqualTo(7);
+        softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(Piece.BLACK, coordinate));
+
+        softly.assertAll();
     }
 
     @Test
@@ -112,14 +115,14 @@ class MinimaxActionTest {
 
         MinimaxState nextState = action.apply(currentState);
 
-        assertThat(nextState.getBoard()).isNotSameAs(currentState.getBoard());
+        SoftAssertions softly = new SoftAssertions();
 
-        assertThat(nextState)
-                .hasFieldOrPropertyWithValue("toMove", Piece.BLACK)
-                .hasFieldOrPropertyWithValue("playerPieces", 6)
-                .hasFieldOrPropertyWithValue("board", BoardBuilder.create(board)
-                        .withPiece(board.getPoint(coordinate), Piece.WHITE)
-                        .build());
+        softly.assertThat(nextState.getBoard()).isNotSameAs(currentState.getBoard());
+        softly.assertThat(nextState.getToMove()).isEqualTo(Piece.BLACK);
+        softly.assertThat(nextState.getPlayerPieces()).isEqualTo(6);
+        softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(Piece.WHITE, coordinate));
+
+        softly.assertAll();
     }
 
     @Test
@@ -170,13 +173,20 @@ class MinimaxActionTest {
 
         MinimaxState nextState = action.apply(currentState);
 
-        assertThat(nextState)
-                .hasFieldOrPropertyWithValue("toMove", Piece.WHITE)
-                .hasFieldOrPropertyWithValue("playerPieces", 5)
-                .hasFieldOrPropertyWithValue("board", BoardBuilder.create(board)
-                        .withPiece(board.getPoint(place), Piece.BLACK)
-                        .withPiece(board.getPoint(capture), null)
-                        .build());
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(nextState.getToMove()).isEqualTo(Piece.WHITE);
+        softly.assertThat(nextState.getPlayerPieces()).isEqualTo(5);
+        softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(Piece.BLACK, place));
+        softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(null, capture));
+
+        softly.assertAll();
     }
 
+    Condition<Board> matchingPieceOnPoint(Piece piece, Coordinate coordinate) {
+        Predicate<Board> predicate = board -> board.getPoint(coordinate).getPiece() == piece;
+
+        return new Condition<>(predicate,
+                "point [%s] is %s", coordinate.pretty(), piece);
+    }
 }
