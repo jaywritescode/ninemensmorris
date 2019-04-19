@@ -1,6 +1,7 @@
 package info.jayharris.ninemensmorris;
 
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableSet;
 
 import java.util.*;
 import java.util.function.Function;
@@ -13,6 +14,42 @@ import java.util.stream.Stream;
 public class Board {
 
     private final Map<Coordinate, Point> points;
+    private final Supplier<Set<Mill>> getMillsMemoized = new Supplier<Set<Mill>>() {
+
+        Set<Mill> mills = null;
+
+        @Override
+        public Set<Mill> get() {
+            if (mills == null) {
+                ImmutableSet.Builder<Mill> builder = ImmutableSet.builder();
+
+                Stream.<Stream<String>>builder()
+                        .add(Stream.of("a7", "d7", "g7"))
+                        .add(Stream.of("b6", "d6", "f6"))
+                        .add(Stream.of("c5", "d5", "e5"))
+                        .add(Stream.of("a4", "b4", "c4"))
+                        .add(Stream.of("e4", "f4", "g4"))
+                        .add(Stream.of("c3", "d3", "e3"))
+                        .add(Stream.of("b2", "d2", "f2"))
+                        .add(Stream.of("a1", "d1", "g1"))
+                        .add(Stream.of("a7", "a4", "a1"))
+                        .add(Stream.of("b6", "b4", "b2"))
+                        .add(Stream.of("c5", "c4", "c3"))
+                        .add(Stream.of("d7", "d6", "d5"))
+                        .add(Stream.of("d3", "d2", "d1"))
+                        .add(Stream.of("e5", "e4", "e3"))
+                        .add(Stream.of("f6", "f4", "f2"))
+                        .add(Stream.of("g7", "g4", "g1"))
+                        .build()
+                        .map(stream -> stream.map(Coordinate::get))
+                        .map(stream -> stream.collect(Collectors.toSet()))
+                        .map(Mill::new)
+                        .forEach(builder::add);
+                mills = builder.build();
+            }
+            return mills;
+        }
+    };
 
     public Board() {
         this.points = Coordinate.valid().stream()
@@ -37,6 +74,10 @@ public class Board {
         return points()
                 .filter(Point::isUnoccupied)
                 .collect(Collectors.toSet());
+    }
+
+    public Set<Mill> getMills() {
+        return getMillsMemoized.get();
     }
 
     public Set<Mill> getMillsAt(Coordinate coordinate) {
