@@ -2,25 +2,27 @@ package info.jayharris.ninemensmorris.minimax.feature;
 
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
-import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
 import info.jayharris.ninemensmorris.player.PlayerAdapter;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
+
+import static info.jayharris.ninemensmorris.Piece.BLACK;
+import static info.jayharris.ninemensmorris.Piece.WHITE;
 
 class MobilityFeatureTest {
 
     @Test
     void apply() throws Exception {
         Board board = BoardBuilder.create()
-                .withPiece("d2", Piece.WHITE)
-                .withPiece("f4", Piece.WHITE)
-                .withPiece("f6", Piece.WHITE)
-                .withPiece("a7", Piece.WHITE)
-                .withPiece("b4", Piece.BLACK)
-                .withPiece("d5", Piece.BLACK)
-                .withPiece("d3", Piece.BLACK)
-                .withPiece("c5", Piece.BLACK)
+                .withPiece("d2", WHITE)
+                .withPiece("f4", WHITE)
+                .withPiece("f6", WHITE)
+                .withPiece("a7", WHITE)
+                .withPiece("b4", BLACK)
+                .withPiece("d5", BLACK)
+                .withPiece("d3", BLACK)
+                .withPiece("c5", BLACK)
                 .build();
         /*
             7  ○ --------------- + --------------- +
@@ -45,7 +47,7 @@ class MobilityFeatureTest {
 
                a     b     c     d     e     f     g
              */
-        MinimaxState state = MinimaxState.create(board, new PlayerAdapter(Piece.BLACK));
+        MinimaxState state = MinimaxState.create(board, new PlayerAdapter(BLACK));
 
         SoftAssertions softly = new SoftAssertions();
 
@@ -55,7 +57,7 @@ class MobilityFeatureTest {
         f4 -> e4, f4 -> f2, f4 -> g4
         d2 -> f2, d2 -> d1, d2 -> c2
          */
-        softly.assertThat(new MobilityFeature(Piece.WHITE).apply(state)).isEqualTo(9);
+        softly.assertThat(new MobilityFeature(WHITE).apply(state)).isEqualTo(9);
 
         /*
         d5 -> d6, d5 -> e5
@@ -63,7 +65,7 @@ class MobilityFeatureTest {
         c5 -> c4
         d3 -> c3, d3 -> e3
          */
-        softly.assertThat(new MobilityFeature(Piece.BLACK).apply(state)).isEqualTo(9);
+        softly.assertThat(new MobilityFeature(BLACK).apply(state)).isEqualTo(9);
 
         softly.assertAll();
     }
