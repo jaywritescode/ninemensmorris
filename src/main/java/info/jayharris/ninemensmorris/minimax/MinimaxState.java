@@ -7,9 +7,6 @@ import info.jayharris.ninemensmorris.Board.Mill;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Piece;
-import info.jayharris.ninemensmorris.move.CapturePiece;
-import info.jayharris.ninemensmorris.move.MovePiece;
-import info.jayharris.ninemensmorris.move.PlacePiece;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 
 import java.util.Collection;
@@ -20,6 +17,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 // TODO: Can this class be consolidated into MinimaxPlayer?
+/**
+ * A state of the game represented in the decision tree.
+ *
+ * Instances of this class are intended to be immutable.
+ */
 public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
 
     private final Board board;
@@ -37,37 +39,17 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         this.playerPieces = playerPieces;
     }
 
+    /**
+     * Get all of the legal actions for this state.
+     *
+     * @return a collection of actions
+     */
     @Override
     public Collection<MinimaxAction> actions() {
         if (playerPieces > 0) {
             return tryPlacePiece();
         }
         return tryMovePiece();
-    }
-
-    void doPlacePiece(Coordinate move) {
-        if (move == null) {
-            return;
-        }
-
-        PlacePiece.createLegal(toMove, board.getPoint(move)).perform();
-    }
-
-    void doMovePiece(Coordinate from, Coordinate to) {
-        if (from == null && to == null) {
-            return;
-        }
-
-        MovePiece.createLegal(toMove, board.getPoint(from), board.getPoint(to),
-                board.getOccupiedPoints(toMove).size() == 3).perform();
-    }
-
-    void doCapturePiece(Coordinate capture) {
-        if (capture == null) {
-            return;
-        }
-
-        CapturePiece.createLegal(toMove, board.getPoint(capture)).perform();
     }
 
     private Set<MinimaxAction> tryPlacePiece() {
@@ -122,6 +104,10 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         return Stream.of(MinimaxAction.fromMovePiece(movePieceFrom, movePieceTo));
     }
 
+    private Function<Point, Stream<MinimaxAction>> generateActionsFromMovePiece(Point initialPoint) {
+        return destination -> generateActionsFromMovePiece(initialPoint, destination);
+    }
+
     public Piece getToMove() {
         return toMove;
     }
@@ -134,10 +120,6 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
         return playerPieces;
     }
 
-    private Function<Point, Stream<MinimaxAction>> generateActionsFromMovePiece(Point initialPoint) {
-        return destination -> generateActionsFromMovePiece(initialPoint, destination);
-    }
-
     private Predicate<Mill> willCompleteMill(Point point) {
         return mill -> mill.getPoints().stream()
                 .filter(Predicate.isEqual(point).negate())
@@ -146,32 +128,31 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
     }
 
     /**
-     * Creates a new MinimaxState from a predecessor state. Changes to the board
-     * in the returned state won't affect the predecessor state.
+     * Creates a MinimaxState from the board and the player to move.
      *
      * @param board  the state's board
      * @param player the state's player to move
      * @return a new state
      */
     public static MinimaxState create(Board board, BasePlayer player) {
-        return create(board, player.getPiece(), player.getStartingPieces());
+        return new MinimaxState(board, player.getPiece(), player.getStartingPieces());
     }
 
     /**
-     * Creates a new MinimaxState from a predecessor state. Changes to the board
-     * in the returned state won't affect the predecessor state.
+     * Creates a successor state from a predecessor state and an action.
      *
      * @param predecessor the predecessor state
-     * @return a new state
+     * @param action the action
+     * @return a successor state
      */
-    public static MinimaxState create(MinimaxState predecessor) {
-        Piece nextPiece = predecessor.getToMove().opposite();
+    protected static MinimaxState create(MinimaxState predecessor, MinimaxAction action) {
+        Piece currentPlayer = predecessor.getToMove();
 
-        return MinimaxState.create(predecessor.getBoard(), nextPiece,
-                predecessor.getPlayerPieces() - (nextPiece == BasePlayer.FIRST_PLAYER ? 1 : 0));
-    }
+        Board copy = Board.copy(predecessor.getBoard());
+        action.makeChain(currentPlayer).forEach(fn -> fn.apply(copy).perform());
 
-    static MinimaxState create(Board board, Piece toMove, int startingPieces) {
-        return new MinimaxState(Board.copy(board), toMove, Math.max(0, startingPieces));
+        int startingPieces = Math.max(0, predecessor.getPlayerPieces() - (currentPlayer == BasePlayer.FIRST_PLAYER ? 0 : 1));
+
+        return new MinimaxState(copy, currentPlayer.opposite(), startingPieces);
     }
 }

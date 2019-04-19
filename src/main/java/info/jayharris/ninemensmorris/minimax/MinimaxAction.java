@@ -4,9 +4,15 @@ import info.jayharris.minimax.Action;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Piece;
-import info.jayharris.ninemensmorris.player.BasePlayer;
+import info.jayharris.ninemensmorris.move.CapturePiece;
+import info.jayharris.ninemensmorris.move.Move;
+import info.jayharris.ninemensmorris.move.MovePiece;
+import info.jayharris.ninemensmorris.move.PlacePiece;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 // TODO: Can this class be consolidated into MinimaxPlayer?
 public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
@@ -27,13 +33,24 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
 
     @Override
     public MinimaxState apply(MinimaxState predecessor) {
-        MinimaxState successor = MinimaxState.create(predecessor);
+        return MinimaxState.create(predecessor, this);
+    }
 
-        successor.doPlacePiece(placePiece);
-        successor.doMovePiece(movePieceFrom, movePieceTo);
-        successor.doCapturePiece(capturePiece);
+    public List<Function<Board, Move>> makeChain(Piece toMove) {
+        List<Function<Board, Move>> moves = new LinkedList<>();
 
-        return successor;
+        if (placePiece != null) {
+            moves.add(board -> PlacePiece.createLegal(toMove, board.getPoint(placePiece)));
+        }
+        if (movePieceFrom != null && movePieceTo != null) {
+            moves.add(board -> MovePiece.createLegal(toMove, board.getPoint(movePieceFrom), board.getPoint(movePieceTo),
+                    board.getOccupiedPoints(toMove).size() == 3));
+        }
+        if (capturePiece != null) {
+            moves.add(board -> CapturePiece.createLegal(toMove, board.getPoint(capturePiece)));
+        }
+
+        return moves;
     }
 
     MinimaxAction withCapture(Coordinate capturePiece) {

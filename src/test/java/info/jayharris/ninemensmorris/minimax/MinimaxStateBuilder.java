@@ -3,6 +3,8 @@ package info.jayharris.ninemensmorris.minimax;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Piece;
 
+import java.lang.reflect.Constructor;
+
 public class MinimaxStateBuilder {
 
     Board board;
@@ -24,8 +26,11 @@ public class MinimaxStateBuilder {
         return this;
     }
 
-    public MinimaxState build() {
-        return MinimaxState.create(board, toMove, playerPieces);
+    public MinimaxState build() throws Exception {
+        Constructor<MinimaxState> ctor = MinimaxState.class.getDeclaredConstructor(Board.class, Piece.class, Integer.TYPE);
+        ctor.setAccessible(true);
+
+        return ctor.newInstance(board, toMove, playerPieces);
     }
 
     public static MinimaxStateBuilder create() {
