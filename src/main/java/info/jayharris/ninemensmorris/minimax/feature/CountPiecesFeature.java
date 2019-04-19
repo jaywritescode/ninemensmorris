@@ -1,6 +1,5 @@
 package info.jayharris.ninemensmorris.minimax.feature;
 
-import info.jayharris.ninemensmorris.BoardUtils;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
 
@@ -15,6 +14,6 @@ public class CountPiecesFeature extends Feature {
 
     @Override
     public double apply(MinimaxState state) {
-        return BoardUtils.countPieces(state.getBoard(), piece);
+        return state.getBoard().getOccupiedPoints(piece).size();
     }
 }

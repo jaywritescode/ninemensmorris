@@ -46,15 +46,4 @@ public class BoardUtils {
     public static Optional<Piece> getWinner(Board board) {
         return Stream.of(Piece.BLACK, Piece.WHITE).filter(pieceIsWinner(board)).findAny();
     }
-
-    /**
-     * Count the number of {@code piece} pieces on {@code board}.
-     *
-     * @param board the board
-     * @param piece the piece
-     * @return the number of pieces on the board
-     */
-    public static int countPieces(Board board, Piece piece) {
-        return board.getOccupiedPoints(piece).size();
-    }
 }
