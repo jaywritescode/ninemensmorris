@@ -18,6 +18,19 @@ public class MinimaxPlayer extends BasePlayer {
 
     Transpositions<MinimaxState> transpositions = new InMemoryMapTranspositions<>();
 
+    /**
+     * The Player interface and the minimax API work somewhat at odds with one another.
+     *
+     * The player makes two separate requests for the part of the turn that places or moves
+     * a piece and the part of the turn that captures a piece, if necessary. But the minimax
+     * algorithm combines both of those into a single action (due to the requirement that the
+     * child of a min-node is a max-node and vice versa).
+     *
+     * So we have to figure out what the best next state is, and then remember the actions
+     * that lead to that state in a global.
+     */
+    private MinimaxAction thisTurnAction;
+
     public MinimaxPlayer(Piece piece, HeuristicEvaluationFunction<MinimaxState> heuristic) {
         super(piece);
         this.heuristic = heuristic;
@@ -35,18 +48,29 @@ public class MinimaxPlayer extends BasePlayer {
                 heuristic,
                 node -> node.getDepth() >= 3);
 
-        MinimaxAction action = tree.perform();
+        thisTurnAction = tree.perform();
 
-        return PlacePiece.create(piece, board.getPoint(action.getPlacePiece()));
+        return PlacePiece.create(piece, board.getPoint(thisTurnAction.getPlacePiece()));
     }
 
     @Override
     public MovePiece movePiece(Board board) {
-        return null;
+        DecisionTree<MinimaxState, MinimaxAction> tree = new DecisionTree<>(
+                MinimaxState.create(board, this),
+                transpositions,
+                heuristic,
+                node -> node.getDepth() >= 3);
+
+        thisTurnAction = tree.perform();
+
+        return MovePiece.create(piece,
+                board.getPoint(thisTurnAction.getMovePieceFrom()),
+                board.getPoint(thisTurnAction.getMovePieceTo()),
+                board.getOccupiedPoints(getPiece()).size() == 3);
     }
 
     @Override
     public CapturePiece capturePiece(Board board) {
-        return null;
+        return CapturePiece.create(piece, board.getPoint(thisTurnAction.getCapturePiece()));
     }
 }

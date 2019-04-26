@@ -27,5 +27,4 @@ public class CountMillsFeature extends Feature {
         return mill -> mill.getPoints().stream()
                 .allMatch(point -> point.getPiece() == piece);
     }
-
 }
