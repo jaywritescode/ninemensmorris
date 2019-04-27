@@ -5,7 +5,7 @@ import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardUtils;
 import info.jayharris.ninemensmorris.Piece;
 
-public abstract class BaseHeuristicFunction implements HeuristicEvaluationFunction<MinimaxState> {
+public class BaseHeuristicFunction implements HeuristicEvaluationFunction<MinimaxState> {
 
     protected final Piece piece;
 

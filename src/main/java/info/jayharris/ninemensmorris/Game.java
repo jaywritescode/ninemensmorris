@@ -1,7 +1,10 @@
 package info.jayharris.ninemensmorris;
 
 import com.google.common.collect.Lists;
+import info.jayharris.minimax.DecisionTreeFactory;
 import info.jayharris.ninemensmorris.Board.Point;
+import info.jayharris.ninemensmorris.minimax.MinimaxAction;
+import info.jayharris.ninemensmorris.minimax.MinimaxState;
 import info.jayharris.ninemensmorris.minimax.SampleHeuristicFunction;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
@@ -73,7 +76,8 @@ public class Game {
 
     public static void main(String... args) {
         BasePlayer black = new TerminalPlayer(Piece.BLACK);
-        BasePlayer white = new MinimaxPlayer(Piece.WHITE, new SampleHeuristicFunction(Piece.WHITE));
+        BasePlayer white = new MinimaxPlayer(Piece.WHITE,
+                new DecisionTreeFactory<MinimaxState, MinimaxAction>(new SampleHeuristicFunction(Piece.WHITE), node -> node.getDepth() >= 3));
 
         Game game = new Game(black, white);
 
