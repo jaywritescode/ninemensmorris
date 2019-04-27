@@ -51,7 +51,17 @@ public abstract class BasePlayer {
 
     public abstract CapturePiece capturePiece(Board board);
 
+    /**
+     * Called before the turn proper starts.
+     *
+     * @param game the game
+     */
     public void begin(Game game) { }
 
+    /**
+     * Called after the turn proper finishes, but before the next ply begins.
+     *
+     * @param game the game
+     */
     public void done(Game game) { }
 }
