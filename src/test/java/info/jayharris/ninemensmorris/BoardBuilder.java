@@ -15,6 +15,10 @@ public class BoardBuilder {
         return withPiece(board.getPoint(point), piece);
     }
 
+    public BoardBuilder withPiece(Coordinate point, Piece piece) {
+        return withPiece(board.getPoint(point), piece);
+    }
+
     public BoardBuilder withPiece(Point point, Piece piece) {
         point.setPiece(piece);
         return this;

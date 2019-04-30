@@ -21,6 +21,8 @@ public class Coordinate {
     static final Map<String, Coordinate> coordinates = ALGEBRAIC_NOTATIONS_FOR_COORDINATES.stream()
             .collect(Collectors.toMap(Function.identity(), Coordinate::new));
 
+    public static final Collection<Coordinate> COORDINATES = coordinates.values();
+
     static final Multimap<Coordinate, Coordinate> neighbors;
     static {
         ImmutableSetMultimap.Builder<Coordinate, Coordinate> builder = ImmutableSetMultimap.builder();

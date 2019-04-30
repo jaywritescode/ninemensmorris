@@ -120,5 +120,4 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
     static MinimaxAction fromMovePiece(Coordinate movePieceFrom, Coordinate movePieceTo) {
         return new MinimaxAction(movePieceFrom, movePieceTo);
     }
-
 }
