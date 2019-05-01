@@ -1,6 +1,5 @@
 package info.jayharris.ninemensmorris.player;
 
-import com.google.common.collect.ImmutableMap;
 import info.jayharris.minimax.DecisionTree;
 import info.jayharris.minimax.DecisionTreeFactory;
 import info.jayharris.ninemensmorris.Board;
@@ -124,19 +123,95 @@ class MinimaxPlayerTest {
     @Nested
     @DisplayName("move piece phase")
     class MovePiecePhase {
-         
-    }
 
-    @Test
-    @DisplayName("it takes a turn in the move piece phase without a capture")
-    public void movePieceNoCapture() throws Exception {
+        @BeforeEach
+        void setUp() {
+            BoardBuilder builder = BoardBuilder.create();
+            pieces.forEach(builder::withPiece);
+            board = builder.build();
+        }
 
-    }
+        private Map<Coordinate, Piece> pieces = Stream.of(
+                Pair.of("d7", WHITE),
+                Pair.of("g7", BLACK),
+                Pair.of("d6", WHITE),
+                Pair.of("f6", BLACK),
+                Pair.of("c5", WHITE),
+                Pair.of("e5", BLACK),
+                Pair.of("a4", WHITE),
+                Pair.of("b4", BLACK),
+                Pair.of("e4", WHITE),
+                Pair.of("f4", WHITE),
+                Pair.of("d3", BLACK),
+                Pair.of("e3", WHITE),
+                Pair.of("b2", WHITE),
+                Pair.of("d2", BLACK),
+                Pair.of("a1", BLACK),
+                Pair.of("d1", BLACK))
+                .collect(Collectors.toMap(pair -> Coordinate.get(pair.getLeft()), Pair::getRight));
 
-    @Test
-    @DisplayName("it takes a turn in the move piece phase with a capture")
-    public void movePieceWithCapture() throws Exception {
+        @Test
+        @DisplayName("it takes a turn in the move piece phase without a capture")
+        public void movePieceNoCapture() throws Exception {
+            player = MinimaxPlayerBuilder.create()
+                    .withPiece(WHITE)
+                    .withDecisionTreeFactory(decisionTreeFactory)
+                    .withStartingPieces(0)
+                    .build();
 
+            Coordinate movePieceFrom = Coordinate.get("a4");
+            Coordinate movePieceTo = Coordinate.get("a7");
+
+            MinimaxAction action = MinimaxActionBuilder.create()
+                    .withMovePieceFrom(movePieceFrom)
+                    .withMovePieceTo(movePieceTo)
+                    .build();
+            DecisionTree<MinimaxState, MinimaxAction> decisionTree = mock(DecisionTree.class);
+            when(decisionTree.perform()).thenReturn(action);
+            when(decisionTreeFactory.build(eq(MinimaxState.create(board, player)))).thenReturn(decisionTree);
+
+            player.takeTurn(board);
+
+            Map<Coordinate, Piece> expectedBoard = new HashMap<>();
+            expectedBoard.putAll(pieces);
+            expectedBoard.remove(movePieceFrom);
+            expectedBoard.put(movePieceTo, player.getPiece());
+
+            assertThat(board).satisfies(boardMatches(expectedBoard));
+        }
+
+        @Test
+        @DisplayName("it takes a turn in the move piece phase with a capture")
+        public void movePieceWithCapture() throws Exception {
+            player = MinimaxPlayerBuilder.create()
+                    .withPiece(WHITE)
+                    .withDecisionTreeFactory(decisionTreeFactory)
+                    .withStartingPieces(0)
+                    .build();
+
+            Coordinate movePieceFrom = Coordinate.get("c5");
+            Coordinate movePieceTo = Coordinate.get("d5");
+            Coordinate capturePiece = Coordinate.get("b4");
+
+            MinimaxAction action = MinimaxActionBuilder.create()
+                    .withMovePieceFrom(movePieceFrom)
+                    .withMovePieceTo(movePieceTo)
+                    .withCapturePiece(capturePiece)
+                    .build();
+            DecisionTree<MinimaxState, MinimaxAction> decisionTree = mock(DecisionTree.class);
+            when(decisionTree.perform()).thenReturn(action);
+            when(decisionTreeFactory.build(eq(MinimaxState.create(board, player)))).thenReturn(decisionTree);
+
+            player.takeTurn(board);
+
+            Map<Coordinate, Piece> expectedBoard = new HashMap<>();
+            expectedBoard.putAll(pieces);
+            expectedBoard.remove(movePieceFrom);
+            expectedBoard.put(movePieceTo, player.getPiece());
+            expectedBoard.remove(capturePiece);
+
+            assertThat(board).satisfies(boardMatches(expectedBoard));
+        }
     }
 
     static class MinimaxPlayerBuilder {
@@ -162,23 +237,15 @@ class MinimaxPlayerTest {
             return this;
         }
 
-        public MinimaxPlayer build() throws Exception {
-
-            PlayerAdapter player = new PlayerAdapter(piece);
-            player.setStartingPieces(startingPieces);
-
-            return new MinimaxPlayer(piece, decisionTreeFactory) {
-                @Override
-                public int getStartingPieces() {
-                    return player.startingPieces;
-                }
-            };
+        public MinimaxPlayer build() {
+            MinimaxPlayer player = new MinimaxPlayer(piece, decisionTreeFactory);
+            player.startingPieces = startingPieces;
+            return player;
         }
 
         static MinimaxPlayerBuilder create() {
             return new MinimaxPlayerBuilder();
         }
-
     }
 
     private Consumer<Board> boardMatches(Map<Coordinate, Piece> expectedBoard) {
