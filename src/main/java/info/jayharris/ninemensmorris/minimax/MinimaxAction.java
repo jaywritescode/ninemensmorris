@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-// TODO: Can this class be consolidated into MinimaxPlayer?
 public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
 
     private Coordinate placePiece;
