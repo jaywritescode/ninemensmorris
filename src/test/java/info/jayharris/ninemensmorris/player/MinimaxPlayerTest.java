@@ -34,6 +34,8 @@ class MinimaxPlayerTest {
 
     private MinimaxPlayer player;
 
+    private BoardBuilder boardBuilder;
+
     private Board board;
 
     @Mock
@@ -42,6 +44,8 @@ class MinimaxPlayerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
+
+        boardBuilder = BoardBuilder.create();
     }
 
     @Nested
@@ -59,9 +63,8 @@ class MinimaxPlayerTest {
 
         @BeforeEach
         void setUp() {
-            BoardBuilder builder = BoardBuilder.create();
-            pieces.forEach(builder::withPiece);
-            board = builder.build();
+            pieces.forEach(boardBuilder::withPiece);
+            board = boardBuilder.build();
         }
 
         @Test
@@ -126,9 +129,8 @@ class MinimaxPlayerTest {
 
         @BeforeEach
         void setUp() {
-            BoardBuilder builder = BoardBuilder.create();
-            pieces.forEach(builder::withPiece);
-            board = builder.build();
+            pieces.forEach(boardBuilder::withPiece);
+            board = boardBuilder.build();
         }
 
         private Map<Coordinate, Piece> pieces = Stream.of(

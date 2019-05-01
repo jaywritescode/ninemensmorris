@@ -10,6 +10,7 @@ import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -125,6 +126,21 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
                 .filter(Predicate.isEqual(point).negate())
                 .map(Point::getPiece)
                 .allMatch(Predicates.equalTo(toMove));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MinimaxState that = (MinimaxState) o;
+        return getPlayerPieces() == that.getPlayerPieces() &&
+                getBoard().equals(that.getBoard()) &&
+                getToMove() == that.getToMove();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBoard(), getToMove(), getPlayerPieces());
     }
 
     /**
