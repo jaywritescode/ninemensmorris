@@ -3,6 +3,7 @@ package info.jayharris.ninemensmorris.player;
 import info.jayharris.minimax.DecisionTreeFactory;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.Turn;
 import info.jayharris.ninemensmorris.minimax.MinimaxAction;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
 import info.jayharris.ninemensmorris.move.CapturePiece;
@@ -13,41 +14,32 @@ public class MinimaxPlayer extends BasePlayer {
 
     private DecisionTreeFactory<MinimaxState, MinimaxAction> decisionTreeFactory;
 
-    /**
-     * The Player interface and the minimax API work somewhat at odds with one another.
-     *
-     * The player makes two separate requests for the part of the turn that places or moves
-     * a piece and the part of the turn that captures a piece, if necessary. But the minimax
-     * algorithm combines both of those into a single action (due to the requirement that the
-     * child of a min-node is a max-node and vice versa).
-     *
-     * So we have to figure out what the best next state is, and then remember the actions
-     * that lead to that state in a global.
-     */
-    private MinimaxAction thisTurnAction;
-
     public MinimaxPlayer(Piece piece, DecisionTreeFactory<MinimaxState, MinimaxAction> decisionTreeFactory) {
         super(piece);
         this.decisionTreeFactory = decisionTreeFactory;
     }
 
     @Override
-    protected PlacePiece placePiece(Board board) {
-        thisTurnAction = decisionTreeFactory.build(MinimaxState.create(board, this)).perform();
-        return PlacePiece.create(piece, board.getPoint(thisTurnAction.getPlacePiece()));
-    }
+    public Turn takeTurn(Board board) {
+        MinimaxAction action = decisionTreeFactory.build(MinimaxState.create(board, this)).perform();
+        Turn turn = Turn.initialize(this, board);
 
-    @Override
-    protected MovePiece movePiece(Board board) {
-        thisTurnAction = decisionTreeFactory.build(MinimaxState.create(board, this)).perform();
-        return MovePiece.create(piece,
-                board.getPoint(thisTurnAction.getMovePieceFrom()),
-                board.getPoint(thisTurnAction.getMovePieceTo()),
-                board.getOccupiedPoints(getPiece()).size() == 3);
-    }
+        if (action.isPlacePiece()) {
+            turn.doInitialMove(PlacePiece.createLegal(piece, board.getPoint(action.getPlacePiece())));
+            --startingPieces;
+        }
+        else {
+            turn.doInitialMove(MovePiece.createLegal(
+                    piece,
+                    board.getPoint(action.getMovePieceFrom()),
+                    board.getPoint(action.getMovePieceTo()),
+                    board.getOccupiedPoints(piece).size() == 3));
+        }
 
-    @Override
-    protected CapturePiece capturePiece(Board board) {
-        return CapturePiece.create(piece, board.getPoint(thisTurnAction.getCapturePiece()));
+        if (action.isCapturePiece()) {
+            turn.doCaptureMove(CapturePiece.createLegal(piece, board.getPoint(action.getCapturePiece())));
+        }
+
+        return turn;
     }
 }

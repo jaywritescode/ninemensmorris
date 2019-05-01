@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class RandomMovePlayer extends BasePlayer {
+public class RandomMovePlayer extends TwoStageTurnPlayer {
 
     public RandomMovePlayer(Piece piece) {
         super(piece);

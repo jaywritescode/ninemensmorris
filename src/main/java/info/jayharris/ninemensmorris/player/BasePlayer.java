@@ -23,33 +23,11 @@ public abstract class BasePlayer {
         return piece;
     }
 
-    public final Turn takeTurn(Board board) {
-        Turn turn = Turn.initialize(this, board);
-
-        if (startingPieces > 0) {
-            turn.doInitialMove(placePiece(board));
-            --startingPieces;
-        }
-        else {
-            turn.doInitialMove(movePiece(board));
-        }
-
-        if (board.isCompleteMill(turn.getUpdatedPoint())) {
-            turn.doCaptureMove(capturePiece(board));
-        }
-
-        return turn;
-    }
+    public abstract Turn takeTurn(Board board);
 
     public int getStartingPieces() {
         return startingPieces;
     }
-
-    protected abstract PlacePiece placePiece(Board board);
-
-    protected abstract MovePiece movePiece(Board board);
-
-    protected abstract CapturePiece capturePiece(Board board);
 
     /**
      * Called before the turn proper starts.

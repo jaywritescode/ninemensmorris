@@ -16,7 +16,7 @@ import java.io.PrintStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TerminalPlayer extends BasePlayer {
+public class TerminalPlayer extends TwoStageTurnPlayer {
 
     private final BufferedReader reader;
     private final PrintStream out;

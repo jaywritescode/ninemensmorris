@@ -8,7 +8,7 @@ import info.jayharris.ninemensmorris.move.PlacePiece;
 
 import java.lang.reflect.Field;
 
-public class PlayerAdapter extends BasePlayer {
+public class PlayerAdapter extends TwoStageTurnPlayer {
 
     Field startingPiecesField;
 

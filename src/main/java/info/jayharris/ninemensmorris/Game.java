@@ -54,6 +54,10 @@ public class Game {
         return ply;
     }
 
+    public Board getBoardCopy() {
+        return Board.copy(board);
+    }
+
     private void nextPly() {
         Turn turn = current.takeTurn(board);
         history.add(turn);

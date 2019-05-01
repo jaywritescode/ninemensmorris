@@ -74,6 +74,12 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
         return capturePiece;
     }
 
+    public boolean isPlacePiece() { return placePiece != null; }
+
+    public boolean isMovePiece() { return movePieceFrom != null && movePieceTo != null; }
+
+    public boolean isCapturePiece() { return capturePiece != null; }
+
     public String pretty() {
         StringBuilder sb = new StringBuilder();
 
