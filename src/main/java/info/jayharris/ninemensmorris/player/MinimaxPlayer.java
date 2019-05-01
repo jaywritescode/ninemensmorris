@@ -32,13 +32,13 @@ public class MinimaxPlayer extends BasePlayer {
     }
 
     @Override
-    public PlacePiece placePiece(Board board) {
+    protected PlacePiece placePiece(Board board) {
         thisTurnAction = decisionTreeFactory.build(MinimaxState.create(board, this)).perform();
         return PlacePiece.create(piece, board.getPoint(thisTurnAction.getPlacePiece()));
     }
 
     @Override
-    public MovePiece movePiece(Board board) {
+    protected MovePiece movePiece(Board board) {
         thisTurnAction = decisionTreeFactory.build(MinimaxState.create(board, this)).perform();
         return MovePiece.create(piece,
                 board.getPoint(thisTurnAction.getMovePieceFrom()),
@@ -47,7 +47,7 @@ public class MinimaxPlayer extends BasePlayer {
     }
 
     @Override
-    public CapturePiece capturePiece(Board board) {
+    protected CapturePiece capturePiece(Board board) {
         return CapturePiece.create(piece, board.getPoint(thisTurnAction.getCapturePiece()));
     }
 }

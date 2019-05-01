@@ -20,17 +20,17 @@ public class PlayerAdapter extends BasePlayer {
     }
 
     @Override
-    public PlacePiece placePiece(Board board) {
+    protected PlacePiece placePiece(Board board) {
         return null;
     }
 
     @Override
-    public MovePiece movePiece(Board board) {
+    protected MovePiece movePiece(Board board) {
         return null;
     }
 
     @Override
-    public CapturePiece capturePiece(Board board) {
+    protected CapturePiece capturePiece(Board board) {
         return null;
     }
 

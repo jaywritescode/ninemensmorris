@@ -45,11 +45,11 @@ public abstract class BasePlayer {
         return startingPieces;
     }
 
-    public abstract PlacePiece placePiece(Board board);
+    protected abstract PlacePiece placePiece(Board board);
 
-    public abstract MovePiece movePiece(Board board);
+    protected abstract MovePiece movePiece(Board board);
 
-    public abstract CapturePiece capturePiece(Board board);
+    protected abstract CapturePiece capturePiece(Board board);
 
     /**
      * Called before the turn proper starts.

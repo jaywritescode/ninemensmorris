@@ -20,12 +20,12 @@ public class RandomMovePlayer extends BasePlayer {
     }
 
     @Override
-    public PlacePiece placePiece(Board board) {
+    protected PlacePiece placePiece(Board board) {
         return PlacePiece.create(piece, randomElement(board.getUnoccupiedPoints()));
     }
 
     @Override
-    public MovePiece movePiece(Board board) {
+    protected MovePiece movePiece(Board board) {
         if (board.getOccupiedPoints(piece).size() == 3) {
             return movePieceAnywhere(board);
         }
@@ -33,7 +33,7 @@ public class RandomMovePlayer extends BasePlayer {
     }
 
     @Override
-    public CapturePiece capturePiece(Board board) {
+    protected CapturePiece capturePiece(Board board) {
         return CapturePiece.create(piece, randomElement(board.getOccupiedPoints(piece.opposite())));
     }
 

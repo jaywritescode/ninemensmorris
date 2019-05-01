@@ -37,7 +37,7 @@ public class TerminalPlayer extends BasePlayer {
     }
 
     @Override
-    public PlacePiece placePiece(Board board) {
+    protected PlacePiece placePiece(Board board) {
         String input;
 
         while (true) {
@@ -63,7 +63,7 @@ public class TerminalPlayer extends BasePlayer {
     }
 
     @Override
-    public MovePiece movePiece(Board board) {
+    protected MovePiece movePiece(Board board) {
         String input;
 
         while (true) {
@@ -97,7 +97,7 @@ public class TerminalPlayer extends BasePlayer {
     }
 
     @Override
-    public CapturePiece capturePiece(Board board) {
+    protected CapturePiece capturePiece(Board board) {
         out.printf("Capture %s piece >> ", piece.opposite());
         String input;
 

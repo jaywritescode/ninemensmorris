@@ -48,7 +48,7 @@ class BasePlayerTest {
 
                 PlayerAdapter player = new PlayerAdapter(Piece.BLACK) {
                     @Override
-                    public PlacePiece placePiece(Board board) {
+                    protected PlacePiece placePiece(Board board) {
                         return PlacePiece.create(getPiece(), initial);
                     }
                 };
@@ -78,12 +78,12 @@ class BasePlayerTest {
 
                 PlayerAdapter player = new PlayerAdapter(Piece.BLACK) {
                     @Override
-                    public PlacePiece placePiece(Board board) {
+                    protected PlacePiece placePiece(Board board) {
                         return PlacePiece.create(getPiece(), initial);
                     }
 
                     @Override
-                    public CapturePiece capturePiece(Board board) {
+                    protected CapturePiece capturePiece(Board board) {
                         return CapturePiece.create(getPiece(), capture);
                     }
                 };
@@ -145,7 +145,7 @@ class BasePlayerTest {
 
                 PlayerAdapter player = new PlayerAdapter(Piece.BLACK) {
                     @Override
-                    public MovePiece movePiece(Board board) {
+                    protected MovePiece movePiece(Board board) {
                         return MovePiece.create(getPiece(), initial, destination, false);
                     }
                 };
@@ -175,12 +175,12 @@ class BasePlayerTest {
 
                 PlayerAdapter player = new PlayerAdapter(Piece.WHITE) {
                     @Override
-                    public MovePiece movePiece(Board board) {
+                    protected MovePiece movePiece(Board board) {
                         return MovePiece.create(getPiece(), initial, destination, false);
                     }
 
                     @Override
-                    public CapturePiece capturePiece(Board board) {
+                    protected CapturePiece capturePiece(Board board) {
                         return CapturePiece.create(getPiece(), capture);
                     }
                 };
