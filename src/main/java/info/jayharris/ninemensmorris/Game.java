@@ -54,10 +54,6 @@ public class Game {
         return ply;
     }
 
-    public Board getBoardCopy() {
-        return Board.copy(board);
-    }
-
     private void nextPly() {
         Turn turn = current.takeTurn(board);
         history.add(turn);
@@ -81,7 +77,7 @@ public class Game {
     public static void main(String... args) {
         BasePlayer black = new TerminalPlayer(Piece.BLACK);
         BasePlayer white = new MinimaxPlayer(Piece.WHITE,
-                new DecisionTreeFactory<MinimaxState, MinimaxAction>(new SampleHeuristicFunction(Piece.WHITE), node -> node.getDepth() >= 3));
+                new DecisionTreeFactory<>(new SampleHeuristicFunction(Piece.WHITE), node -> node.getDepth() >= 3));
 
         Game game = new Game(black, white);
 
