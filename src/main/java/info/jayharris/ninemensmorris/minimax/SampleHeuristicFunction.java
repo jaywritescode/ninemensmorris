@@ -16,6 +16,9 @@ public class SampleHeuristicFunction extends BaseHeuristicFunction {
             return val;
         }
 
-        return new MobilityFeature(piece).apply(state);
+        double myPieces = new MobilityFeature(piece).apply(state);
+        double theirPieces = new MobilityFeature(piece.opposite()).apply(state);
+
+        return myPieces / (myPieces + theirPieces);
     }
 }
