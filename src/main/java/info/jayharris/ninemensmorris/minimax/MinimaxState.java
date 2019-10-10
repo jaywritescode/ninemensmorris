@@ -1,7 +1,7 @@
 package info.jayharris.ninemensmorris.minimax;
 
 import com.google.common.base.Predicates;
-import info.jayharris.minimax.BaseState;
+import info.jayharris.minimax.State;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Mill;
 import info.jayharris.ninemensmorris.Board.Point;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  *
  * Instances of this class are intended to be immutable.
  */
-public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
+public class MinimaxState implements State<MinimaxState, MinimaxAction> {
 
     private final Board board;
     private final Piece toMove;
@@ -51,6 +51,11 @@ public class MinimaxState extends BaseState<MinimaxState, MinimaxAction> {
             return tryPlacePiece();
         }
         return tryMovePiece();
+    }
+
+    @Override
+    public boolean terminalTest() {
+        return actions().isEmpty();
     }
 
     private Set<MinimaxAction> tryPlacePiece() {

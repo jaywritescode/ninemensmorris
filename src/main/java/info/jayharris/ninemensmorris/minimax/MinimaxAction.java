@@ -31,8 +31,8 @@ public class MinimaxAction implements Action<MinimaxState, MinimaxAction> {
     }
 
     @Override
-    public MinimaxState apply(MinimaxState predecessor) {
-        return MinimaxState.create(predecessor, this);
+    public MinimaxState perform(MinimaxState initialState) {
+        return MinimaxState.create(initialState, this);
     }
 
     public List<Function<Board, Move>> makeChain(Piece toMove) {

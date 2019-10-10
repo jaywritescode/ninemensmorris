@@ -9,12 +9,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Comparator;
-import java.util.Objects;
 import java.util.function.Predicate;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MinimaxActionTest {
 
@@ -59,7 +54,7 @@ class MinimaxActionTest {
         Coordinate coordinate = Coordinate.get("g1");
         MinimaxAction action = MinimaxAction.fromPlacePiece(coordinate);
 
-        MinimaxState nextState = action.apply(currentState);
+        MinimaxState nextState = action.perform(currentState);
 
         SoftAssertions softly = new SoftAssertions();
 
@@ -113,7 +108,7 @@ class MinimaxActionTest {
         Coordinate coordinate = Coordinate.get("f6");
         MinimaxAction action = MinimaxAction.fromPlacePiece(coordinate);
 
-        MinimaxState nextState = action.apply(currentState);
+        MinimaxState nextState = action.perform(currentState);
 
         SoftAssertions softly = new SoftAssertions();
 
@@ -171,7 +166,7 @@ class MinimaxActionTest {
         Coordinate capture = Coordinate.get("b4");
         MinimaxAction action = MinimaxAction.fromPlacePiece(place).withCapture(capture);
 
-        MinimaxState nextState = action.apply(currentState);
+        MinimaxState nextState = action.perform(currentState);
 
         SoftAssertions softly = new SoftAssertions();
 

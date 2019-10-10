@@ -2,8 +2,6 @@ package info.jayharris.ninemensmorris.minimax;
 
 import info.jayharris.ninemensmorris.Coordinate;
 
-import java.lang.reflect.Constructor;
-
 public class MinimaxActionBuilder {
 
     Coordinate placePiece;

@@ -1,6 +1,6 @@
 package info.jayharris.ninemensmorris.player;
 
-import info.jayharris.minimax.DecisionTreeFactory;
+import info.jayharris.minimax.search.AlphaBetaPruningSearch;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.Turn;
@@ -12,16 +12,17 @@ import info.jayharris.ninemensmorris.move.PlacePiece;
 
 public class MinimaxPlayer extends BasePlayer {
 
-    private DecisionTreeFactory<MinimaxState, MinimaxAction> decisionTreeFactory;
+    private AlphaBetaPruningSearch<MinimaxState, MinimaxAction> search;
 
-    public MinimaxPlayer(Piece piece, DecisionTreeFactory<MinimaxState, MinimaxAction> decisionTreeFactory) {
+    public MinimaxPlayer(Piece piece, AlphaBetaPruningSearch<MinimaxState, MinimaxAction> search) {
         super(piece);
-        this.decisionTreeFactory = decisionTreeFactory;
+        this.search = search;
     }
 
     @Override
     public Turn takeTurn(Board board) {
-        MinimaxAction action = decisionTreeFactory.build(MinimaxState.create(board, this)).perform();
+        MinimaxAction action = search.perform(MinimaxState.create(board, this));
+
         Turn turn = Turn.initialize(this, board);
 
         if (action.isPlacePiece()) {
