@@ -1,7 +1,8 @@
 package info.jayharris.ninemensmorris.player;
 
-import info.jayharris.minimax.DecisionTree;
-import info.jayharris.minimax.DecisionTreeFactory;
+import com.google.common.base.Suppliers;
+import info.jayharris.minimax.search.MinimaxDecision;
+import info.jayharris.minimax.search.Search;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
 import info.jayharris.ninemensmorris.Coordinate;
@@ -20,14 +21,14 @@ import org.mockito.MockitoAnnotations;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static info.jayharris.ninemensmorris.Piece.BLACK;
 import static info.jayharris.ninemensmorris.Piece.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 class MinimaxPlayerTest {
@@ -39,7 +40,7 @@ class MinimaxPlayerTest {
     private Board board;
 
     @Mock
-    private DecisionTreeFactory<MinimaxState, MinimaxAction> decisionTreeFactory;
+    private MinimaxDecision<MinimaxState, MinimaxAction> search;
 
     @BeforeEach
     void setUp() {
@@ -72,16 +73,14 @@ class MinimaxPlayerTest {
         public void placePieceNoCapture() throws Exception {
             player = MinimaxPlayerBuilder.create()
                     .withPiece(BLACK)
-                    .withDecisionTreeFactory(decisionTreeFactory)
+                    .withSearch(search)
                     .withStartingPieces(6)
                     .build();
 
             Coordinate placePiece = Coordinate.get("c3");
 
             MinimaxAction action = MinimaxActionBuilder.create().withPlacePiece(placePiece).build();
-            DecisionTree<MinimaxState, MinimaxAction> decisionTree = mock(DecisionTree.class);
-            when(decisionTree.perform()).thenReturn(action);
-            when(decisionTreeFactory.build(eq(MinimaxState.create(board, player)))).thenReturn(decisionTree);
+            when(search.perform(any())).thenReturn(action);
 
             player.takeTurn(board);
 
@@ -97,7 +96,7 @@ class MinimaxPlayerTest {
         public void placePieceWithCapture() throws Exception {
             player = MinimaxPlayerBuilder.create()
                     .withPiece(BLACK)
-                    .withDecisionTreeFactory(decisionTreeFactory)
+                    .withSearch(search)
                     .withStartingPieces(6)
                     .build();
 
@@ -108,9 +107,7 @@ class MinimaxPlayerTest {
                     .withPlacePiece(placePiece)
                     .withCapturePiece(capturePiece)
                     .build();
-            DecisionTree<MinimaxState, MinimaxAction> decisionTree = mock(DecisionTree.class);
-            when(decisionTree.perform()).thenReturn(action);
-            when(decisionTreeFactory.build(eq(MinimaxState.create(board, player)))).thenReturn(decisionTree);
+            when(search.perform(any())).thenReturn(action);
 
             player.takeTurn(board);
 
@@ -157,7 +154,7 @@ class MinimaxPlayerTest {
         public void movePieceNoCapture() throws Exception {
             player = MinimaxPlayerBuilder.create()
                     .withPiece(WHITE)
-                    .withDecisionTreeFactory(decisionTreeFactory)
+                    .withSearch(search)
                     .withStartingPieces(0)
                     .build();
 
@@ -168,9 +165,7 @@ class MinimaxPlayerTest {
                     .withMovePieceFrom(movePieceFrom)
                     .withMovePieceTo(movePieceTo)
                     .build();
-            DecisionTree<MinimaxState, MinimaxAction> decisionTree = mock(DecisionTree.class);
-            when(decisionTree.perform()).thenReturn(action);
-            when(decisionTreeFactory.build(eq(MinimaxState.create(board, player)))).thenReturn(decisionTree);
+            when(search.perform(any())).thenReturn(action);
 
             player.takeTurn(board);
 
@@ -187,7 +182,7 @@ class MinimaxPlayerTest {
         public void movePieceWithCapture() throws Exception {
             player = MinimaxPlayerBuilder.create()
                     .withPiece(WHITE)
-                    .withDecisionTreeFactory(decisionTreeFactory)
+                    .withSearch(search)
                     .withStartingPieces(0)
                     .build();
 
@@ -200,9 +195,7 @@ class MinimaxPlayerTest {
                     .withMovePieceTo(movePieceTo)
                     .withCapturePiece(capturePiece)
                     .build();
-            DecisionTree<MinimaxState, MinimaxAction> decisionTree = mock(DecisionTree.class);
-            when(decisionTree.perform()).thenReturn(action);
-            when(decisionTreeFactory.build(eq(MinimaxState.create(board, player)))).thenReturn(decisionTree);
+            when(search.perform(any())).thenReturn(action);
 
             player.takeTurn(board);
 
@@ -220,7 +213,7 @@ class MinimaxPlayerTest {
 
         Piece piece;
         int startingPieces = 0;
-        DecisionTreeFactory<MinimaxState, MinimaxAction> decisionTreeFactory;
+        Supplier<? extends Search<MinimaxState, MinimaxAction>> search;
 
         private MinimaxPlayerBuilder() { }
 
@@ -234,13 +227,13 @@ class MinimaxPlayerTest {
             return this;
         }
 
-        public MinimaxPlayerBuilder withDecisionTreeFactory(DecisionTreeFactory<MinimaxState, MinimaxAction> decisionTreeFactory) {
-            this.decisionTreeFactory = decisionTreeFactory;
+        public MinimaxPlayerBuilder withSearch(Search<MinimaxState, MinimaxAction> search) {
+            this.search = Suppliers.ofInstance(search);
             return this;
         }
 
         public MinimaxPlayer build() {
-            MinimaxPlayer player = new MinimaxPlayer(piece, decisionTreeFactory);
+            MinimaxPlayer player = new MinimaxPlayer(piece, search);
             player.startingPieces = startingPieces;
             return player;
         }

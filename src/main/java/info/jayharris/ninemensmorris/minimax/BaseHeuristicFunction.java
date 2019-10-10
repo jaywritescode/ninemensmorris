@@ -1,11 +1,10 @@
 package info.jayharris.ninemensmorris.minimax;
 
-import info.jayharris.minimax.HeuristicEvaluationFunction;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardUtils;
 import info.jayharris.ninemensmorris.Piece;
 
-public class BaseHeuristicFunction implements HeuristicEvaluationFunction<MinimaxState> {
+public class BaseHeuristicFunction {
 
     protected final Piece piece;
 
@@ -13,7 +12,6 @@ public class BaseHeuristicFunction implements HeuristicEvaluationFunction<Minima
         this.piece = piece;
     }
 
-    @Override
     public double apply(MinimaxState state) {
         Board board = state.getBoard();
 

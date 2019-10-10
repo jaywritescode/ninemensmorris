@@ -1,6 +1,6 @@
 package info.jayharris.ninemensmorris.player;
 
-import info.jayharris.minimax.search.AlphaBetaPruningSearch;
+import info.jayharris.minimax.search.Search;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.Turn;
@@ -10,18 +10,20 @@ import info.jayharris.ninemensmorris.move.CapturePiece;
 import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.move.PlacePiece;
 
+import java.util.function.Supplier;
+
 public class MinimaxPlayer extends BasePlayer {
 
-    private AlphaBetaPruningSearch<MinimaxState, MinimaxAction> search;
+    private Supplier<? extends Search<MinimaxState, MinimaxAction>> searchSupplier;
 
-    public MinimaxPlayer(Piece piece, AlphaBetaPruningSearch<MinimaxState, MinimaxAction> search) {
+    public MinimaxPlayer(Piece piece, Supplier<? extends Search<MinimaxState, MinimaxAction>> searchSupplier) {
         super(piece);
-        this.search = search;
+        this.searchSupplier = searchSupplier;
     }
 
     @Override
     public Turn takeTurn(Board board) {
-        MinimaxAction action = search.perform(MinimaxState.create(board, this));
+        MinimaxAction action = searchSupplier.get().perform(MinimaxState.create(board, this));
 
         Turn turn = Turn.initialize(this, board);
 
