@@ -10,6 +10,7 @@ import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -66,6 +67,10 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
 
     private Set<MinimaxAction> tryMovePiece() {
         Set<Point> initialPoints = board.getOccupiedPoints(toMove);
+
+        if (initialPoints.size() < 3) {
+            return Collections.emptySet();
+        }
 
         return initialPoints.stream()
                 .flatMap(initialPoints.size() == 3 ? this::tryMovePieceAnywhere : this::tryMovePieceToNeighbor)

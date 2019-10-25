@@ -281,6 +281,55 @@ class MinimaxStateTest {
             assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
         }
 
+        @Test
+        @DisplayName("in the \"move piece\" phase of the game, player to move has fewer than three pieces")
+        void getMovePieceActions_tryTwoPieces() throws Exception {
+            Piece toMove = Piece.WHITE;
+            board = BoardBuilder.create()
+                    .withPiece("g7", Piece.BLACK)
+                    .withPiece("b6", Piece.WHITE)
+                    .withPiece("d5", Piece.WHITE)
+                    .withPiece("a4", Piece.BLACK)
+                    .withPiece("b4", Piece.BLACK)
+                    .withPiece("c4", Piece.BLACK)
+                    .withPiece("f4", Piece.BLACK)
+                    .withPiece("d3", Piece.BLACK)
+                    .withPiece("b2", Piece.BLACK)
+                    .withPiece("f2", Piece.BLACK)
+                    .build();
+            /*
+            7  + --------------- + --------------- ●
+               |                 |                 |
+               |                 |                 |
+            6  |     + --------- ○ --------- +     |
+               |     |           |           |     |
+               |     |           |           |     |
+            5  |     |     + --- ○ --- +     |     |
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            4  ● --- ● --- ●           + --- ● --- +
+               |     |     |           |     |     |
+               |     |     |           |     |     |
+            3  |     |     + --- ● --- +     |     |
+               |     |           |           |     |
+               |     |           |           |     |
+            2  |     ● --------- + --------- ●     |
+               |                 |                 |
+               |                 |                 |
+            1  + --------------- + --------------- +
+
+               a     b     c     d     e     f     g
+             */
+            Collection<MinimaxAction> actual = new MinimaxStateBuilder()
+                    .withBoard(board)
+                    .withPlayerPieces(0)
+                    .withToMove(toMove)
+                    .build()
+                    .actions();
+
+            assertThat(actual).isEmpty();
+        }
+
         MinimaxAction actionWithPlacePiece(String point) {
             return actionWithPlacePiece(point, null);
         }
