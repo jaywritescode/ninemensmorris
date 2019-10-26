@@ -6,7 +6,6 @@ import info.jayharris.minimax.search.AlphaBetaPruningSearch;
 import info.jayharris.minimax.search.Search;
 import info.jayharris.ninemensmorris.minimax.MinimaxAction;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
-import info.jayharris.ninemensmorris.minimax.SampleHeuristicFunction;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import info.jayharris.ninemensmorris.player.TerminalPlayer;
@@ -76,13 +75,7 @@ public class Game {
     public static void main(String... args) {
         BasePlayer black = new TerminalPlayer(Piece.BLACK);
 
-        Search<MinimaxState, MinimaxAction> search = new AlphaBetaPruningSearch<MinimaxState, MinimaxAction>() {
-            @Override
-            public double utility(MinimaxState state) {
-                return new SampleHeuristicFunction(Piece.WHITE).apply(state);
-            }
-        };
-        BasePlayer white = new MinimaxPlayer(Piece.WHITE, Suppliers.ofInstance(search));
+        BasePlayer white = new MinimaxPlayer(Piece.WHITE, Suppliers.ofInstance(null));
 
         Game game = new Game(black, white);
 
