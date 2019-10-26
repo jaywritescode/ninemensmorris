@@ -2,6 +2,8 @@ package info.jayharris.ninemensmorris;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
+import info.jayharris.minimax.search.Search;
+import info.jayharris.ninemensmorris.minimax.*;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import info.jayharris.ninemensmorris.player.TerminalPlayer;
@@ -71,7 +73,9 @@ public class Game {
     public static void main(String... args) {
         BasePlayer black = new TerminalPlayer(Piece.BLACK);
 
-        BasePlayer white = new MinimaxPlayer(Piece.WHITE, Suppliers.ofInstance(null));
+        Search<MinimaxState, MinimaxAction> search = new NineMensMorrisMinimaxDecision(
+                new SampleCutoffTest(), new SampleHeuristicFunction(Piece.WHITE), Piece.WHITE);
+        BasePlayer white = new MinimaxPlayer(Piece.WHITE, Suppliers.ofInstance(search));
 
         Game game = new Game(black, white);
 
