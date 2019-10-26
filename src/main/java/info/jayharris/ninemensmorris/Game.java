@@ -2,10 +2,6 @@ package info.jayharris.ninemensmorris;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
-import info.jayharris.minimax.search.AlphaBetaPruningSearch;
-import info.jayharris.minimax.search.Search;
-import info.jayharris.ninemensmorris.minimax.MinimaxAction;
-import info.jayharris.ninemensmorris.minimax.MinimaxState;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import info.jayharris.ninemensmorris.player.TerminalPlayer;
