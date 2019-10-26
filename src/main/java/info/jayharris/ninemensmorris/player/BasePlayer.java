@@ -42,4 +42,11 @@ public abstract class BasePlayer {
      * @param game the game
      */
     public void done(Game game) { }
+
+    /**
+     * Called after the game is over.
+     *
+     * @param winner the winner
+     */
+    public void gameOver(BasePlayer winner) { }
 }
