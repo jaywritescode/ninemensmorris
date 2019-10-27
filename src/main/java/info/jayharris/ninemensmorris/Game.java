@@ -67,6 +67,14 @@ public class Game {
         return BoardUtils.isWinner(board, current.getPiece());
     }
 
+    public Turn lastPly() {
+        if (history.isEmpty()) {
+            return null;
+        }
+
+        return history.get(history.size() - 1);
+    }
+
     public String pretty() {
         return board.pretty();
     }

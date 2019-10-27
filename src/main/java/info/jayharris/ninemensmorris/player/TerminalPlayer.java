@@ -129,6 +129,12 @@ public class TerminalPlayer extends TwoStageTurnPlayer {
 
     @Override
     public void begin(Game game) {
+        if (game.getPly() > 1) {
+            out.println();
+            out.println("Opponent played: " + game.lastPly().pretty());
+            out.println("=======================================");
+        }
+
         out.println(game.pretty());
         out.printf("Ply %d: %s to %s >> ", game.getPly(), piece.toString(), startingPieces > 0 ? "place piece" : "move piece");
     }
