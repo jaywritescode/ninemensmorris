@@ -8,6 +8,7 @@ import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import info.jayharris.ninemensmorris.player.TerminalPlayer;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Game {
@@ -79,7 +80,9 @@ public class Game {
 
         Game game = new Game(black, white);
 
-        game.play();
+        BasePlayer winner = game.play();
         System.out.println(game.pretty());
+
+        Arrays.asList(black, white).forEach(player -> player.gameOver(winner));
     }
 }
