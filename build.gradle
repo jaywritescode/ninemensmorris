@@ -21,7 +21,7 @@ dependencies {
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.apache.commons:commons-lang3:3.8'
 
-    implementation 'com.github.jaywritescode:minimax:2.0.1'
+    implementation 'info.jayharris:minimax:2.0.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testImplementation 'org.assertj:assertj-core:3.12.0'
