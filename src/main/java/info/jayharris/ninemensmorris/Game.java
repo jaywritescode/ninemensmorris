@@ -95,7 +95,7 @@ public class Game {
         BasePlayer black = new TerminalPlayer(Piece.BLACK);
 
         Search<MinimaxState, MinimaxAction> search = new NineMensMorrisMinimaxDecision(
-                new SampleCutoffTest(), new SampleHeuristicFunction(Piece.WHITE), Piece.WHITE);
+                new SampleCutoffTest(), new ComparativeMobilityHeuristicFunction(Piece.WHITE), Piece.WHITE);
         BasePlayer white = new MinimaxPlayer(Piece.WHITE, Suppliers.ofInstance(search));
 
         Game game = new Game(black, white);
