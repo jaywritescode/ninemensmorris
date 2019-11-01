@@ -165,7 +165,9 @@ public class Board {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Board board = (Board) o;
-        return Objects.equals(points, board.points);
+
+        return Coordinate.COORDINATES.stream()
+                .allMatch(c -> this.getPoint(c).getPiece() == board.getPoint(c).getPiece());
     }
 
     public class Mill {
@@ -186,7 +188,10 @@ public class Board {
 
     @Override
     public int hashCode() {
-        return Objects.hash(points);
+        return Objects.hash(points.entrySet()
+                .stream()
+                .filter(e -> e.getValue().getPiece() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getPiece())));
     }
 
     public static Board copy(Board original) {

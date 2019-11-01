@@ -8,8 +8,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BoardTest {
 
-    Comparator<Board> boardComparator = new BoardComparator();
-
     @Test
     void copy() {
         Board original = BoardBuilder.create()
@@ -26,20 +24,10 @@ class BoardTest {
                 .withPiece("b2", Piece.WHITE)
                 .withPiece("d2", Piece.BLACK)
                 .build();
-        Board copy = Board.copy(original);
+        Board copy = Board.copy(original);;
 
         assertThat(copy)
                 .as("Original board:\n%s\nis the same as copy:\n%s", original.pretty(), copy.pretty())
-                .usingComparator(boardComparator)
                 .isEqualTo(original);
-    }
-
-    class BoardComparator implements Comparator<Board> {
-
-        @Override
-        public int compare(Board o1, Board o2) {
-            return Coordinate.ALGEBRAIC_NOTATIONS_FOR_COORDINATES.stream()
-                    .allMatch(point -> o1.getPoint(point).getPiece() == o2.getPoint(point).getPiece()) ? 0 : 1;
-        }
     }
 }
