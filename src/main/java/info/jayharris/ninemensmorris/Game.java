@@ -101,6 +101,21 @@ public class Game {
         return history.get(history.size() - 1);
     }
 
+    public String prettyHistory() {
+        StringBuilder sb = new StringBuilder()
+                .append("BLACK").append("       ")
+                .append("WHITE").append("\n")
+                .append("-----").append("       ")
+                .append("-----").append("\n");
+
+        Iterator<Turn> iter = history.iterator();
+        for (boolean eol = false; iter.hasNext(); eol = !eol) {
+            sb.append(StringUtils.rightPad(iter.next().pretty(), 11));
+            sb.append(eol ? "\n" : " ");
+        }
+        return sb.toString();
+    }
+
     public String pretty() {
         return board.pretty();
     }
