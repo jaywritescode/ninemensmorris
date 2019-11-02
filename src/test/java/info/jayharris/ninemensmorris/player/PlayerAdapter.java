@@ -8,6 +8,10 @@ import info.jayharris.ninemensmorris.move.PlacePiece;
 
 import java.lang.reflect.Field;
 
+/**
+ * Adapter for the abstract TwoStageTurnPlayer, with default null-returning methods
+ * for `#placePiece`, `#movePiece`, and `#capturePiece`.
+ */
 public class PlayerAdapter extends TwoStageTurnPlayer {
 
     Field startingPiecesField;
