@@ -1,14 +1,18 @@
 package info.jayharris.ninemensmorris;
 
 import com.google.common.base.Suppliers;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multiset;
 import info.jayharris.minimax.search.Search;
 import info.jayharris.ninemensmorris.minimax.*;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import info.jayharris.ninemensmorris.player.TerminalPlayer;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class Game {
@@ -19,6 +23,7 @@ public class Game {
     private Board board;
 
     private List<Turn> history = Lists.newLinkedList();
+    private Multiset<Board> pastStates = null;
     private int ply = 1;
 
     Game(BasePlayer black, BasePlayer white) {
@@ -31,13 +36,25 @@ public class Game {
     /**
      * Play the game.
      *
-     * @return the winner
+     * @return the winner, or null in the case of a stalemate
      */
     public BasePlayer play() {
         while (true) {
             current.begin(this);
             nextPly();
             current.done(this);
+
+            if (pastStates == null && black.getStartingPieces() == 0 && white.getStartingPieces() == 0) {
+                // after this call, `#isInMovePiecePhase()` will return true
+                pastStates = HashMultiset.create();
+            }
+
+            if (isInMovePiecePhase()) {
+                pastStates.add(Board.copy(board));
+                if (pastStates.count(board) >= 3) {
+                    return null;
+                }
+            }
 
             if (isGameOver()) {
                 return current;
@@ -58,7 +75,7 @@ public class Game {
     }
 
     private boolean isGameOver() {
-        if (current.getStartingPieces() > 0) {
+        if (isInMovePiecePhase()) {
             return false;
         }
 
@@ -67,12 +84,36 @@ public class Game {
         return BoardUtils.isWinner(board, current.getPiece());
     }
 
+    private boolean isInMovePiecePhase() {
+        return pastStates != null;
+    }
+
+    /**
+     * Gets the most recent move.
+     *
+     * @return the last turn, or null if this is the first turn
+     */
     public Turn lastPly() {
         if (history.isEmpty()) {
             return null;
         }
 
         return history.get(history.size() - 1);
+    }
+
+    public String prettyHistory() {
+        StringBuilder sb = new StringBuilder()
+                .append("BLACK").append("       ")
+                .append("WHITE").append("\n")
+                .append("-----").append("       ")
+                .append("-----").append("\n");
+
+        Iterator<Turn> iter = history.iterator();
+        for (boolean eol = false; iter.hasNext(); eol = !eol) {
+            sb.append(StringUtils.rightPad(iter.next().pretty(), 11));
+            sb.append(eol ? "\n" : " ");
+        }
+        return sb.toString();
     }
 
     public String pretty() {
