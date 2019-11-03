@@ -3,6 +3,7 @@ package info.jayharris.ninemensmorris;
 import com.google.common.base.Suppliers;
 import info.jayharris.minimax.search.Search;
 import info.jayharris.ninemensmorris.minimax.*;
+import info.jayharris.ninemensmorris.move.MovePiece;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
 import info.jayharris.ninemensmorris.player.TerminalPlayer;
@@ -14,9 +15,10 @@ public class Game {
     private final BasePlayer black, white;
     private BasePlayer current;
 
-    private Board board;
-    private TurnHistory history;
+    private final TurnHistory history;
+    private final StalemateChecker stalemateChecker;
 
+    private Board board;
     private int ply = 1;
 
     Game(BasePlayer black, BasePlayer white) {
@@ -25,6 +27,7 @@ public class Game {
 
         this.board = new Board();
         this.history = new TurnHistory();
+        this.stalemateChecker = new StalemateChecker();
     }
 
     /**
@@ -37,6 +40,10 @@ public class Game {
             current.begin(this);
             nextPly();
             current.done(this);
+
+            if (stalemateChecker.isStalemateState(board)) {
+                return null;
+            }
 
             if (isGameOver()) {
                 return current;
@@ -52,7 +59,12 @@ public class Game {
 
     private void nextPly() {
         Turn turn = current.takeTurn(board);
-        history.consume(turn);
+
+        history.accept(turn);
+        if (turn.getMoveType() == MovePiece.class) {
+            stalemateChecker.accept(Board.copy(board));
+        }
+
         ++ply;
     }
 

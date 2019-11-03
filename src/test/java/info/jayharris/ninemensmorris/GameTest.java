@@ -44,7 +44,6 @@ class GameTest {
 
     @Test
     @DisplayName("it ends in a stalemate if we repeat the same board position three times")
-    @org.junit.jupiter.api.Disabled
     void stalemate() throws Exception {
         Deque<String> moves = Lists.newLinkedList(Splitter.on(' ').split(
                 "b4 f4 d2 a4 d6 d5 e4 c3 d3 d1 c4 d7 g4 " +

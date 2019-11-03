@@ -54,6 +54,10 @@ public class Turn {
         return initial.getUpdatedPoint();
     }
 
+    public Class<? extends InitialMove> getMoveType() {
+        return initial.getClass();
+    }
+
     public String pretty() {
         return initial.pretty() + (capture == null ? StringUtils.EMPTY : capture.pretty());
     }

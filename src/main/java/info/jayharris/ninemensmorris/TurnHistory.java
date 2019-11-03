@@ -21,7 +21,7 @@ public class TurnHistory {
      *
      * @param turn the turn that just occurred
      */
-    public void consume(Turn turn) {
+    public void accept(Turn turn) {
         turnList.add(turn);
     }
 
