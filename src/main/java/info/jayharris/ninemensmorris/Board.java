@@ -50,10 +50,19 @@ public class Board {
             return mills;
         }
     };
+    private Supplier<PrettyPrinter> prettyPrinterSupplier = Suppliers.memoize(PrettyPrinter::new);
 
     public Board() {
         this.points = Coordinate.valid().stream()
                 .collect(Collectors.toMap(Function.identity(), Point::new));
+    }
+
+    public static Board copy(Board original) {
+        Board copy = new Board();
+
+        original.points().forEach(point -> copy.getPoint(point.coordinate).setPiece(point.getPiece()));
+
+        return copy;
     }
 
     public Point getPoint(String point) {
@@ -94,6 +103,28 @@ public class Board {
 
     public boolean isCompleteMill(Point point) {
         return point.getMills().stream().anyMatch(mill -> mill.isComplete(point.getPiece()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+
+        return Coordinate.COORDINATES.stream()
+                .allMatch(c -> this.getPoint(c).getPiece() == board.getPoint(c).getPiece());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(points.entrySet()
+                .stream()
+                .filter(e -> e.getValue().getPiece() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getPiece())));
+    }
+
+    public String pretty() {
+        return prettyPrinterSupplier.get().print();
     }
 
     public class Point {
@@ -160,16 +191,6 @@ public class Board {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Board board = (Board) o;
-
-        return Coordinate.COORDINATES.stream()
-                .allMatch(c -> this.getPoint(c).getPiece() == board.getPoint(c).getPiece());
-    }
-
     public class Mill {
         Set<Point> points;
 
@@ -185,28 +206,6 @@ public class Board {
             return points;
         }
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(points.entrySet()
-                .stream()
-                .filter(e -> e.getValue().getPiece() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getPiece())));
-    }
-
-    public static Board copy(Board original) {
-        Board copy = new Board();
-
-        original.points().forEach(point -> copy.getPoint(point.coordinate).setPiece(point.getPiece()));
-
-        return copy;
-    }
-
-    public String pretty() {
-        return prettyPrinterSupplier.get().print();
-    }
-
-    private Supplier<PrettyPrinter> prettyPrinterSupplier = Suppliers.memoize(PrettyPrinter::new);
 
     private class PrettyPrinter {
 
