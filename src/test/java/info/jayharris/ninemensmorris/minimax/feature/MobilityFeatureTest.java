@@ -2,6 +2,7 @@ package info.jayharris.ninemensmorris.minimax.feature;
 
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
+import info.jayharris.ninemensmorris.NilStalemateChecker;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
 import info.jayharris.ninemensmorris.player.PlayerAdapter;
 import org.assertj.core.api.SoftAssertions;
@@ -47,7 +48,7 @@ class MobilityFeatureTest {
 
                a     b     c     d     e     f     g
              */
-        MinimaxState state = MinimaxState.create(board, new PlayerAdapter(BLACK));
+        MinimaxState state = MinimaxState.create(board, new PlayerAdapter(BLACK), NilStalemateChecker.create());
 
         SoftAssertions softly = new SoftAssertions();
 

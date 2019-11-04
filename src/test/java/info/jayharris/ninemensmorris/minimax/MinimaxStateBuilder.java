@@ -1,7 +1,9 @@
 package info.jayharris.ninemensmorris.minimax;
 
 import info.jayharris.ninemensmorris.Board;
+import info.jayharris.ninemensmorris.NilStalemateChecker;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.StalemateChecker;
 
 import java.lang.reflect.Constructor;
 
@@ -10,6 +12,7 @@ public class MinimaxStateBuilder {
     Board board;
     Piece toMove;
     int playerPieces = 0;
+    StalemateChecker stalemateChecker = NilStalemateChecker.create();
 
     public MinimaxStateBuilder withBoard(Board board) {
         this.board = board;
@@ -26,11 +29,17 @@ public class MinimaxStateBuilder {
         return this;
     }
 
+    public MinimaxStateBuilder withStalemateChecker(StalemateChecker stalemateChecker) {
+        this.stalemateChecker = stalemateChecker;
+        return this;
+    }
+
     public MinimaxState build() throws Exception {
-        Constructor<MinimaxState> ctor = MinimaxState.class.getDeclaredConstructor(Board.class, Piece.class, Integer.TYPE);
+        // TODO: why is this necessary instead of a normal constructor call?
+        Constructor<MinimaxState> ctor = MinimaxState.class.getDeclaredConstructor(Board.class, Piece.class, Integer.TYPE, StalemateChecker.class);
         ctor.setAccessible(true);
 
-        return ctor.newInstance(board, toMove, playerPieces);
+        return ctor.newInstance(board, toMove, playerPieces, stalemateChecker);
     }
 
     public static MinimaxStateBuilder create() {

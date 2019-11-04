@@ -2,6 +2,7 @@ package info.jayharris.ninemensmorris.minimax.feature;
 
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
+import info.jayharris.ninemensmorris.NilStalemateChecker;
 import info.jayharris.ninemensmorris.Piece;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
 import info.jayharris.ninemensmorris.player.MinimaxPlayer;
@@ -30,7 +31,7 @@ class CountPiecesFeatureTest {
                 .withPiece("a1", Piece.WHITE)
                 .withPiece("g1", Piece.BLACK)
                 .build();
-        MinimaxState state = MinimaxState.create(board, new MinimaxPlayer(Piece.BLACK, null));
+        MinimaxState state = MinimaxState.create(board, new MinimaxPlayer(Piece.BLACK, null), NilStalemateChecker.create());
 
         SoftAssertions softly = new SoftAssertions();
 

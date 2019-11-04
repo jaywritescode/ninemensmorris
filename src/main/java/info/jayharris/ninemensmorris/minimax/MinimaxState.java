@@ -36,11 +36,11 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
      */
     private final int playerPieces;
 
-    private MinimaxState(Board board, Piece toMove, int playerPieces) {
+    private MinimaxState(Board board, Piece toMove, int playerPieces, StalemateChecker stalemateChecker) {
         this.board = board;
         this.toMove = toMove;
         this.playerPieces = playerPieces;
-        this.stalemateChecker = null;
+        this.stalemateChecker = stalemateChecker;
     }
 
     /**
@@ -160,10 +160,11 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
      *
      * @param board  the state's board
      * @param player the state's player to move
+     * @param stalemateChecker
      * @return a new state
      */
-    public static MinimaxState create(Board board, BasePlayer player) {
-        return new MinimaxState(board, player.getPiece(), player.getStartingPieces());
+    public static MinimaxState create(Board board, BasePlayer player, StalemateChecker stalemateChecker) {
+        return new MinimaxState(board, player.getPiece(), player.getStartingPieces(), stalemateChecker);
     }
 
     /**
@@ -176,11 +177,14 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
     protected static MinimaxState create(MinimaxState predecessor, MinimaxAction action) {
         Piece currentPlayer = predecessor.getToMove();
 
+        // make copies of the mutable parts of the predecessor state
         Board copy = Board.copy(predecessor.getBoard());
+        StalemateChecker stalemateChecker = StalemateChecker.copy(predecessor.stalemateChecker);
+
         action.makeChain(currentPlayer).forEach(fn -> fn.apply(copy).perform());
 
         int startingPieces = Math.max(0, predecessor.getPlayerPieces() - (currentPlayer == BasePlayer.FIRST_PLAYER ? 0 : 1));
 
-        return new MinimaxState(copy, currentPlayer.opposite(), startingPieces);
+        return new MinimaxState(copy, currentPlayer.opposite(), startingPieces, stalemateChecker);
     }
 }

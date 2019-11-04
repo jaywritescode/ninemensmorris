@@ -3,6 +3,7 @@ package info.jayharris.ninemensmorris.player;
 import info.jayharris.minimax.search.Search;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.StalemateChecker;
 import info.jayharris.ninemensmorris.Turn;
 import info.jayharris.ninemensmorris.minimax.MinimaxAction;
 import info.jayharris.ninemensmorris.minimax.MinimaxState;
@@ -15,15 +16,17 @@ import java.util.function.Supplier;
 public class MinimaxPlayer extends BasePlayer {
 
     private Supplier<? extends Search<MinimaxState, MinimaxAction>> searchSupplier;
+    private StalemateChecker stalemateChecker;
 
     public MinimaxPlayer(Piece piece, Supplier<? extends Search<MinimaxState, MinimaxAction>> searchSupplier) {
         super(piece);
         this.searchSupplier = searchSupplier;
+        this.stalemateChecker = StalemateChecker.create();
     }
 
     @Override
     public Turn takeTurn(Board board) {
-        MinimaxAction action = searchSupplier.get().perform(MinimaxState.create(board, this));
+        MinimaxAction action = searchSupplier.get().perform(MinimaxState.create(board, this, stalemateChecker));
 
         Turn turn = Turn.initialize(this, board);
 
@@ -41,6 +44,10 @@ public class MinimaxPlayer extends BasePlayer {
 
         if (action.isCapturePiece()) {
             turn.doCaptureMove(CapturePiece.createLegal(piece, board.getPoint(action.getCapturePiece())));
+        }
+
+        if (action.isMovePiece()) {
+            stalemateChecker.accept(Board.copy(board));
         }
 
         return turn;
