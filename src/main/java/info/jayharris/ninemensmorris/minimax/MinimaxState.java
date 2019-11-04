@@ -1,6 +1,5 @@
 package info.jayharris.ninemensmorris.minimax;
 
-import com.google.common.base.Predicates;
 import info.jayharris.minimax.State;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Board.Mill;
@@ -135,7 +134,7 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
         return mill -> mill.getPoints().stream()
                 .filter(Predicate.isEqual(point).negate())
                 .map(Point::getPiece)
-                .allMatch(Predicates.equalTo(toMove));
+                .allMatch(Predicate.isEqual(toMove));
     }
 
     @Override
