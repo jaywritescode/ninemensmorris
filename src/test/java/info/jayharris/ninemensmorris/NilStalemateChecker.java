@@ -1,5 +1,8 @@
 package info.jayharris.ninemensmorris;
 
+/**
+ * A dummy stalemate checker for tests that don't care about it.
+ */
 public class NilStalemateChecker extends StalemateChecker {
 
     private NilStalemateChecker() {

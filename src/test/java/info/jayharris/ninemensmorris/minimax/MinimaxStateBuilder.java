@@ -35,7 +35,6 @@ public class MinimaxStateBuilder {
     }
 
     public MinimaxState build() throws Exception {
-        // TODO: why is this necessary instead of a normal constructor call?
         Constructor<MinimaxState> ctor = MinimaxState.class.getDeclaredConstructor(Board.class, Piece.class, Integer.TYPE, StalemateChecker.class);
         ctor.setAccessible(true);
 

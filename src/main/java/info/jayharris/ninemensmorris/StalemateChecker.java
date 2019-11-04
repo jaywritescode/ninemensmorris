@@ -5,6 +5,11 @@ import com.google.common.collect.Multiset;
 
 import java.util.function.Predicate;
 
+/**
+ * The stalemate checker tracks the history of all the board states since the
+ * "move piece" phase of the game began. If the same board state appears three
+ * times in the history, then the game is a stalemate.
+ */
 public class StalemateChecker {
     
     private final Multiset<Board> states;
