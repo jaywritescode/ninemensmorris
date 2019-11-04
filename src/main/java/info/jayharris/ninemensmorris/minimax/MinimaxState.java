@@ -182,6 +182,9 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
         StalemateChecker stalemateChecker = StalemateChecker.copy(predecessor.stalemateChecker);
 
         action.makeChain(currentPlayer).forEach(fn -> fn.apply(copy).perform());
+        if (action.isMovePiece()) {
+            stalemateChecker.accept(copy);
+        }
 
         int startingPieces = Math.max(0, predecessor.getPlayerPieces() - (currentPlayer == BasePlayer.FIRST_PLAYER ? 0 : 1));
 
