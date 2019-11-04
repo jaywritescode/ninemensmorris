@@ -6,6 +6,7 @@ import info.jayharris.ninemensmorris.Board.Mill;
 import info.jayharris.ninemensmorris.Board.Point;
 import info.jayharris.ninemensmorris.Coordinate;
 import info.jayharris.ninemensmorris.Piece;
+import info.jayharris.ninemensmorris.StalemateChecker;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 
 import java.util.Collection;
@@ -27,6 +28,7 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
 
     private final Board board;
     private final Piece toMove;
+    private final StalemateChecker stalemateChecker;
 
     /**
      * the number of pieces the player has left to put on the board in the
@@ -38,6 +40,7 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
         this.board = board;
         this.toMove = toMove;
         this.playerPieces = playerPieces;
+        this.stalemateChecker = null;
     }
 
     /**
