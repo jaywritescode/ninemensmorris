@@ -27,7 +27,7 @@ public class Game {
 
         this.board = new Board();
         this.history = new TurnHistory();
-        this.stalemateChecker = new StalemateChecker();
+        this.stalemateChecker = StalemateChecker.create();
     }
 
     /**

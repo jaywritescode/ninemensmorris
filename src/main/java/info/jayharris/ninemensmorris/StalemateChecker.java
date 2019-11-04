@@ -10,8 +10,13 @@ public class StalemateChecker {
     private final Multiset<Board> states;
     private final Predicate<Board> isStalemate;
 
-    public StalemateChecker() {
+    private StalemateChecker() {
         states = HashMultiset.create();
+        isStalemate = board -> states.count(board) >= 3;
+    }
+
+    private StalemateChecker(StalemateChecker original) {
+        states = HashMultiset.create(original.states);
         isStalemate = board -> states.count(board) >= 3;
     }
 
@@ -25,5 +30,13 @@ public class StalemateChecker {
 
     public boolean isStalemateState(Board board) {
         return isStalemate.test(board);
+    }
+
+    public static StalemateChecker create() {
+        return new StalemateChecker();
+    }
+
+    public static StalemateChecker copy(StalemateChecker original) {
+        return new StalemateChecker(original);
     }
 }
