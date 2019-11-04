@@ -10,7 +10,7 @@ public class StalemateChecker {
     private final Multiset<Board> states;
     private final Predicate<Board> isStalemate;
 
-    private StalemateChecker() {
+    protected StalemateChecker() {
         states = HashMultiset.create();
         isStalemate = board -> states.count(board) >= 3;
     }
