@@ -58,7 +58,7 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
 
     @Override
     public boolean terminalTest() {
-        return actions().isEmpty();
+        return isStalemate() || actions().isEmpty();
     }
 
     public boolean isStalemate() {
