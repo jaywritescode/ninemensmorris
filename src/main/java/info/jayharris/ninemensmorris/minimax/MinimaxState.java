@@ -61,6 +61,10 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
         return actions().isEmpty();
     }
 
+    public boolean isStalemate() {
+        return stalemateChecker.hasStalemateState();
+    }
+
     private Set<MinimaxAction> tryPlacePiece() {
         return board.getUnoccupiedPoints().stream()
                 .flatMap(this::generateActionsFromPlacePiece)
@@ -160,7 +164,7 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
      *
      * @param board  the state's board
      * @param player the state's player to move
-     * @param stalemateChecker
+     * @param stalemateChecker contains the history of states visited
      * @return a new state
      */
     public static MinimaxState create(Board board, BasePlayer player, StalemateChecker stalemateChecker) {

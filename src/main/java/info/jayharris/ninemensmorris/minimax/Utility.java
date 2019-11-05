@@ -13,6 +13,10 @@ public class Utility {
     }
 
     double apply(MinimaxState state) {
+        if (state.isStalemate()) {
+            return 0.0;
+        }
+
         Piece winner = BoardUtils.getWinner(state.getBoard())
                 .orElseThrow(UnknownUtilityException::new);
 
