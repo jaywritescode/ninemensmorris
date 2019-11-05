@@ -178,6 +178,74 @@ class MinimaxActionTest {
         softly.assertAll();
     }
 
+    @Test
+    @DisplayName("move piece - no capture")
+    void movePieceNoCapture() throws Exception {
+        Board board = BoardBuilder.create()
+                .withPiece("a7", Piece.WHITE)
+                .withPiece("d6", Piece.WHITE)
+                .withPiece("c5", Piece.BLACK)
+                .withPiece("d5", Piece.BLACK)
+                .withPiece("a4", Piece.BLACK)
+                .withPiece("b4", Piece.BLACK)
+                .withPiece("c4", Piece.BLACK)
+                .withPiece("e4", Piece.WHITE)
+                .withPiece("f4", Piece.BLACK)
+                .withPiece("g4", Piece.WHITE)
+                .withPiece("c3", Piece.BLACK)
+                .withPiece("d3", Piece.WHITE)
+                .withPiece("b2", Piece.WHITE)
+                .withPiece("d2", Piece.BLACK)
+                .withPiece("a1", Piece.WHITE)
+                .withPiece("d1", Piece.BLACK)
+                .build();
+        /*
+        7  ○ --------------- + --------------- +
+           |                 |                 |
+           |                 |                 |
+        6  |     + --------- ○ --------- +     |
+           |     |           |           |     |
+           |     |           |           |     |
+        5  |     |     ● --- ● --- +     |     |
+           |     |     |           |     |     |
+           |     |     |           |     |     |
+        4  ● --- ● --- ●           ○ --- ● --- ○
+           |     |     |           |     |     |
+           |     |     |           |     |     |
+        3  |     |     ● --- ○ --- +     |     |
+           |     |           |           |     |
+           |     |           |           |     |
+        2  |     ○ --------- ● --------- +     |
+           |                 |                 |
+           |                 |                 |
+        1  ○ --------------- ● --------------- +
+
+           a     b     c     d     e     f     g
+         */
+        MinimaxState currentState = MinimaxStateBuilder.create()
+                .withBoard(board)
+                .withPlayerPieces(0)
+                .withToMove(Piece.BLACK)
+                .build();
+
+        Coordinate from = Coordinate.get("b4");
+        Coordinate to = Coordinate.get("b6");
+
+        MinimaxAction action = MinimaxAction.fromMovePiece(from, to);
+
+        MinimaxState nextState = action.perform(currentState);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(nextState.getToMove()).isEqualTo(Piece.WHITE);
+        softly.assertThat(nextState.getPlayerPieces()).isZero();
+        softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(null, from));
+        softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(Piece.BLACK, to));
+        softly.assertThat(nextState)
+                .extracting("stalemateChecker.states")
+                .contains(nextState.getBoard());
+    }
+
     Condition<Board> matchingPieceOnPoint(Piece piece, Coordinate coordinate) {
         Predicate<Board> predicate = board -> board.getPoint(coordinate).getPiece() == piece;
 
