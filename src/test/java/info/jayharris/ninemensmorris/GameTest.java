@@ -8,62 +8,88 @@ import info.jayharris.ninemensmorris.move.PlacePiece;
 import info.jayharris.ninemensmorris.player.BasePlayer;
 import info.jayharris.ninemensmorris.player.PlayerAdapter;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Deque;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 class GameTest {
 
-    @Test
-    @DisplayName("it plays a full game")
-    void play() throws Exception {
-        Deque<String> moves = Lists.newLinkedList(Splitter.on(' ').split(
+    @Nested
+    class NonStalemate {
+
+        // a game that doesn't end in a stalemate
+        final Deque<String> moves = Lists.newLinkedList(Splitter.on(' ').split(
                 "d2 f4 d6 b4 d1 d3 c4 d7 e4 d5 g4 e5 " +
                         "c5 a4 a1 f6 f2 g7 g4-g1xd7 g7-g4 d2-b2 g4-g7 " +
                         "d1-d2xd3 g7-g4 d2-d1xf4 f6-f4 d1-d2xb4 a4-b4 " +
                         "d2-d1xf4 b4-a4 d6-f6 d5-d6 d1-d2xe5 a4-e3 e4-f4xg4"));
+        BasePlayer black, white;
 
-        ListPlayer black = new ListPlayer(Piece.BLACK, moves);
-        ListPlayer white = new ListPlayer(Piece.WHITE, moves);
+        @BeforeEach
+        void setUp() throws Exception {
+            black = new ListPlayer(Piece.BLACK, moves);
+            white = new ListPlayer(Piece.WHITE, moves);
+        }
 
-        Game game = new Game(black, white);
-        BasePlayer winner = game.play();
+        @Test
+        @DisplayName("the game ends when it's over")
+        void play() throws Exception {
+            Game game = new Game(black, white);
 
-        // assert that the game doesn't end before it's over
-        assertThat(moves).isEmpty();
+            // assert that the game stops once there's a winner
+            assertThatCode(game::play).doesNotThrowAnyException();
 
-        // implicitly assert that the game ends when it's over by not throwing an exception
-        // from calling `#removeFirst` on an empty `moves` list.
+            // assert that the game doesn't end before it's over
+            assertThat(moves).isEmpty();
+        }
 
-        // assert that the correct player won the game
-        assertThat(winner).isSameAs(black);
+        @Test
+        @DisplayName("it returns the correct winner")
+        void winner() throws Exception {
+            Game game = new Game(black, white);
+            assertThat(game.play()).isSameAs(black);
+        }
     }
 
-    @Test
-    @DisplayName("it ends in a stalemate if we repeat the same board position three times")
-    void stalemate() throws Exception {
-        Deque<String> moves = Lists.newLinkedList(Splitter.on(' ').split(
+    @Nested
+    class Stalemate {
+
+        final Deque<String> moves = Lists.newLinkedList(Splitter.on(' ').split(
                 "b4 f4 d2 a4 d6 d5 e4 c3 d3 d1 c4 d7 g4 " +
                         "e5 c5 e3 f6 b2 b4-b6xf4 a4-a7 g4-g7 b2-b4 " +
                         "g7-g4 b4-b2 g4-g7 b2-b4 g7-g4 b4-b2"));
+        BasePlayer black, white;
 
-        ListPlayer black = new ListPlayer(Piece.BLACK, moves);
-        ListPlayer white = new ListPlayer(Piece.WHITE, moves);
+        @BeforeEach
+        void setUp() throws Exception {
+            black = new ListPlayer(Piece.BLACK, moves);
+            white = new ListPlayer(Piece.WHITE, moves);
+        }
 
-        Game game = new Game(black, white);
-        BasePlayer winner = game.play();
+        @Test
+        @DisplayName("the game ends in a stalemate")
+        void play() throws Exception {
+            Game game = new Game(black, white);
 
-        // assert that the game doesn't end before it's over
-        assertThat(moves).isEmpty();
+            // assert that the game stops once there's a winner
+            assertThatCode(game::play).doesNotThrowAnyException();
 
-        // implicitly assert that the game ends when it's over by not throwing an exception
-        // from calling `#removeFirst` on an empty `moves` list.
+            // assert that the game doesn't end before it's over
+            assertThat(moves).isEmpty();
+        }
 
-        // assert that no one won the game
-        assertThat(winner).isNull();
+        @Test
+        @DisplayName("there is no winner")
+        void winner() throws Exception {
+            Game game = new Game(black, white);
+            assertThat(game.play()).isNull();
+        }
     }
 
     /**
