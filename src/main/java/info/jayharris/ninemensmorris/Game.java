@@ -41,7 +41,7 @@ public class Game {
             nextPly();
             current.done(this);
 
-            if (stalemateChecker.isStalemateState(board)) {
+            if (stalemateChecker.isStalemate()) {
                 return null;
             }
 

@@ -10,12 +10,7 @@ public class NilStalemateChecker extends StalemateChecker {
     }
 
     @Override
-    public boolean hasStalemateState() {
-        return false;
-    }
-
-    @Override
-    public boolean isStalemateState(Board board) {
+    public boolean isStalemate() {
         return false;
     }
 

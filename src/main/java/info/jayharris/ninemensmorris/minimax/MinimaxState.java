@@ -61,10 +61,6 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
         return isStalemate() || actions().isEmpty();
     }
 
-    public boolean isStalemate() {
-        return stalemateChecker.hasStalemateState();
-    }
-
     private Set<MinimaxAction> tryPlacePiece() {
         return board.getUnoccupiedPoints().stream()
                 .flatMap(this::generateActionsFromPlacePiece)
@@ -135,6 +131,10 @@ public class MinimaxState implements State<MinimaxState, MinimaxAction> {
 
     public int getPlayerPieces() {
         return playerPieces;
+    }
+
+    public boolean isStalemate() {
+        return stalemateChecker.isStalemate();
     }
 
     private Predicate<Mill> willCompleteMill(Point point) {
