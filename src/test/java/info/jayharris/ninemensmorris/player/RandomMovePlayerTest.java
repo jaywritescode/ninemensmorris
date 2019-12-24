@@ -42,7 +42,7 @@ class RandomMovePlayerTest {
     @RepeatedTest(10)
     @DisplayName("it always places a piece on an empty point")
     void placePiece() {
-        randomPoints(RandomUtils.nextInt(8, 16)).stream()
+        randomPoints(RandomUtils.nextInt(8, 16))
                 .forEach(point -> builder.withPiece(point, RandomUtils.nextBoolean() ? Piece.WHITE : Piece.BLACK));
 
         Board board = builder.build();
