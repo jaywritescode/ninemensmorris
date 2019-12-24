@@ -242,8 +242,15 @@ class MinimaxActionTest {
         softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(null, from));
         softly.assertThat(nextState.getBoard()).is(matchingPieceOnPoint(Piece.BLACK, to));
         softly.assertThat(nextState)
-                .extracting("stalemateChecker.states")
+                .extracting("stalemateChecker.stateHistory")
                 .contains(nextState.getBoard());
+    }
+
+    @Test
+    @DisplayName("move piece - with capture")
+    @org.junit.jupiter.api.Disabled
+    public void movePieceWithCapture() {
+        
     }
 
     Condition<Board> matchingPieceOnPoint(Piece piece, Coordinate coordinate) {

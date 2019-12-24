@@ -63,7 +63,7 @@ class GameTest {
         final Deque<String> moves = Lists.newLinkedList(Splitter.on(' ').split(
                 "b4 f4 d2 a4 d6 d5 e4 c3 d3 d1 c4 d7 g4 " +
                         "e5 c5 e3 f6 b2 b4-b6xf4 a4-a7 g4-g7 b2-b4 " +
-                        "g7-g4 b4-b2 g4-g7 b2-b4 g7-g4 b4-b2"));
+                        "g7-g4 b4-b2"));
         BasePlayer black, white;
 
         @BeforeEach
