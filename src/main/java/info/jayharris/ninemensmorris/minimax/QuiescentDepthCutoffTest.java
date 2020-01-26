@@ -1,29 +1,33 @@
 package info.jayharris.ninemensmorris.minimax;
 
-import info.jayharris.minimax.CutoffTest;
-import info.jayharris.minimax.Node;
+import info.jayharris.minimax.search.Node;
+import info.jayharris.minimax.search.cutoff.CutoffTest;
+import info.jayharris.minimax.search.cutoff.DepthCutoffTest;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.Piece;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class DepthAwareCutoffTest extends CutoffTest<MinimaxState, MinimaxAction> {
+public class QuiescentDepthCutoffTest extends CutoffTest<MinimaxState, MinimaxAction> {
 
-    private final int maxDepth;
+    private final DepthCutoffTest depthCutoffTest;
 
-    public DepthAwareCutoffTest(int maxDepth) {
-        this.maxDepth = maxDepth;
+    public QuiescentDepthCutoffTest(int maxDepth) {
+        depthCutoffTest = new DepthCutoffTest(maxDepth);
     }
 
     @Override
-    public boolean test(Node<MinimaxState, MinimaxAction> node) {
-        if (node.getDepth() < maxDepth) {
+    public boolean cutoffSearch(Node<MinimaxState, MinimaxAction> node) {
+        if (!depthCutoffTest.cutoffSearch(node)) {
             return false;
         }
 
-        return isQuiescentState(node);
+        return node.getState().getPlayerPieces() > 0 || isQuiescentState(node);
     }
 
     private boolean isQuiescentState(Node<MinimaxState, MinimaxAction> node) {

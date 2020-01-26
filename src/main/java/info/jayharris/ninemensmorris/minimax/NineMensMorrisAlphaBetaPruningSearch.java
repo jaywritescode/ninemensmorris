@@ -1,8 +1,8 @@
 package info.jayharris.ninemensmorris.minimax;
 
-import info.jayharris.minimax.CutoffTest;
 import info.jayharris.minimax.search.AlphaBetaPruningSearch;
 import info.jayharris.minimax.search.UnknownUtilityException;
+import info.jayharris.minimax.search.cutoff.CutoffTest;
 import info.jayharris.ninemensmorris.Piece;
 
 import java.util.function.ToDoubleFunction;

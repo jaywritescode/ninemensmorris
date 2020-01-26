@@ -1,18 +1,16 @@
 package info.jayharris.ninemensmorris.minimax;
 
-import info.jayharris.minimax.Node;
+import info.jayharris.minimax.search.Node;
 import info.jayharris.ninemensmorris.Board;
 import info.jayharris.ninemensmorris.BoardBuilder;
 import info.jayharris.ninemensmorris.Piece;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class DepthAwareCutoffTestTest {
+class QuiescentDepthCutoffTestTest {
 
     private final int MAX_DEPTH = 3;
 
@@ -50,9 +48,9 @@ class DepthAwareCutoffTestTest {
                     .withDepth(MAX_DEPTH)
                     .build();
 
-            DepthAwareCutoffTest cutoffTest = new DepthAwareCutoffTest(MAX_DEPTH);
+            QuiescentDepthCutoffTest cutoffTest = new QuiescentDepthCutoffTest(MAX_DEPTH);
 
-            assertThat(cutoffTest.test(node)).isTrue();
+            assertThat(cutoffTest.cutoffSearch(node)).isTrue();
         }
     }
 
@@ -74,14 +72,14 @@ class DepthAwareCutoffTestTest {
                     .withPiece("d3", Piece.BLACK)
                     .build();
 
-            Node node = NodeBuilder.create()
+            Node<MinimaxState, MinimaxAction> node = NodeBuilder.create()
                     .withState(MinimaxStateBuilder.create().withBoard(board).build())
                     .withDepth(1)
                     .build();
 
-            DepthAwareCutoffTest cutoffTest = new DepthAwareCutoffTest(MAX_DEPTH);
+            QuiescentDepthCutoffTest cutoffTest = new QuiescentDepthCutoffTest(MAX_DEPTH);
 
-            assertThat(cutoffTest.test(node)).isFalse();
+            assertThat(cutoffTest.cutoffSearch(node)).isFalse();
         }
 
         @Test
@@ -116,9 +114,9 @@ class DepthAwareCutoffTestTest {
                     .withDepth(MAX_DEPTH)
                     .build();
 
-            DepthAwareCutoffTest cutoffTest = new DepthAwareCutoffTest(MAX_DEPTH);
+            QuiescentDepthCutoffTest cutoffTest = new QuiescentDepthCutoffTest(MAX_DEPTH);
 
-            assertThat(cutoffTest.test(node)).isFalse();
+            assertThat(cutoffTest.cutoffSearch(node)).isFalse();
         }
     }
 }

@@ -1,6 +1,6 @@
 package info.jayharris.ninemensmorris.minimax;
 
-import info.jayharris.minimax.Node;
+import info.jayharris.minimax.search.Node;
 
 import java.lang.reflect.Field;
 
